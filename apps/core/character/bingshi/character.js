@@ -1,10 +1,4 @@
 const characters = {
-	zhuji: {
-		sex: "male",
-		group: "wu",
-		hp: 4,
-		skills: ["potjiezhu", "pothuanshi"],
-	},
 	sp_zhonghui: {
 		sex: "male",
 		group: "wei",
@@ -36,7 +30,7 @@ const characters = {
 		sex: "male",
 		group: "wei",
 		hp: 4,
-		skills: ["pottuntian", "potzaoxian", "potjixi"],
+		skills: ["pottuntian", "potjixi", "potzaoxian"],
 	},
 	pot_huanjie: {
 		sex: "male",

@@ -6622,10 +6622,9 @@ const skills = {
 				.forResult();
 		},
 		async content(event, trigger, player) {
-			const [card] = event.cards;
 			await player.showCards(event.cards);
-			if (player.hasUseTarget(card) && player.getCards("h").includes(card)) {
-				await player.chooseUseTarget(card, true, false);
+			if (player.hasUseTarget(event.cards[0])) {
+				await player.chooseUseTarget(event.cards[0], true, false);
 			}
 		},
 	},
@@ -11018,7 +11017,7 @@ const skills = {
 	xy_jinshou: {
 		trigger: { player: "phaseJieshuBegin" },
 		filter(event, player) {
-			return game.getGlobalHistory("changeHp", evt => evt.player == player && evt.changedHp !== 0).length == 0;
+			return game.getGlobalHistory("changeHp", evt => evt.player == player).length == 0;
 		},
 		check(event, player) {
 			const cards = player.getCards("h");
@@ -15812,9 +15811,6 @@ const skills = {
 	jun_xiongtu: {
 		audio: "sbjianxiong",
 		trigger: { player: "changeHpAfter" },
-		filter(event, player) {
-			return event.changedHp != 0;
-		},
 		frequent: true,
 		async content(event, trigger, player) {
 			const list = [];
@@ -35763,7 +35759,7 @@ const skills = {
 		},
 		filterCard: true,
 		filterTarget(card, player, target) {
-			return player.inRange(target) && target.countDiscardableCards(target, "he");
+			return player.inRange(target) && target.countDiscardableCards("he");
 		},
 		async content(event, trigger, player) {
 			const target = event.targets[0];
@@ -40698,52 +40694,49 @@ const skills = {
 	},
 	//用间beta张飞
 	yjmangji: {
+		forced: true,
 		trigger: {
-			player: ["loseAfter", "changeHpAfter"],
+			player: ["loseAfter", "damageEnd", "loseHpEnd", "recoverEnd"],
 			global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
 		},
+		direct: true,
 		filter(event, player) {
 			if (player.hp < 1 || !player.countDiscardableCards(player, "h")) {
 				return false;
 			}
-			if (event.name == "changeHp") {
-				return event.changedHp != 0;
+			if (["damage", "loseHp", "recover"].includes(event.name)) {
+				return true;
 			}
-			const evt = event.getl(player);
+			var evt = event.getl(player);
 			if (event.name == "equip" && event.player == player) {
 				return !evt || evt.cards.length != 1;
 			}
-			if (!evt?.es.length) {
+			if (!evt || !evt.es.length) {
 				return false;
 			}
-			return game.hasPlayer(current => player.canUse({ name: "sha", isCard: true }, current, false));
+			return game.hasPlayer(current => player.canUse("sha", current, false));
 		},
-		direct: true,
-		forced: true,
-		async content(event, trigger, player) {
-			if (!player.countDiscardableCards(player, "h") || !game.hasPlayer(current => player.canUse({ name: "sha", isCard: true }, current, false))) {
-				return;
-			}
-			const result = await player
-				.chooseCardTarget({
-					prompt: "莽击：弃置一张手牌，视为对一名其他角色使用一张【杀】",
-					forced: true,
-					filterCard: lib.filter.cardDiscardable,
-					filterTarget(card, player, target) {
-						return player.canUse({ name: "sha", isCard: true }, target, false);
-					},
-					ai2(target) {
-						return get.effect(target, { name: "sha" }, _status.event.player);
-					},
-				})
-				.forResult();
-			if (result?.bool) {
-				const target = result.targets[0],
+		content() {
+			"step 0";
+			player.chooseCardTarget({
+				prompt: "莽击：弃置一张手牌，视为对一名其他角色使用一张【杀】",
+				forced: true,
+				filterCard: lib.filter.cardDiscardable,
+				filterTarget(card, player, target) {
+					return player.canUse("sha", target, false);
+				},
+				ai2(target) {
+					return get.effect(target, { name: "sha" }, _status.event.player);
+				},
+			});
+			"step 1";
+			if (result.bool) {
+				var target = result.targets[0],
 					cards = result.cards;
-				player.logSkill(event.name, target);
-				await player.discard(cards);
-				if (player.canUse({ name: "sha", isCard: true }, target, false)) {
-					await player.useCard({ name: "sha", isCard: true }, target, false);
+				player.logSkill("yjmangji", target);
+				player.discard(cards);
+				if (player.canUse("sha", target, false)) {
+					player.useCard({ name: "sha", isCard: true }, target, false);
 				}
 			}
 		},

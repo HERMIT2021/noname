@@ -1,14 +1,22 @@
 import { spawnSync } from "node:child_process";
 import fs from "node:fs/promises";
-spawnSync("pnpm -F noname... build", {
-	shell: true,
-	stdio: "inherit",
-});
 
-spawnSync("pnpm -F ./packages/extension/** build", {
-	shell: true,
-	stdio: "inherit",
-});
+function run(command: string) {
+	const result = spawnSync(command, {
+		shell: true,
+		stdio: "inherit",
+	});
+
+	if (result.error) throw result.error;
+	if (result.signal) {
+		console.error(`Command terminated with signal ${result.signal}: ${command}`);
+		process.exit(1);
+	}
+	if (result.status !== 0) process.exit(result.status ?? 1);
+}
+
+run("pnpm -F noname... build");
+run("pnpm -F ./packages/extension/** build");
 
 console.log("合并打包结果");
 await fs.rm("dist", { recursive: true, force: true });

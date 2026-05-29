@@ -1,6 +1,6 @@
 import { lib, game, ui, get, ai, _status } from "noname";
 
-/** @type { importCharacterConfig["skill"] } */
+/** @type { importCharacterConfig['skill'] } */
 const skills = {
 	//曼巴
 	//关羽
@@ -48,7 +48,6 @@ const skills = {
 				evt => {
 					return evt.player == player && evt.name == "sxrmhanguo";
 				},
-				void 0,
 				1
 			);
 			if (!historys.length) {
@@ -1419,7 +1418,6 @@ const skills = {
 	//疑包
 	//曹操 -by.柴油鹿鹿
 	sxrmkuxin: {
-		audio: 2,
 		trigger: { player: "damageEnd" },
 		filter(event, player) {
 			return game.hasPlayer(current => {
@@ -1510,6 +1508,7 @@ const skills = {
 							"枯心：请选择一项执行",
 							[
 								list.flatMap(([cards, target]) => {
+									console.log(cards);
 									return cards.map(card => [card, target]);
 								}),
 								(item, type, position, noclick, node) => {
@@ -1526,17 +1525,13 @@ const skills = {
 							],
 							[
 								dialog => {
-									dialog.css({ top: get.is.phoneLayout() ? "20%" : "40%" });
+									dialog.css({ top: get.is.phoneLayout() ? "20%" : "25%" });
 									dialog.buttons
+										.filter(button => typeof button.link == "number")
 										.forEach(button => {
-											if (typeof button.link == "number") {
-												button.style.setProperty("width", "200px", "important");
-												button.style.setProperty("text-align", "left", "important");
-											} else {
-												button.style.setProperty("opacity", "1", "important");
-											}
+											button.style.setProperty("width", "200px", "important");
+											button.style.setProperty("text-align", "left", "important");
 										});
-									dialog.buttons = dialog.buttons.filter(button => typeof button.link == "number");
 								},
 								"handle",
 							],
@@ -1596,8 +1591,8 @@ const skills = {
 							}
 							const player = get.player();
 							const cards = get
-								.event()
-								.list?.map(i => i[0])
+								.event("list")
+								?.map(i => i[0])
 								.flat();
 							return -get.attitude(player, target) * target.countCards("h", cardx => !cards?.includes(cardx));
 						},
@@ -1699,7 +1694,6 @@ const skills = {
 		},
 	},
 	sxrmsigu: {
-		audio: 2,
 		enable: "phaseUse",
 		usable: 1,
 		filterTarget: lib.filter.notMe,
@@ -1761,7 +1755,6 @@ const skills = {
 	},
 	//刘备
 	sxrmchengbian: {
-		audio: 2,
 		trigger: {
 			player: ["phaseZhunbeiBegin", "phaseJieshuBegin"],
 		},
@@ -2012,7 +2005,6 @@ const skills = {
 	},
 	//华佗
 	sxrmmiehai: {
-		audio: 2,
 		enable: "chooseToUse",
 		filterCard: true,
 		selectCard: 2,
@@ -2083,7 +2075,6 @@ const skills = {
 		},
 	},
 	sxrmqingjun: {
-		audio: 2,
 		trigger: {
 			global: "roundEnd",
 		},
@@ -2172,7 +2163,9 @@ const skills = {
 	},
 	sxrmshefu: {
 		audio: "shefu",
-		trigger: { player: "phaseJieshuBegin" },
+		trigger: {
+			player: "phaseJieshuBegin",
+		},
 		filter(event, player) {
 			return player.countCards("he");
 		},
@@ -2191,8 +2184,6 @@ const skills = {
 				})
 				.forResult();
 		},
-		// 防止【请君】中useSkill('sxrmshefu')出现player.discard(event.cards)的结算，lose: false也可以
-		discard: false,
 		async content(event, trigger, player) {
 			const next = player.addToExpansion(event.cards, player, "giveAuto");
 			next.gaintag.add("sxrmshefu_effect");
@@ -2207,7 +2198,9 @@ const skills = {
 		group: "sxrmshefu_effect",
 		subSkill: {
 			effect: {
-				trigger: { global: "useCard" },
+				trigger: {
+					global: ["useCard"],
+				},
 				filter(event, player) {
 					if (_status.currentPhase == player || event.player == player || event.all_excluded) {
 						return false;
@@ -2284,7 +2277,6 @@ const skills = {
 	},
 	//伏寿
 	sxrmmitu: {
-		audio: 2,
 		trigger: {
 			player: "phaseZhunbeiBegin",
 		},
@@ -2404,7 +2396,6 @@ const skills = {
 		},
 	},
 	sxrmqianliu: {
-		audio: 2,
 		trigger: {
 			global: "useCardToTargeted",
 		},

@@ -1,6 +1,6 @@
 import { lib, game, ui, get, ai, _status } from "noname";
 
-/** @type { importCharacterConfig["skill"] } */
+/** @type { importCharacterConfig['skill'] } */
 const skills = {
 	//主公吕布
 	stdqingjiao: {
@@ -919,9 +919,9 @@ const skills = {
 					num += evt.cards.length;
 				}
 			});
-			await player.give(event.cards, event.target);
+			player.give(event.cards, event.target);
 			if (num < 2 && num + event.cards.length > 1) {
-				await player.recover();
+				player.recover();
 			}
 		},
 		ai: {

@@ -27,10 +27,6 @@ game.import("character", function () {
 				["yuanshaoyuanshu_shu", []],
 			],
 			taipingsangong: [["taipingsangong_ultimate", ["die:taipingsangong"]]],
-			ol_re_nianshou: [
-				["ol_re_nianshou_level1", []],
-				["ol_re_nianshou_level2", []],
-			],
 		},
 		characterFilter: { ...characterFilters },
 		characterInitFilter: { ...characterInitFilters },

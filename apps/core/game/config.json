@@ -193,8 +193,6 @@
 		"collab",
 		"diy",
 		"huicui",
-		"jsrg",
-		"key",
 		"standard",
 		"shenhua",
 		"extra",
@@ -202,8 +200,7 @@
 		"old",
 		"sixiang",
 		"sxrm",
-		"yijiang",
-		"yingbian"
+		"yijiang"
 	],
 	"moderned_modes": ["guozhan"],
 	"connect_characters": ["diy"],
