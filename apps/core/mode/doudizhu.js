@@ -64,8 +64,6 @@ export default () => {
 				game.waitForPlayer(function () {
 					lib.configOL.number = 3;
 				});
-			} else if (_status.mode == "binglin") {
-				event.replacePile();
 			} else if (_status.mode == "online") {
 				lib.card.list = lib.online_cardPile.slice(0);
 				lib.inpile.addArray(["nanman", "wanjian", "taoyuan", "wugu"]);
@@ -77,8 +75,6 @@ export default () => {
 					lib.card.list = lib.online_cardPile.slice(0);
 					lib.inpile.addArray(["nanman", "wanjian", "taoyuan", "wugu"]);
 					game.fixedPile = true;
-				} else if (_status.mode == "binglin") {
-					event.replacePile();
 				}
 				if (lib.configOL.number < 3) {
 					lib.configOL.number = 3;
@@ -113,9 +109,6 @@ export default () => {
 					game.addGlobalSkill("online_zhadan");
 					game.addGlobalSkill("online_aozhan");
 					game.addGlobalSkill("online_gongshoujintui");
-					break;
-				case "binglin":
-					game.addGlobalSkill("binglin_bingjin");
 					break;
 				default:
 					if (!game.zhu.isInitFilter("noZhuSkill")) {
@@ -171,10 +164,6 @@ export default () => {
 						}
 					}
 					return num;
-				};
-			} else if (_status.mode == "binglin") {
-				next.num = function (player) {
-					return player == game.zhu ? 5 : 4;
 				};
 			}
 			if (_status.mode != "online" && _status.connectMode && lib.configOL.change_card) {
@@ -286,8 +275,8 @@ export default () => {
 					case "huanle":
 						namex = "欢乐斗地主";
 						break;
-					case "binglin":
-						namex = "兵临城下";
+					case "zhizun":
+						namex = "至尊场";
 						break;
 					case "online":
 						namex = "智斗三国";
@@ -318,7 +307,7 @@ export default () => {
 			checkResult() {
 				var me = game.me._trueMe || game.me;
 				if (game.zhu.isAlive()) {
-					if (_status.mode != "online" && (_status.mode != "binglin" || game.roundNumber < 3) && game.players.length > 1) {
+					if (_status.mode != "online" && game.players.length > 1) {
 						return;
 					}
 					if (me == game.zhu) {
@@ -775,8 +764,8 @@ export default () => {
 					game.chooseCharacterZhidou();
 					return;
 				}
-				if (_status.mode == "binglin") {
-					game.chooseCharacterBinglin();
+				if (_status.mode == "zhizun") {
+					game.chooseCharacterHuanle();
 					return;
 				}
 				var next = game.createEvent("chooseCharacter");
@@ -1901,8 +1890,8 @@ export default () => {
 				} else if (_status.mode == "online") {
 					game.chooseCharacterZhidouOL();
 					return;
-				} else if (_status.mode == "binglin") {
-					game.chooseCharacterBinglinOL();
+				} else if (_status.mode == "zhizun") {
+					game.chooseCharacterHuanleOL();
 					return;
 				}
 				var next = game.createEvent("chooseCharacter");
@@ -2161,18 +2150,10 @@ export default () => {
 					}
 				},
 				dieAfter(source) {
-					if (_status.mode == "binglin" && source && this != source && this.identity == source.identity && source.hasSkill("binglin_neihong")) {
-						if (game.me == game.zhu) {
-							game.over(true);
-						} else {
-							game.over(false);
-						}
-					} else {
-						game.checkResult();
-					}
+					game.checkResult();
 				},
 				dieAfter2() {
-					if (_status.mode == "binglin" || _status.mode == "online" || this.identity != "fan") {
+					if (_status.mode == "online" || this.identity != "fan") {
 						return;
 					}
 					var player = this,
@@ -2627,11 +2608,11 @@ export default () => {
 				charlotte: true,
 				trigger: { player: "phaseJudgeBegin" },
 				filter(event, player) {
-					return _status.mode != "online" && _status.mode != "binglin" && player == game.zhu && player.countCards("j") && player.countCards("he") > 1;
+					return _status.mode != "online" && player == game.zhu && player.countCards("j") && player.countCards("h") > 1;
 				},
 				async cost(event, trigger, player) {
 					event.result = await player
-						.chooseToDiscard("he", 2, get.prompt(event.skill), "弃置两张牌，然后弃置判定区里的所有牌")
+						.chooseToDiscard("h", 2, get.prompt(event.skill), "弃置两张手牌，然后弃置判定区里的一张牌")
 						.set("logSkill", event.skill)
 						.set("ai", function (card) {
 							if (_status.event.goon) {
@@ -2667,7 +2648,7 @@ export default () => {
 				},
 				popup: false,
 				async content(event, trigger, player) {
-					await player.discardPlayerCard(player, "j", true, player.countCards("j"));
+					await player.discardPlayerCard(player, "j", true);
 				},
 			},
 			//十周年飞扬
@@ -2675,7 +2656,7 @@ export default () => {
 				charlotte: true,
 				trigger: { player: "phaseJudgeBegin" },
 				filter(event, player) {
-					return _status.mode != "online" && _status.mode != "binglin" && player == game.zhu && player.countCards("j") && player.countCards("h") > 1;
+					return _status.mode != "online" && player == game.zhu && player.countCards("j") && player.countCards("h") > 1;
 				},
 				async cost(event, trigger, player) {
 					event.result = await player
@@ -2715,7 +2696,7 @@ export default () => {
 				},
 				popup: false,
 				async content(event, trigger, player) {
-					await player.discardPlayerCard(player, "j", true, player.countCards("j"));
+					await player.discardPlayerCard(player, "j", true);
 				},
 			},
 			//手杀飞扬
@@ -2723,7 +2704,7 @@ export default () => {
 				charlotte: true,
 				trigger: { player: "phaseJudgeBegin" },
 				filter(event, player) {
-					return _status.mode != "online" && _status.mode != "binglin" && player == game.zhu && player.countCards("j") && player.countCards("h") > 1;
+					return _status.mode != "online" && player == game.zhu && player.countCards("j") && player.countCards("h") > 1;
 				},
 				async cost(event, trigger, player) {
 					event.result = await player
@@ -2771,7 +2752,7 @@ export default () => {
 				charlotte: true,
 				trigger: { player: "phaseZhunbeiBegin" },
 				filter(event, player) {
-					return _status.mode != "online" && _status.mode != "binglin" && player == game.zhu;
+					return _status.mode != "online" && player == game.zhu;
 				},
 				forced: true,
 				content() {
@@ -2779,7 +2760,7 @@ export default () => {
 				},
 				mod: {
 					cardUsable(card, player, num) {
-						if (_status.mode != "online" && _status.mode != "binglin" && player == game.zhu && card.name == "sha") {
+						if (_status.mode != "online" && player == game.zhu && card.name == "sha") {
 							return num + 1;
 						}
 					},
