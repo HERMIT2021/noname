@@ -1407,6 +1407,7 @@ export class Get {
 		const configMap = {
 			basic: "effect_speed_basic",
 			trick: "effect_speed_trick",
+			equip: "effect_speed_equip",
 			line: "effect_speed_line",
 			skill: "effect_speed_skill",
 			card: "effect_speed_card",
@@ -1425,8 +1426,10 @@ export class Get {
 		if (typeof duration != "number" || !isFinite(duration)) {
 			return duration;
 		}
-		const result = Math.round(duration / get.effectSpeed(type));
-		return Math.max(min, result);
+		const speed = get.effectSpeed(type);
+		const result = Math.round(duration / speed);
+		const minDuration = speed > 1 ? Math.max(16, Math.round(min / speed)) : min;
+		return Math.max(minDuration, result);
 	}
 	effectType(card) {
 		if (!card) {
@@ -1438,6 +1441,9 @@ export class Get {
 		}
 		if (type == "trick" || type == "delay") {
 			return "trick";
+		}
+		if (type == "equip") {
+			return "equip";
 		}
 		return "card";
 	}

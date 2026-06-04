@@ -2468,7 +2468,7 @@ export class Create {
 		ui.window.addEventListener(
 			lib.config.touchscreen ? "touchend" : "click",
 			() => {
-				if (!ui.backgroundMusic.played.length && lib.config.background_music != "music_off" && lib.config.volumn_background > 0 && !isNaN(ui.backgroundMusic.duration)) {
+				if (!ui.backgroundMusic.played.length && game.canPlayBackgroundMusic()) {
 					ui.backgroundMusic.play();
 				}
 			},

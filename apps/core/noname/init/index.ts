@@ -10,6 +10,19 @@ import { loadCard, loadCardPile, loadCharacter, loadExtension, loadMode, loadPla
 
 const DEFAULT_CLOSED_CHARACTER_PACKS = ["key", "diy", "sixiang", "sxrm", "jsrg", "offline", "old", "collab", "tw", "xianding", "huicui", "clan", "yingbian", "onlyOL", "newjiang", "sp2", "sp"];
 const FALLBACK_ENABLED_CHARACTER_PACKS = ["standard", "shenhua", "refresh", "yijiang"];
+const PROTECTED_MODE_PACKS = ["identity"];
+const PERSISTENT_DEFAULT_CONFIG = {
+	background_music: "music_off",
+	effect_speed_card: "1",
+	effect_speed_basic: "1",
+	effect_speed_trick: "1",
+	effect_speed_equip: "1",
+	effect_line_enabled: true,
+	effect_speed_line: "1",
+	effect_speed_skill: "1",
+	mode_preload_disabled: [],
+	character_pack_preload_disabled: DEFAULT_CLOSED_CHARACTER_PACKS,
+};
 
 function normalizeCharacterPackList(list: unknown): string[] {
 	if (!Array.isArray(list)) return [];
@@ -50,6 +63,30 @@ function normalizeCharacterPackPreloadConfig() {
 	}
 	config.set("characters", enabled);
 	saveCharacterPackListIfChanged("characters", enabled, savedCharacters);
+}
+
+function normalizeModePreloadConfig() {
+	const savedDisabled = config.get("mode_preload_disabled");
+	const disabled = normalizeCharacterPackList(savedDisabled).filter(name => !PROTECTED_MODE_PACKS.includes(name));
+	config.set("mode_preload_disabled", disabled);
+	saveCharacterPackListIfChanged("mode_preload_disabled", disabled, savedDisabled);
+	if (disabled.includes(config.get("mode"))) {
+		const nextMode = PROTECTED_MODE_PACKS.find(name => !disabled.includes(name)) || "identity";
+		config.set("mode", nextMode);
+		game.saveConfig("mode", nextMode);
+	}
+}
+
+function persistDefaultConfigs(result: Record<string, any>) {
+	for (const [name, value] of Object.entries(PERSISTENT_DEFAULT_CONFIG)) {
+		if (config.get(name) === undefined) {
+			config.set(name, Array.isArray(value) ? value.slice() : value);
+		}
+		if (!(name in result)) {
+			const current = config.get(name);
+			game.saveConfig(name, Array.isArray(current) ? current.slice() : current);
+		}
+	}
 }
 
 // 无名杀，启动！
@@ -151,6 +188,7 @@ export async function boot() {
 	const pack = window.noname_package;
 	delete window.noname_package;
 	const disabledCharacterPacks = normalizeCharacterPackList(config.get("character_pack_preload_disabled"));
+	const disabledModePacks = normalizeCharacterPackList(config.get("mode_preload_disabled"));
 	for (const name in pack.character) {
 		lib.translate[name + "_character_config"] = pack.character[name];
 		if (disabledCharacterPacks.includes(name)) continue;
@@ -174,9 +212,10 @@ export async function boot() {
 		}
 	}
 	for (const name in pack.mode) {
+		lib.translate[name] = pack.mode[name];
+		if (disabledModePacks.includes(name)) continue;
 		if (config.get("hiddenModePack").includes(name)) continue;
 		config.get("all").mode.push(name);
-		lib.translate[name] = pack.mode[name];
 		config.get("gameRecord")[name] ??= { data: {} };
 	}
 	if (config.get("all").mode.length == 0) {
@@ -927,12 +966,16 @@ async function loadConfig() {
 	if (config.get("effect_speed_card") === undefined) config.set("effect_speed_card", config.get("card_animation") || "1");
 	if (config.get("effect_speed_basic") === undefined) config.set("effect_speed_basic", "1");
 	if (config.get("effect_speed_trick") === undefined) config.set("effect_speed_trick", "1");
+	if (config.get("effect_speed_equip") === undefined) config.set("effect_speed_equip", "1");
 	if (config.get("effect_line_enabled") === undefined) config.set("effect_line_enabled", true);
 	if (config.get("effect_speed_line") === undefined) config.set("effect_speed_line", "1");
 	if (config.get("effect_speed_skill") === undefined) config.set("effect_speed_skill", "1");
 	if (config.get("swipe_up") === undefined) config.set("swipe_up", "off");
 	if (config.get("touch_pause_gesture") === undefined) config.set("touch_pause_gesture", false);
 	normalizeCharacterPackPreloadConfig();
+	normalizeModePreloadConfig();
+	config.get("mode_config")[config.get("mode")] ??= {};
+	persistDefaultConfigs(result);
 
 	if (!config.get("gameRecord")) config.set("gameRecord", {});
 

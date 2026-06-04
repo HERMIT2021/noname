@@ -47,7 +47,7 @@ export default async function cordovaReady({ lib, game, get, _status, ui }) {
 			}
 		});
 		document.addEventListener("resume", () => {
-			if (ui.backgroundMusic && !isNaN(ui.backgroundMusic.duration)) {
+			if (game.canPlayBackgroundMusic()) {
 				ui.backgroundMusic.play();
 			}
 		});

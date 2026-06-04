@@ -550,7 +550,7 @@ export const optionsMenu = function (connectMenu) {
 		var createPackConfig = function (packName) {
 			var packLabel = lib.translate[packName + "_character_config"] || packName;
 			resourceConfig["character_pack_preload_" + packName] = {
-				name: packLabel,
+				name: "武将包：" + packLabel,
 				init: !lib.config.character_pack_preload_disabled.includes(packName),
 				restart: true,
 				noSave: true,
@@ -572,6 +572,58 @@ export const optionsMenu = function (connectMenu) {
 			};
 		};
 		for (var i = 0; i < packList.length; i++) createPackConfig(packList[i]);
+
+		if (!Array.isArray(lib.config.mode_preload_disabled)) lib.config.mode_preload_disabled = [];
+		var modeList = [];
+		var addMode = function (name) {
+			if (typeof name == "string" && !modeList.includes(name)) modeList.push(name);
+		};
+		if (Array.isArray(lib.config.all.sgsmodes)) {
+			for (var i = 0; i < lib.config.all.sgsmodes.length; i++) addMode(lib.config.all.sgsmodes[i]);
+		}
+		if (Array.isArray(lib.config.all.stockmode)) {
+			for (var i = 0; i < lib.config.all.stockmode.length; i++) addMode(lib.config.all.stockmode[i]);
+		}
+		for (var modeName in lib.mode) addMode(modeName);
+		if (Array.isArray(lib.config.mode_preload_disabled)) {
+			for (var i = 0; i < lib.config.mode_preload_disabled.length; i++) addMode(lib.config.mode_preload_disabled[i]);
+		}
+		modeList.sort(function (a, b) {
+			var aa = lib.translate[a] || lib.mode[a]?.name || a,
+				bb = lib.translate[b] || lib.mode[b]?.name || b;
+			if (aa != bb) return aa > bb ? 1 : -1;
+			return a > b ? 1 : -1;
+		});
+		var protectedModes = ["identity"];
+		var createModePreloadConfig = function (modeName) {
+			var modeLabel = lib.translate[modeName] || lib.mode[modeName]?.name || modeName;
+			resourceConfig["mode_preload_" + modeName] = {
+				name: "模式：" + modeLabel,
+				init: !lib.config.mode_preload_disabled.includes(modeName),
+				restart: true,
+				noSave: true,
+				characterPackPreload: true,
+				intro: protectedModes.includes(modeName) ? "身份模式是基础入口，不能关闭" : "关闭后下次启动不会加载该游戏模式，也不会在开始菜单中显示",
+				onclick(bool) {
+					if (protectedModes.includes(modeName)) {
+						alert("身份模式是基础入口，不能关闭");
+						return false;
+					}
+					if (!Array.isArray(lib.config.mode_preload_disabled)) lib.config.mode_preload_disabled = [];
+					if (bool) {
+						lib.config.mode_preload_disabled.remove(modeName);
+					} else {
+						lib.config.mode_preload_disabled.add(modeName);
+						if (lib.config.mode == modeName) {
+							lib.config.mode = "identity";
+							game.saveConfig("mode", "identity");
+						}
+					}
+					game.saveConfig("mode_preload_disabled", lib.config.mode_preload_disabled.slice());
+				},
+			};
+		};
+		for (var i = 0; i < modeList.length; i++) createModePreloadConfig(modeList[i]);
 	};
 	setupCharacterPackPreloadConfig();
 

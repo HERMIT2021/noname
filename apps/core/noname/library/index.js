@@ -1825,6 +1825,22 @@ export class Library {
 					},
 					intro: "调整【顺手牵羊】等普通锦囊和延时锦囊的出牌提示和跟随动画速度",
 				},
+				effect_speed_equip: {
+					name: "装备牌特效速度",
+					init: "1",
+					item: {
+						"0.5": "0.5x(慢速)",
+						"1": "默认(1x)",
+						"1.5": "1.5x(较快)",
+						"2": "2x(快速)",
+						"3": "3x(极速)",
+						"4": "4x(瞬捷)",
+						"5": "5x(疾速)",
+						"8": "8x(闪现)",
+						"10": "10x(近乎瞬间)",
+					},
+					intro: "调整武器、防具、坐骑、宝物等装备牌的使用和移动动画速度",
+				},
 				effect_line_enabled: {
 					name: "出牌指示线",
 					init: true,
@@ -1847,7 +1863,7 @@ export class Library {
 					intro: "调整出牌后指向目标角色的指示线、激光束出现和消失速度",
 				},
 				effect_speed_skill: {
-					name: "技能/属性特效速度",
+					name: "技能特效速度",
 					init: "1",
 					item: {
 						"0.5": "0.5x(慢速)",
@@ -1859,6 +1875,9 @@ export class Library {
 						"5": "5x(疾速)",
 						"8": "8x(闪现)",
 						"10": "10x(近乎瞬间)",
+						"12": "12x(极快)",
+						"16": "16x(瞬发)",
+						"20": "20x(超瞬发)",
 					},
 					intro: "调整限定技、觉醒技、属性伤害、回复体力等粒子和全屏文字特效速度",
 				},
@@ -1868,7 +1887,7 @@ export class Library {
 			name: "资源",
 			config: {
 				character_pack_preload_restore_default: {
-					name: "恢复默认关闭包",
+					name: "武将包恢复默认关闭",
 					clear: true,
 					noSave: true,
 					onclick() {
@@ -1884,13 +1903,13 @@ export class Library {
 							this.innerHTML = "<span>确认恢复默认</span>";
 							var that = this;
 							setTimeout(function () {
-								that.innerHTML = "<span>恢复默认关闭包</span>";
+								that.innerHTML = "<span>武将包恢复默认关闭</span>";
 							}, 1000);
 						}
 					},
 				},
 				character_pack_preload_open_all: {
-					name: "全部开启武将包",
+					name: "武将包全部开启",
 					clear: true,
 					noSave: true,
 					onclick() {
@@ -1909,7 +1928,25 @@ export class Library {
 							this.innerHTML = "<span>确认全部开启</span>";
 							var that = this;
 							setTimeout(function () {
-								that.innerHTML = "<span>全部开启武将包</span>";
+								that.innerHTML = "<span>武将包全部开启</span>";
+							}, 1000);
+						}
+					},
+				},
+				mode_preload_open_all: {
+					name: "模式全部开启",
+					clear: true,
+					noSave: true,
+					onclick() {
+						if (this.innerHTML == "<span>确认全部开启</span>") {
+							lib.config.mode_preload_disabled = [];
+							game.saveConfig("mode_preload_disabled", []);
+							alert("已开启所有游戏模式，重启后会重新显示并允许加载");
+						} else {
+							this.innerHTML = "<span>确认全部开启</span>";
+							var that = this;
+							setTimeout(function () {
+								that.innerHTML = "<span>模式全部开启</span>";
 							}, 1000);
 						}
 					},

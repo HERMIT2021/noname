@@ -1602,7 +1602,7 @@ export const Content = {
 					if (roundmenu) {
 						ui.roundmenu.style.display = "";
 					}
-					if (ui.backgroundMusic && !isNaN(ui.backgroundMusic.duration)) {
+					if (game.canPlayBackgroundMusic()) {
 						ui.backgroundMusic.play();
 					}
 					hitsound_audio.remove();
@@ -1837,7 +1837,7 @@ export const Content = {
 				if (dialog) {
 					dialog.close();
 				}
-				if (ui.backgroundMusic && !isNaN(ui.backgroundMusic.duration)) {
+				if (game.canPlayBackgroundMusic()) {
 					ui.backgroundMusic.play();
 				}
 			},

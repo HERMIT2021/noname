@@ -2838,6 +2838,12 @@ export class Game {
 			music = lib.config.all.background_music.randomGet("music_off", "music_random", _status.currentMusic);
 		}
 		_status.currentMusic = music;
+		if (!music || music == "music_off") {
+			ui.backgroundMusic.pause();
+			ui.backgroundMusic.removeAttribute("src");
+			ui.backgroundMusic.src = "";
+			return;
+		}
 		if (music == "music_custom") {
 			const backgroundMusicSourceConfiguration = lib.config.background_music_src;
 			if (backgroundMusicSourceConfiguration) {
@@ -2854,6 +2860,9 @@ export class Game {
 		} else {
 			ui.backgroundMusic.src = `${lib.assetURL}audio/background/${music}.mp3`;
 		}
+	}
+	canPlayBackgroundMusic() {
+		return !!ui.backgroundMusic && lib.config.background_music != "music_off" && lib.config.volumn_background > 0 && !isNaN(ui.backgroundMusic.duration);
 	}
 	// 某种意义上，改不了，得重写
 	// 等正式用import导入再说
