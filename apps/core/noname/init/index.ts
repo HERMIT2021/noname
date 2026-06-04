@@ -8,6 +8,50 @@ import { CacheContext } from "@/library/cache/cacheContext.js";
 import { importCardPack, importCharacterPack, importExtension, importMode } from "./import.js";
 import { loadCard, loadCardPile, loadCharacter, loadExtension, loadMode, loadPlay } from "./loading.js";
 
+const DEFAULT_CLOSED_CHARACTER_PACKS = ["key", "diy", "sixiang", "sxrm", "jsrg", "offline", "old", "collab", "tw", "xianding", "huicui", "clan", "yingbian", "onlyOL", "newjiang", "sp2", "sp"];
+const FALLBACK_ENABLED_CHARACTER_PACKS = ["standard", "shenhua", "refresh", "yijiang"];
+
+function normalizeCharacterPackList(list: unknown): string[] {
+	if (!Array.isArray(list)) return [];
+	const result: string[] = [];
+	for (const name of list) {
+		if (typeof name == "string" && !result.includes(name)) result.push(name);
+	}
+	return result;
+}
+
+function saveCharacterPackListIfChanged(name: string, value: string[], oldValue = config.get(name)) {
+	if (!Array.isArray(oldValue) || oldValue.length != value.length || oldValue.some((current, index) => current != value[index])) {
+		game.saveConfig(name, value.slice());
+	}
+}
+
+function normalizeCharacterPackPreloadConfig() {
+	const defaultClosed = DEFAULT_CLOSED_CHARACTER_PACKS.slice();
+	config.set("character_pack_preload_default_closed", defaultClosed);
+
+	const savedDisabled = config.get("character_pack_preload_disabled");
+	let disabled = normalizeCharacterPackList(savedDisabled);
+	if (!Array.isArray(savedDisabled)) {
+		disabled = defaultClosed.slice();
+		config.set("character_pack_preload_disabled", disabled);
+		game.saveConfig("character_pack_preload_disabled", disabled.slice());
+	} else {
+		config.set("character_pack_preload_disabled", disabled);
+		saveCharacterPackListIfChanged("character_pack_preload_disabled", disabled, savedDisabled);
+	}
+
+	const savedCharacters = config.get("characters");
+	const enabled = (normalizeCharacterPackList(savedCharacters).length ? normalizeCharacterPackList(savedCharacters) : normalizeCharacterPackList(config.get("all").sgscharacters)).filter(name => !disabled.includes(name));
+	if (!enabled.length) {
+		for (const name of FALLBACK_ENABLED_CHARACTER_PACKS) {
+			if (!disabled.includes(name)) enabled.push(name);
+		}
+	}
+	config.set("characters", enabled);
+	saveCharacterPackListIfChanged("characters", enabled, savedCharacters);
+}
+
 // 无名杀，启动！
 export async function boot() {
 	// 不想看，反正别动
@@ -106,10 +150,12 @@ export async function boot() {
 	await lib.init.promises.js("game", "package");
 	const pack = window.noname_package;
 	delete window.noname_package;
+	const disabledCharacterPacks = normalizeCharacterPackList(config.get("character_pack_preload_disabled"));
 	for (const name in pack.character) {
+		lib.translate[name + "_character_config"] = pack.character[name];
+		if (disabledCharacterPacks.includes(name)) continue;
 		if (config.get("all").sgscharacters.includes(name) || config.get("hiddenCharacterPack").indexOf(name) == -1) {
 			config.get("all").characters.push(name);
-			lib.translate[name + "_character_config"] = pack.character[name];
 		}
 	}
 	for (const name in pack.card) {
@@ -886,6 +932,7 @@ async function loadConfig() {
 	if (config.get("effect_speed_skill") === undefined) config.set("effect_speed_skill", "1");
 	if (config.get("swipe_up") === undefined) config.set("swipe_up", "off");
 	if (config.get("touch_pause_gesture") === undefined) config.set("touch_pause_gesture", false);
+	normalizeCharacterPackPreloadConfig();
 
 	if (!config.get("gameRecord")) config.set("gameRecord", {});
 

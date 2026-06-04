@@ -1864,6 +1864,58 @@ export class Library {
 				},
 			},
 		},
+		resource: {
+			name: "资源",
+			config: {
+				character_pack_preload_restore_default: {
+					name: "恢复默认关闭包",
+					clear: true,
+					noSave: true,
+					onclick() {
+						if (this.innerHTML == "<span>确认恢复默认</span>") {
+							const defaults = Array.isArray(lib.config.character_pack_preload_default_closed) ? lib.config.character_pack_preload_default_closed.slice() : [];
+							if (!Array.isArray(lib.config.characters)) lib.config.characters = [];
+							lib.config.character_pack_preload_disabled = defaults.slice();
+							lib.config.characters.removeArray(defaults);
+							game.saveConfig("character_pack_preload_disabled", lib.config.character_pack_preload_disabled.slice());
+							game.saveConfig("characters", lib.config.characters.slice());
+							alert("已恢复默认关闭武将包，重启后完全生效");
+						} else {
+							this.innerHTML = "<span>确认恢复默认</span>";
+							var that = this;
+							setTimeout(function () {
+								that.innerHTML = "<span>恢复默认关闭包</span>";
+							}, 1000);
+						}
+					},
+				},
+				character_pack_preload_open_all: {
+					name: "全部开启武将包",
+					clear: true,
+					noSave: true,
+					onclick() {
+						if (this.innerHTML == "<span>确认全部开启</span>") {
+							const packs = [];
+							if (Array.isArray(lib.config.all.sgscharacters)) packs.addArray(lib.config.all.sgscharacters);
+							if (Array.isArray(lib.config.character_pack_preload_default_closed)) packs.addArray(lib.config.character_pack_preload_default_closed);
+							if (Array.isArray(lib.config.character_pack_preload_disabled)) packs.addArray(lib.config.character_pack_preload_disabled);
+							if (!Array.isArray(lib.config.characters)) lib.config.characters = [];
+							lib.config.character_pack_preload_disabled = [];
+							lib.config.characters.addArray(packs);
+							game.saveConfig("character_pack_preload_disabled", []);
+							game.saveConfig("characters", lib.config.characters.slice());
+							alert("已开启所有武将包，重启后会加载这些包");
+						} else {
+							this.innerHTML = "<span>确认全部开启</span>";
+							var that = this;
+							setTimeout(function () {
+								that.innerHTML = "<span>全部开启武将包</span>";
+							}, 1000);
+						}
+					},
+				},
+			},
+		},
 		appearence: {
 			name: "外观",
 			config: {

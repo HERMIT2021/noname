@@ -130,6 +130,14 @@ export const characterPackMenu = function (connectMenu) {
 				} else {
 					lib.config.characters.remove(name);
 				}
+				if (Array.isArray(lib.config.character_pack_preload_disabled)) {
+					if (bool) {
+						lib.config.character_pack_preload_disabled.remove(name);
+					} else {
+						lib.config.character_pack_preload_disabled.add(name);
+					}
+					game.saveConfig("character_pack_preload_disabled", lib.config.character_pack_preload_disabled.slice());
+				}
 				game.saveConfig("characters", lib.config.characters);
 			}
 		}

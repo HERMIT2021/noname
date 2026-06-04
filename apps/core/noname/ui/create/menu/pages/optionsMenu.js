@@ -317,7 +317,7 @@ export const optionsMenu = function (connectMenu) {
 				cfg._name = j;
 				if (j in config) {
 					cfg.init = config[j];
-				} else if (cfg.type != "autoskill" && cfg.type != "banskill") {
+				} else if (cfg.type != "autoskill" && cfg.type != "banskill" && !cfg.noSave) {
 					game.saveConfig(j, cfg.init);
 				}
 				if (!cfg.onclick) {
@@ -516,6 +516,64 @@ export const optionsMenu = function (connectMenu) {
 		// if(!get.config('menu_loadondemand')) node._initLink();
 		return node;
 	};
+
+	var setupCharacterPackPreloadConfig = function () {
+		if (!lib.configMenu.resource) return;
+		var resourceConfig = lib.configMenu.resource.config;
+		for (var key in resourceConfig) {
+			if (resourceConfig[key].characterPackPreload) delete resourceConfig[key];
+		}
+
+		if (!Array.isArray(lib.config.character_pack_preload_disabled)) lib.config.character_pack_preload_disabled = [];
+		if (!Array.isArray(lib.config.characters)) lib.config.characters = [];
+
+		var packList = [];
+		var addPack = function (name) {
+			if (typeof name == "string" && !packList.includes(name)) packList.push(name);
+		};
+		if (Array.isArray(lib.config.all.sgscharacters)) {
+			for (var i = 0; i < lib.config.all.sgscharacters.length; i++) addPack(lib.config.all.sgscharacters[i]);
+		}
+		if (Array.isArray(lib.config.character_pack_preload_default_closed)) {
+			for (var i = 0; i < lib.config.character_pack_preload_default_closed.length; i++) addPack(lib.config.character_pack_preload_default_closed[i]);
+		}
+		if (Array.isArray(lib.config.character_pack_preload_disabled)) {
+			for (var i = 0; i < lib.config.character_pack_preload_disabled.length; i++) addPack(lib.config.character_pack_preload_disabled[i]);
+		}
+		packList.sort(function (a, b) {
+			var aa = lib.translate[a + "_character_config"] || a,
+				bb = lib.translate[b + "_character_config"] || b;
+			if (aa != bb) return aa > bb ? 1 : -1;
+			return a > b ? 1 : -1;
+		});
+
+		var createPackConfig = function (packName) {
+			var packLabel = lib.translate[packName + "_character_config"] || packName;
+			resourceConfig["character_pack_preload_" + packName] = {
+				name: packLabel,
+				init: !lib.config.character_pack_preload_disabled.includes(packName),
+				restart: true,
+				noSave: true,
+				characterPackPreload: true,
+				intro: "关闭后下次启动不会加载该武将包的代码和武将数据；当前已经载入的内容需要重启后才会完全卸载",
+				onclick(bool) {
+					if (!Array.isArray(lib.config.character_pack_preload_disabled)) lib.config.character_pack_preload_disabled = [];
+					if (!Array.isArray(lib.config.characters)) lib.config.characters = [];
+					if (bool) {
+						lib.config.character_pack_preload_disabled.remove(packName);
+						lib.config.characters.add(packName);
+					} else {
+						lib.config.character_pack_preload_disabled.add(packName);
+						lib.config.characters.remove(packName);
+					}
+					game.saveConfig("character_pack_preload_disabled", lib.config.character_pack_preload_disabled.slice());
+					game.saveConfig("characters", lib.config.characters.slice());
+				},
+			};
+		};
+		for (var i = 0; i < packList.length; i++) createPackConfig(packList[i]);
+	};
+	setupCharacterPackPreloadConfig();
 
 	for (var i in lib.configMenu) {
 		if (i != "others") {
