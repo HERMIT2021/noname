@@ -10330,7 +10330,7 @@ export const Content = {
 						_status.waitingForTransition = event.waitingForTransition;
 						game.pause();
 					} else {
-						game.delayx();
+						game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration);
 					}
 				}
 			}
@@ -10591,7 +10591,7 @@ export const Content = {
 			if (event.effectedCount < event.effectCount) {
 				if (document.getElementsByClassName("thrown").length) {
 					if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-						game.delayx();
+						game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration);
 					}
 				}
 				event.goto(11);
@@ -10608,7 +10608,7 @@ export const Content = {
 			//delete player.using;
 			if (document.getElementsByClassName("thrown").length) {
 				if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-					game.delayx();
+					game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration);
 				}
 			} else {
 				event.finish();

@@ -127,8 +127,8 @@ export default () => {
 
 					if (lib.config.touchscreen) {
 						clear();
-						ui.create.dialog("触屏模式中，下划可以显示菜单，上划可以切换托管，双指单击可以暂停");
-						ui.dialog.add('<div class="text center">你可以在选项-通用-中更改手势设置');
+						ui.create.dialog("触屏模式中，下划可以显示菜单；暂停可在选项-特效中操作");
+						ui.dialog.add('<div class="text center">你可以在选项-通用中更改手势设置');
 						await new Promise(resolve => ui.create.control("继续", resolve));
 					}
 

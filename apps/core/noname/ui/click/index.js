@@ -1690,7 +1690,7 @@ export class Click {
 		if (window.inSplash) {
 			return;
 		}
-		if (e.touches.length == 1 && !_status.dragged && !_status.draggingtouchdialog) {
+		if (lib.config.touch_pause_gesture && e.touches.length == 1 && !_status.dragged && !_status.draggingtouchdialog) {
 			ui.click.pause();
 		}
 		if (_status.draggingroundmenu) {

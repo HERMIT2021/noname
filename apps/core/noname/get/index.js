@@ -1403,6 +1403,47 @@ export class Get {
 				return Math.min(max, num);
 		}
 	}
+	effectSpeed(type = "card") {
+		const configMap = {
+			basic: "effect_speed_basic",
+			trick: "effect_speed_trick",
+			line: "effect_speed_line",
+			skill: "effect_speed_skill",
+			card: "effect_speed_card",
+		};
+		const configName = configMap[type] || configMap.card;
+		let speed = parseFloat(lib.config[configName]);
+		if (!isFinite(speed) || speed <= 0) {
+			speed = configName == "effect_speed_card" ? parseFloat(lib.config.card_animation) : 1;
+		}
+		if (!isFinite(speed) || speed <= 0) {
+			speed = 1;
+		}
+		return speed;
+	}
+	effectDuration(duration, type = "card", min = 0) {
+		if (typeof duration != "number" || !isFinite(duration)) {
+			return duration;
+		}
+		const result = Math.round(duration / get.effectSpeed(type));
+		return Math.max(min, result);
+	}
+	effectType(card) {
+		if (!card) {
+			return "card";
+		}
+		const type = get.type(card);
+		if (type == "basic") {
+			return "basic";
+		}
+		if (type == "trick" || type == "delay") {
+			return "trick";
+		}
+		return "card";
+	}
+	effectTypeFromEvent(card, event = get.event()) {
+		return get.effectType(event?.card || card);
+	}
 	prompt(skill, target, player) {
 		player = player || _status.event.player;
 		if (target) {

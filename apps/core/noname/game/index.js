@@ -5193,6 +5193,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 			}
 		},
 		flame: function (x, y, duration, type) {
+			duration = get.effectDuration(duration, "skill", 120);
 			var particles = [];
 			var particle_count = 50;
 			if (type == "thunder" || type == "recover") {
@@ -5429,6 +5430,9 @@ ${e instanceof Error ? e.stack : String(e)}`);
 		} else if (typeof arguments[1] == "string") {
 			color = arguments[1];
 		}
+		if (arguments[1] != "drag") {
+			total = get.effectDuration(total, "line", 80);
+		}
 		if (typeof color == "string") {
 			color = lib.lineColor.get(color) || [255, 255, 255];
 		}
@@ -5519,11 +5523,12 @@ ${e instanceof Error ? e.stack : String(e)}`);
 		image: "jianqilinexy",
 	};
 	zsPlayLineAnimation(name, node, fake, points) {
-		var animation = game.jianqiLineAnim;
+		var animation = Object.assign({}, game.jianqiLineAnim);
 		animation["image"] = name;
 		if (lib.config.zsGuideTime) {
 			animation["time"] = parseInt(lib.config.zsGuideTime);
 		}
+		animation["time"] = get.effectDuration(animation.time, "line", 180);
 		if (animation == undefined) {
 			return;
 		}
@@ -5688,7 +5693,9 @@ ${e instanceof Error ? e.stack : String(e)}`);
 				div.style.left = points[0][0] + "px";
 			}
 			if (points != undefined) {
-				var timeS = (animation.fade == true ? animation.time - 450 : animation.time - 100) / 1000 / 2;
+				var fadeLineTime = Math.min(350, Math.max(80, animation.time / 4));
+				var fadeBodyTime = Math.min(400, Math.max(100, animation.time / 3));
+				var timeS = (animation.fade == true ? Math.max(100, animation.time - fadeBodyTime - 50) : Math.max(100, animation.time - 100)) / 1000 / 2;
 				var getAngle = function (x1, y1, x2, y2, bool) {
 					var x = x1 - x2;
 					var y = y1 - y2;
@@ -5770,14 +5777,14 @@ ${e instanceof Error ? e.stack : String(e)}`);
 					if (div2 != undefined) {
 						setTimeout(function () {
 							div2.hide();
-						}, animation.time - 350);
+						}, Math.max(0, animation.time - fadeLineTime));
 						setTimeout(function () {
 							div.hide();
-						}, animation.time - 400);
+						}, Math.max(0, animation.time - fadeBodyTime));
 					} else {
 						setTimeout(function () {
 							div.hide();
-						}, animation.time - 350);
+						}, Math.max(0, animation.time - fadeLineTime));
 					}
 				}
 				setTimeout(function () {
@@ -5927,6 +5934,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 		} else if (arguments[1] == "fire" || arguments[1] == "thunder" || arguments[1] == "green") {
 			color = arguments[1];
 		}
+		total = get.effectDuration(total, "line", 80);
 		if (color == "fire") {
 			color = [255, 146, 68];
 		} else if (color == "thunder") {

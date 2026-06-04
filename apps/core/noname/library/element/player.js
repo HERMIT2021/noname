@@ -4980,7 +4980,7 @@ export class Player extends HTMLDivElement {
 			(function (j) {
 				setTimeout(function () {
 					targets[j - 1].line(targets[j], config);
-				}, lib.config.duration * i);
+				}, get.effectDuration(lib.config.duration * i, "line", 80));
 			})(i);
 		}
 	}
@@ -14025,7 +14025,7 @@ export class Player extends HTMLDivElement {
 				}
 			}
 		}
-		node.style.transitionDuration = "0.8s";
+		node.style.transitionDuration = get.effectDuration(800, "card", 80) / 1000 + "s";
 		ui.refresh(node);
 		if (typeof num == "number" && init !== false) {
 			config = {
@@ -14063,7 +14063,7 @@ export class Player extends HTMLDivElement {
 		node.show();
 
 		node.listenTransition(function () {
-			node.style.transitionDuration = "0.5s";
+			node.style.transitionDuration = get.effectDuration(500, "card", 80) / 1000 + "s";
 			ui.refresh(node);
 			node.delete();
 		});
@@ -14076,7 +14076,7 @@ export class Player extends HTMLDivElement {
 					} else {
 						that.$draw(num - 1, false, config, cardsetion);
 					}
-				}, 50);
+				}, get.effectDuration(50, "card", 20));
 			} else {
 				setTimeout(function () {
 					if (cards) {
@@ -14084,7 +14084,7 @@ export class Player extends HTMLDivElement {
 					} else {
 						that.$draw(num - 1, false, config, cardsetion);
 					}
-				}, 200);
+				}, get.effectDuration(200, "card", 20));
 			}
 		}
 	}
@@ -14481,7 +14481,7 @@ export class Player extends HTMLDivElement {
 						}
 
 						// 等待动画之后添加喵
-						await waitForTransition(lastCard, 500);
+						await waitForTransition(lastCard, get.effectDuration(500, "card", 80));
 
 						// 创建一张实体假牌用于显示信息哦
 						const number = get.number(vcard, false);
@@ -14516,7 +14516,7 @@ export class Player extends HTMLDivElement {
 
 						// 等待动画完成喵
 						await waitForAnimation(initMask, [{ opacity: 0 }, { opacity: 1 }], {
-							duration: 150,
+							duration: get.effectDuration(150, "card", 50),
 							fill: "forwards",
 							iterations: 1,
 						});
@@ -14526,7 +14526,7 @@ export class Player extends HTMLDivElement {
 
 						// 等待动画完成喵
 						await waitForAnimation(initMask, [{ opacity: 1 }, { opacity: 0 }], {
-							duration: 150,
+							duration: get.effectDuration(150, "card", 50),
 							fill: "forwards",
 							iterations: 1,
 						});
@@ -14599,14 +14599,16 @@ export class Player extends HTMLDivElement {
 		} else {
 			var node;
 			if (card == void 0 || card.length == 0) return;
+			const effectType = get.effectTypeFromEvent(card);
 			var cardx = card.copy("thrown");
+			cardx._effectType = effectType;
 			if (id) cardx.node.throw_id = id;
 			node = this.$throwordered(cardx, nosource, cardsetion);
 			if (time != void 0) {
 				node.fixed = true;
 				setTimeout(function () {
 					node.delete();
-				}, time);
+				}, get.effectDuration(time, effectType, 80));
 			}
 			lib.listenEnd(node);
 			return node;
@@ -14676,6 +14678,7 @@ export class Player extends HTMLDivElement {
 		node.classList.add("thrown");
 		node.hide();
 		node.style.transitionProperty = "left,top,opacity,transform";
+		node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1000 + "s";
 		for (var i = 0; i < ui.thrown.length; i++) {
 			if (ui.thrown[i].parentNode != ui.arena || ui.thrown[i].classList.contains("removing")) {
 				ui.thrown.splice(i--, 1);
@@ -14795,6 +14798,7 @@ export class Player extends HTMLDivElement {
 		node.classList.add("center");
 		node.hide();
 		node.style.transitionProperty = "left,top,opacity,transform";
+		node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1000 + "s";
 		if (!nosource) {
 			var nx = [50, -52];
 			var ny = [50, -52];
@@ -14911,9 +14915,11 @@ export class Player extends HTMLDivElement {
 	}
 	$throwxy(card, left, top) {
 		var node = card.copy("thrown", "thrownhighlight");
+		node._effectType = get.effectTypeFromEvent(card);
 		node.dataset.position = this.dataset.position;
 		node.hide();
 		node.style.transitionProperty = "left,top,opacity";
+		node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1000 + "s";
 
 		ui.arena.appendChild(node);
 		ui.refresh(node);
@@ -14928,9 +14934,11 @@ export class Player extends HTMLDivElement {
 			return this.$throwxy.apply(this, arguments);
 		}
 		var node = card.copy("thrown", "thrownhighlight");
+		node._effectType = get.effectTypeFromEvent(card);
 		node.style.left = left;
 		node.style.top = top;
 		node.hide();
+		node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1000 + "s";
 		// node.style.transitionProperty='left,top,opacity,transform';
 
 		var parseCalc = function (str) {
@@ -15796,29 +15804,32 @@ export class Player extends HTMLDivElement {
 		if (typeof type != "string") {
 			type = "legend";
 		}
+		const focusTime = get.effectDuration(1500, "skill", 300);
+		const arenaFocusTime = get.effectDuration(1800, "skill", 300);
+		const animationTime = get.effectDuration(1200, "skill", 200);
 		if (!avatar) {
-			this.playerfocus(1500);
-			game.delay(2);
+			this.playerfocus(focusTime);
+			game.delay(focusTime / lib.config.duration);
 		} else {
 			game.addVideo("playerfocus2");
-			game.broadcastAll(function () {
+			game.broadcastAll(function (arenaFocusTime) {
 				ui.arena.classList.add("playerfocus");
 				setTimeout(function () {
 					ui.arena.classList.remove("playerfocus");
-				}, 1800);
-			});
-			game.delay(3);
+				}, arenaFocusTime);
+			}, arenaFocusTime);
+			game.delay(arenaFocusTime / lib.config.duration);
 		}
 		var that = this;
 		setTimeout(
 			function () {
 				game.broadcastAll(
-					function (that, type, name, color, avatar) {
+					function (that, type, name, color, avatar, animationTime) {
 						if (lib.config.animation && !lib.config.low_performance) {
 							if (game.chess) {
-								that["$" + type + "2"](1200);
+								that["$" + type + "2"](animationTime);
 							} else {
-								that["$" + type](1200);
+								that["$" + type](animationTime);
 							}
 						}
 						if (name) {
@@ -15829,10 +15840,11 @@ export class Player extends HTMLDivElement {
 					type,
 					name,
 					color,
-					avatar
+					avatar,
+					animationTime
 				);
 			},
-			avatar ? 0 : 300
+			avatar ? 0 : get.effectDuration(300, "skill", 50)
 		);
 	}
 	$fire() {
@@ -16025,7 +16037,7 @@ export class Player extends HTMLDivElement {
 				} else {
 					clearInterval(interval);
 				}
-			}, 100);
+			}, get.effectDuration(100, "skill", 30));
 		} else {
 			avatar = false;
 			node.innerHTML = str;
@@ -16051,7 +16063,7 @@ export class Player extends HTMLDivElement {
 				node.delete();
 				node.style.transform = "scale(1.5)";
 			},
-			avatar ? 1600 : 1000
+			get.effectDuration(avatar ? 1600 : 1000, "skill", 200)
 		);
 	}
 	/**

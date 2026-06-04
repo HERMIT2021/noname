@@ -1203,7 +1203,27 @@ const skills = {
 					return link != "card" || (player.hasEquipableSlot(1) && !player.getEquip("real_zhuge"));
 				})
 				.set("ai", ({ link }) => {
-					return link == "skill" ? 2 : 1;
+					const player = get.player();
+					if (link == "card") {
+						if (!player.hasEquipableSlot(1) || player.getEquip("real_zhuge")) {
+							return 0;
+						}
+						const shaCount = player.countCards("hs", card => get.name(card, player) == "sha");
+						return 3 + Math.min(2, shaCount);
+					}
+					if (link == "mantou") {
+						const repeatable = player.countCards("hs", card => {
+							const num = get.number(card, player);
+							if (typeof num != "number" || num <= 0 || num > 10) {
+								return false;
+							}
+							const type = get.type(card, player);
+							return (type == "basic" || type == "trick") && !get.tag(card, "norepeat");
+						});
+						return 1.5 + Math.min(3, repeatable) + (player.countMark("dcyingyou") < 10 ? 1 : 0);
+					}
+					const skills = get.info("dcyingyou").getList().filter(skill => !player.hasSkill(skill[0], null, null, false));
+					return skills.length ? 2.5 : 0.5;
 				})
 				.forResult();
 			if (result.bool) {
@@ -1307,6 +1327,28 @@ const skills = {
 					}
 					const num = get.number(event.card);
 					return typeof num == "number" && num > 0 && num <= player.countMark("dcyingyou");
+				},
+				check(event, player) {
+					const card = event.card;
+					if (get.tag(card, "norepeat")) {
+						return false;
+					}
+					const num = get.number(card);
+					if (typeof num != "number" || num <= 0) {
+						return false;
+					}
+					const targets = event.targets?.length ? event.targets : [player];
+					const effect = targets.reduce((sum, target) => sum + get.effect(target, card, player, player), 0);
+					if (effect <= 0) {
+						return false;
+					}
+					if (get.tag(card, "recover") && targets.some(target => get.attitude(player, target) > 0 && target.isDamaged())) {
+						return true;
+					}
+					if (get.tag(card, "damage")) {
+						return effect >= Math.max(1, num / 3);
+					}
+					return effect >= Math.max(1.5, num / 2);
 				},
 				prompt2(event, player) {
 					const num = get.number(event.card);
