@@ -2793,13 +2793,22 @@ export class Game {
 		}
 	}
 	playBackgroundMusic() {
-		if (lib.config.background_music == "music_off") {
+		if (!ui.backgroundMusic) {
+			return;
+		}
+		if (lib.config.background_music == "music_off" || lib.config.volumn_background === 0) {
+			ui.backgroundMusic.pause();
+			ui.backgroundMusic.removeAttribute("src");
 			ui.backgroundMusic.src = "";
+			_status.currentMusic = "music_off";
 			return;
 		}
 		if (_status._aozhan) {
 			const aozhanBGMConfiguration = lib.config.mode_config.guozhan.aozhan_bgm;
 			if (aozhanBGMConfiguration == "disabled") {
+				ui.backgroundMusic.pause();
+				ui.backgroundMusic.removeAttribute("src");
+				ui.backgroundMusic.src = "";
 				return;
 			}
 			let aozhan = _status.tempAozhan || aozhanBGMConfiguration;
@@ -5403,6 +5412,9 @@ ${e instanceof Error ? e.stack : String(e)}`);
 	 * @param { [number, number | {opacity:any, color:any, dashed:any, duration:any} | string, number, number] } path
 	 */
 	linexy(path) {
+		if (lib.config.effect_line_enabled === false && arguments[1] != "drag") {
+			return;
+		}
 		const from = [path[0], path[1]],
 			to = [path[2], path[3]];
 		let total = typeof arguments[1] === "number" ? arguments[1] : lib.config.duration * 2,
@@ -5523,6 +5535,9 @@ ${e instanceof Error ? e.stack : String(e)}`);
 		image: "jianqilinexy",
 	};
 	zsPlayLineAnimation(name, node, fake, points) {
+		if (lib.config.effect_line_enabled === false) {
+			return;
+		}
 		var animation = Object.assign({}, game.jianqiLineAnim);
 		animation["image"] = name;
 		if (lib.config.zsGuideTime) {
@@ -5908,6 +5923,9 @@ ${e instanceof Error ? e.stack : String(e)}`);
 	 * @param { [number, number | {opacity:any, color:any, dashed:any, duration:any} | string, number, number] } path
 	 */
 	_linexy(path) {
+		if (lib.config.effect_line_enabled === false) {
+			return;
+		}
 		let from = [path[0], path[1]];
 		let to = [path[2], path[3]];
 		let total = typeof arguments[1] === "number" ? arguments[1] : lib.config.duration * 2;

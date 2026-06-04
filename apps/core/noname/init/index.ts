@@ -881,6 +881,7 @@ async function loadConfig() {
 	if (config.get("effect_speed_card") === undefined) config.set("effect_speed_card", config.get("card_animation") || "1");
 	if (config.get("effect_speed_basic") === undefined) config.set("effect_speed_basic", "1");
 	if (config.get("effect_speed_trick") === undefined) config.set("effect_speed_trick", "1");
+	if (config.get("effect_line_enabled") === undefined) config.set("effect_line_enabled", true);
 	if (config.get("effect_speed_line") === undefined) config.set("effect_speed_line", "1");
 	if (config.get("effect_speed_skill") === undefined) config.set("effect_speed_skill", "1");
 	if (config.get("swipe_up") === undefined) config.set("swipe_up", "off");

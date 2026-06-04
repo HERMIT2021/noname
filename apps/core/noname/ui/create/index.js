@@ -2460,14 +2460,15 @@ export class Create {
 		ui.arena.dataset.target_shake = lib.config.target_shake || "off";
 		ui.backgroundMusic = document.createElement("audio");
 		ui.backgroundMusic.volume = lib.config.volumn_background / 8;
+		ui.backgroundMusic.autoplay = lib.config.background_music != "music_off" && lib.config.volumn_background > 0;
+		ui.backgroundMusic.preload = lib.config.background_music == "music_off" || lib.config.volumn_background === 0 ? "none" : "auto";
 		game.playBackgroundMusic();
-		ui.backgroundMusic.autoplay = true;
 		ui.backgroundMusic.addEventListener("ended", game.playBackgroundMusic);
 		ui.window.appendChild(ui.backgroundMusic);
 		ui.window.addEventListener(
 			lib.config.touchscreen ? "touchend" : "click",
 			() => {
-				if (!ui.backgroundMusic.played.length && lib.config.background_music != "music_off" && !isNaN(ui.backgroundMusic.duration)) {
+				if (!ui.backgroundMusic.played.length && lib.config.background_music != "music_off" && lib.config.volumn_background > 0 && !isNaN(ui.backgroundMusic.duration)) {
 					ui.backgroundMusic.play();
 				}
 			},
