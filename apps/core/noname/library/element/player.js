@@ -14025,7 +14025,7 @@ export class Player extends HTMLDivElement {
 				}
 			}
 		}
-		node.style.transitionDuration = get.effectDuration(800, "card", 80) / 1000 + "s";
+		node.style.transitionDuration = get.effectDuration(800, "move", 80) / 1000 + "s";
 		ui.refresh(node);
 		if (typeof num == "number" && init !== false) {
 			config = {
@@ -14063,7 +14063,7 @@ export class Player extends HTMLDivElement {
 		node.show();
 
 		node.listenTransition(function () {
-			node.style.transitionDuration = get.effectDuration(500, "card", 80) / 1000 + "s";
+			node.style.transitionDuration = get.effectDuration(500, "move", 80) / 1000 + "s";
 			ui.refresh(node);
 			node.delete();
 		});
@@ -14076,7 +14076,7 @@ export class Player extends HTMLDivElement {
 					} else {
 						that.$draw(num - 1, false, config, cardsetion);
 					}
-				}, get.effectDuration(50, "card", 20));
+				}, get.effectDuration(50, "move", 20));
 			} else {
 				setTimeout(function () {
 					if (cards) {
@@ -14084,7 +14084,7 @@ export class Player extends HTMLDivElement {
 					} else {
 						that.$draw(num - 1, false, config, cardsetion);
 					}
-				}, get.effectDuration(200, "card", 20));
+				}, get.effectDuration(200, "move", 20));
 			}
 		}
 	}
@@ -15809,7 +15809,7 @@ export class Player extends HTMLDivElement {
 		const animationTime = get.effectDuration(1200, "skill", 200);
 		if (!avatar) {
 			this.playerfocus(focusTime);
-			game.delay(focusTime / lib.config.duration);
+			game.delay(focusTime / lib.config.duration, 0, false);
 		} else {
 			game.addVideo("playerfocus2");
 			game.broadcastAll(function (arenaFocusTime) {
@@ -15818,7 +15818,7 @@ export class Player extends HTMLDivElement {
 					ui.arena.classList.remove("playerfocus");
 				}, arenaFocusTime);
 			}, arenaFocusTime);
-			game.delay(arenaFocusTime / lib.config.duration);
+			game.delay(arenaFocusTime / lib.config.duration, 0, false);
 		}
 		var that = this;
 		setTimeout(
@@ -16114,7 +16114,7 @@ export class Player extends HTMLDivElement {
 			node.listenTransition(function () {
 				setTimeout(function () {
 					node.delete();
-				}, 200);
+				}, get.effectDuration(200, "popup", 40));
 			});
 			// setTimeout(function(){
 			// 	node.delete();
@@ -16123,7 +16123,7 @@ export class Player extends HTMLDivElement {
 			setTimeout(function () {
 				that.damagepopups.shift();
 				that.$damagepop();
-			}, 500);
+			}, get.effectDuration(500, "popup", 80));
 		}
 	}
 	$damage(source) {

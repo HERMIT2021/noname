@@ -6142,7 +6142,7 @@ export const Content = {
 						pair[0].$draw(pair[1].length);
 					}
 				}
-				delay = game.delay(0, get.delayx(500, 500));
+				delay = game.delay(0, get.delayx(500, 500), "move");
 				break;
 			case "gain":
 				for (const pair of event.gain_list) {
@@ -6158,7 +6158,7 @@ export const Content = {
 						pair[0].$gain(pair[1].length);
 					}
 				}
-				delay = game.delay(0, get.delayx(700, 700));
+				delay = game.delay(0, get.delayx(700, 700), "move");
 				break;
 			case "gain2":
 			case "draw2":
@@ -6175,7 +6175,7 @@ export const Content = {
 						pair[0].$gain2(pair[1]);
 					}
 				}
-				delay = game.delay(0, get.delayx(500, 500));
+				delay = game.delay(0, get.delayx(500, 500), "move");
 				break;
 			case "give":
 			case "giveAuto": {
@@ -6209,7 +6209,7 @@ export const Content = {
 						player.$giveAuto(hidden, pair[0]);
 					}
 				}
-				delay = game.delay(0, get.delayx(500, 500));
+				delay = game.delay(0, get.delayx(500, 500), "move");
 				break;
 			}
 		}
@@ -10330,7 +10330,7 @@ export const Content = {
 						_status.waitingForTransition = event.waitingForTransition;
 						game.pause();
 					} else {
-						game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration);
+						game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration, 0, false);
 					}
 				}
 			}
@@ -10591,7 +10591,7 @@ export const Content = {
 			if (event.effectedCount < event.effectCount) {
 				if (document.getElementsByClassName("thrown").length) {
 					if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-						game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration);
+						game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration, 0, false);
 					}
 				}
 				event.goto(11);
@@ -10608,7 +10608,7 @@ export const Content = {
 			//delete player.using;
 			if (document.getElementsByClassName("thrown").length) {
 				if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-					game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration);
+					game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration, 0, false);
 				}
 			} else {
 				event.finish();
@@ -13211,9 +13211,13 @@ export const Content = {
 						event = _status.event;
 					}
 					if (game.chess) {
-						event.node = card.copy("thrown", "center", ui.arena).addTempClass("start");
+						event.node = card.copy("thrown", "center", ui.arena);
+						event.node._effectType = "judge";
+						event.node.addTempClass("start");
 					} else {
-						event.node = player.$throwordered(card.copy(), true);
+						const node = card.copy();
+						node._effectType = "judge";
+						event.node = player.$throwordered(node, true);
 					}
 					if (lib.cardOL) {
 						lib.cardOL[cardid] = event.node;
@@ -13233,7 +13237,7 @@ export const Content = {
 			);
 
 			game.log(player, "进行" + event.judgestr + "判定，亮出的判定牌为", player.judging[0]);
-			await game.delay(2);
+			await game.delay(2, 0, "judge");
 			if (!event.noJudgeTrigger) {
 				await event.trigger("judge");
 			}

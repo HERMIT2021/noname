@@ -13,10 +13,16 @@ const FALLBACK_ENABLED_CHARACTER_PACKS = ["standard", "shenhua", "refresh", "yij
 const PROTECTED_MODE_PACKS = ["identity"];
 const PERSISTENT_DEFAULT_CONFIG = {
 	background_music: "music_off",
+	effect_speed_global: "1",
 	effect_speed_card: "1",
 	effect_speed_basic: "1",
 	effect_speed_trick: "1",
 	effect_speed_equip: "1",
+	effect_speed_judge: "1",
+	effect_speed_move: "1",
+	effect_speed_delay: "1",
+	effect_speed_popup: "1",
+	effect_speed_player: "1",
 	effect_line_enabled: true,
 	effect_speed_line: "1",
 	effect_speed_skill: "1",
@@ -963,10 +969,16 @@ async function loadConfig() {
 	config.get("all").mode = [];
 
 	if (config.get("duration") === undefined) config.set("duration", 500);
+	if (config.get("effect_speed_global") === undefined) config.set("effect_speed_global", "1");
 	if (config.get("effect_speed_card") === undefined) config.set("effect_speed_card", config.get("card_animation") || "1");
 	if (config.get("effect_speed_basic") === undefined) config.set("effect_speed_basic", "1");
 	if (config.get("effect_speed_trick") === undefined) config.set("effect_speed_trick", "1");
 	if (config.get("effect_speed_equip") === undefined) config.set("effect_speed_equip", "1");
+	if (config.get("effect_speed_judge") === undefined) config.set("effect_speed_judge", "1");
+	if (config.get("effect_speed_move") === undefined) config.set("effect_speed_move", "1");
+	if (config.get("effect_speed_delay") === undefined) config.set("effect_speed_delay", "1");
+	if (config.get("effect_speed_popup") === undefined) config.set("effect_speed_popup", "1");
+	if (config.get("effect_speed_player") === undefined) config.set("effect_speed_player", "1");
 	if (config.get("effect_line_enabled") === undefined) config.set("effect_line_enabled", true);
 	if (config.get("effect_speed_line") === undefined) config.set("effect_speed_line", "1");
 	if (config.get("effect_speed_skill") === undefined) config.set("effect_speed_skill", "1");

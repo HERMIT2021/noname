@@ -1405,22 +1405,36 @@ export class Get {
 	}
 	effectSpeed(type = "card") {
 		const configMap = {
+			global: "effect_speed_global",
 			basic: "effect_speed_basic",
 			trick: "effect_speed_trick",
 			equip: "effect_speed_equip",
+			judge: "effect_speed_judge",
+			move: "effect_speed_move",
+			delay: "effect_speed_delay",
+			popup: "effect_speed_popup",
+			player: "effect_speed_player",
 			line: "effect_speed_line",
 			skill: "effect_speed_skill",
 			card: "effect_speed_card",
 		};
 		const configName = configMap[type] || configMap.card;
-		let speed = parseFloat(lib.config[configName]);
-		if (!isFinite(speed) || speed <= 0) {
-			speed = configName == "effect_speed_card" ? parseFloat(lib.config.card_animation) : 1;
+		const readSpeed = (name, fallback = 1) => {
+			let speed = parseFloat(lib.config[name]);
+			if (!isFinite(speed) || speed <= 0) {
+				speed = fallback;
+			}
+			if (!isFinite(speed) || speed <= 0) {
+				speed = 1;
+			}
+			return speed;
+		};
+		const globalSpeed = readSpeed(configMap.global, 1);
+		if (configName == configMap.global) {
+			return globalSpeed;
 		}
-		if (!isFinite(speed) || speed <= 0) {
-			speed = 1;
-		}
-		return speed;
+		const fallback = configName == "effect_speed_card" ? parseFloat(lib.config.card_animation) : 1;
+		return globalSpeed * readSpeed(configName, fallback);
 	}
 	effectDuration(duration, type = "card", min = 0) {
 		if (typeof duration != "number" || !isFinite(duration)) {
@@ -1428,7 +1442,7 @@ export class Get {
 		}
 		const speed = get.effectSpeed(type);
 		const result = Math.round(duration / speed);
-		const minDuration = speed > 1 ? Math.max(16, Math.round(min / speed)) : min;
+		const minDuration = min > 0 && speed > 1 ? Math.max(16, Math.round(min / speed)) : min;
 		return Math.max(minDuration, result);
 	}
 	effectType(card) {

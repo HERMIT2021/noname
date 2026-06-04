@@ -186,6 +186,9 @@ export class Game {
 	 * @author Curpond
 	 */
 	$swapElement(e1, e2, duration = 400, timefun = "linear") {
+		if (duration != 0) {
+			duration = get.effectDuration(duration, "move", 40);
+		}
 		return new Promise(resolve => {
 			let e1p = e1.parentElement;
 			let e2p = e2.parentElement;
@@ -307,6 +310,9 @@ export class Game {
 	async $elementGoto(element, parent, position = "last", duration = 500, timefun = "linear") {
 		if (!document.contains(element) || !document.contains(parent)) {
 			throw new Error("无效的参数或者元素没有添加到页面喵");
+		}
+		if (duration != 0) {
+			duration = get.effectDuration(duration, "move", 40);
 		}
 
 		/**
@@ -4300,9 +4306,13 @@ ${e instanceof Error ? e.stack : String(e)}`);
 			if (player && content) {
 				var judging = get.infoCard(content[0]);
 				if (game.chess) {
-					judging.copy("thrown", "center", "thrownhighlight", ui.arena).addTempClass("start");
+					const node = judging.copy("thrown", "center", "thrownhighlight", ui.arena);
+					node._effectType = "judge";
+					node.addTempClass("start");
 				} else {
-					player.$throwordered(judging.copy("thrownhighlight"), true);
+					const node = judging.copy("thrownhighlight");
+					node._effectType = "judge";
+					player.$throwordered(node, true);
 				}
 
 				ui.create.dialog(content[1]).videoId = content[2];
@@ -7299,19 +7309,24 @@ ${e instanceof Error ? e.stack : String(e)}`);
 	/**
 	 * @param { number } [time]
 	 * @param { number } [time2]
+	 * @param { string | false } [effectType]
 	 */
-	delay(time = 1, time2 = 0) {
+	delay(time = 1, time2 = 0, effectType = "delay") {
 		time = time * lib.config.duration + time2;
 		if (lib.config.game_speed == "vvfast") {
 			time /= 3;
+		}
+		if (effectType !== false && time > 0) {
+			time = get.effectDuration(time, effectType || "delay", 16);
 		}
 		return _status.pauseManager.setDelay(delay(time));
 	}
 	/**
 	 * @param { number } [time]
 	 * @param { number } [time2]
+	 * @param { string | false } [effectType]
 	 */
-	delayx(time = 1, time2 = 0) {
+	delayx(time = 1, time2 = 0, effectType = "delay") {
 		switch (lib.config.game_speed) {
 			case "vslow":
 				time *= 2.5;
@@ -7329,7 +7344,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 				time *= 0.2;
 				break;
 		}
-		return game.delay(time, time2);
+		return game.delay(time, time2, effectType);
 	}
 	/**
 	 * @param { GameEvent } [event]
@@ -10572,7 +10587,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 						},
 					],
 					{
-						duration: 600,
+						duration: get.effectDuration(600, "player", 120),
 						easing: "cubic-bezier(0.85, 0, 0.15, 1)",
 					}
 				);
@@ -10580,7 +10595,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 					const list = [];
 					//落地后开始震动
 					const shock = parent.animate([{ transform: "translate(0, 0)" }, { transform: "translate(-10px, 15px)" }, { transform: "translate(10px, -10px)" }, { transform: "translate(-5px, 5px)" }, { transform: "translate(0, 0)" }], {
-						duration: 300,
+						duration: get.effectDuration(300, "player", 80),
 						easing: "ease-out",
 					}).finished;
 					list.push(shock);
@@ -10629,7 +10644,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 								},
 							],
 							{
-								duration: 1000,
+								duration: get.effectDuration(1000, "player", 120),
 								easing: "cubic-bezier(0.1, 0.5, 0.2, 1)",
 								fill: "forwards",
 							}
@@ -10805,7 +10820,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 									},
 								],
 								{
-									duration: 1000 + Math.random() * 500,
+									duration: get.effectDuration(1000 + Math.random() * 500, "player", 120),
 									easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
 									fill: "forwards",
 								}
@@ -10822,7 +10837,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 						{ transform: "scale(0.8)", filter: "brightness(0) grayscale(1)", opacity: 0 },
 					],
 					{
-						duration: 1000,
+						duration: get.effectDuration(1000, "player", 120),
 						fill: "forwards",
 					}
 				).finished;
