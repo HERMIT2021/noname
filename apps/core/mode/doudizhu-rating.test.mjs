@@ -46,11 +46,23 @@ assert.deepEqual(
 				hidden_test: ["male", "shen", 3, [], ["unseen"]],
 			},
 			extra: {
-				extra_test: ["male", "qun", 4, [], []],
+				zombie_zombie: {
+					sex: "male",
+					group: "qun",
+					hp: 2,
+					skills: ["zombieshibian"],
+					isUnseen: true,
+				},
+				ca_shen_caocao: {
+					sex: "male",
+					group: "shen",
+					hp: 4,
+					skills: ["cazhaoshao"],
+				},
 			},
 		},
-		["standard", "shenhua"],
+		["standard", "shenhua", "extra"],
 		["liubei"]
 	),
-	["caocao", "shen_guojia"]
+	["caocao", "shen_guojia", "ca_shen_caocao"]
 );

@@ -36,6 +36,16 @@ export function getDoudizhuRating(ratings, name, role) {
 	return normalizeRating(rating[role == "fan" ? "fan" : "zhu"]);
 }
 
+function isDoudizhuSelectableCharacter(info) {
+	if (!info || typeof info != "object") {
+		return false;
+	}
+	if (Array.isArray(info)) {
+		return !Array.isArray(info[4]) || !info[4].includes("unseen");
+	}
+	return !info.isUnseen && !info.isHiddenBoss && !info.isMinskin;
+}
+
 export function getDoudizhuEnabledCharacters(characterPacks, enabledPacks, bannedCharacters) {
 	if (!characterPacks || typeof characterPacks != "object") {
 		return [];
@@ -54,7 +64,7 @@ export function getDoudizhuEnabledCharacters(characterPacks, enabledPacks, banne
 				continue;
 			}
 			const info = pack[name];
-			if (Array.isArray(info) && Array.isArray(info[4]) && info[4].includes("unseen")) {
+			if (!isDoudizhuSelectableCharacter(info)) {
 				continue;
 			}
 			added.add(name);
