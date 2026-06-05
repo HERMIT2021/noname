@@ -1,0 +1,13 @@
+.rzshCon,
+#rzsh-app,
+.rzsh-home-page {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 1;
+	left: 0;
+	top: 0;
+}
+.rzsh-home-page {
+	z-index: 2;
+}
