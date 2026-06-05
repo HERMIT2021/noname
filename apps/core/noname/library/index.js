@@ -23,6 +23,7 @@ import dedent from "dedent";
 import { PoptipManager, HTMLPoptipElement } from "./poptip.js";
 import { ZhanfaManager } from "./zhanfa.js";
 import skills from "./skill.js";
+import { getDoudizhuEnabledCharacters, getDoudizhuRating, normalizeDoudizhuRatings } from "../../mode/doudizhu-rating.js";
 
 const html = dedent;
 const effectSpeedItems = {
@@ -7917,6 +7918,13 @@ export class Library {
 						game.saveConfig("connect_choice_fan", num, "doudizhu");
 					},
 				},
+				connect_doudizhu_character_rating: {
+					name: "启用武将评分匹配",
+					init: true,
+					frequent: true,
+					restart: true,
+					intro: "启用后，斗地主AI会按地主/农民两套评分选将，农民会优先围绕地主强度匹配。",
+				},
 				connect_change_card: {
 					name: "启用手气卡",
 					init: false,
@@ -8069,6 +8077,201 @@ export class Library {
 						}
 						text.innerText = num;
 						game.saveConfig("choice_fan", num, "doudizhu");
+					},
+				},
+				doudizhu_character_rating: {
+					name: "启用武将评分匹配",
+					init: true,
+					restart: true,
+					frequent: true,
+					intro: "启用后，斗地主AI会按地主/农民两套评分选将，农民会优先围绕地主强度匹配。",
+				},
+				edit_character_rating: {
+					name: "编辑武将评分",
+					intro: "读取斗转星移禁将页面中斗地主池当前启用的武将，在弹窗里分别设置地主评分和农民评分。",
+					clear: true,
+					onclick() {
+						const prefix = "extension_斗转星移_";
+						const modePlan = lib.config[prefix + "modePlan"] || {};
+						let planIndex = parseInt(modePlan.doudizhu_all);
+						if (!isFinite(planIndex)) {
+							planIndex = parseInt(modePlan.doudizhu);
+						}
+						if (!isFinite(planIndex)) {
+							planIndex = 2;
+						}
+						const plan = lib.config[prefix + "plan" + planIndex] || lib.config[prefix + "plan2"];
+						if (!plan) {
+							alert("没有读取到斗转星移的斗地主池方案，请先打开斗转星移禁将页面初始化斗地主池。");
+							return;
+						}
+						const enabledPacks = Array.isArray(plan.pack) && plan.pack.length ? plan.pack : Array.isArray(lib.config.characters) && lib.config.characters.length ? lib.config.characters : Object.keys(lib.characterPack);
+						const bannedCharacters = Array.isArray(plan.banList) ? plan.banList : Array.isArray(lib.config.doudizhu_banned) ? lib.config.doudizhu_banned : [];
+						let characters = getDoudizhuEnabledCharacters(lib.characterPack, enabledPacks, bannedCharacters);
+						if (!characters.length && Array.isArray(lib.config.characters) && lib.config.characters.length && enabledPacks != lib.config.characters) {
+							characters = getDoudizhuEnabledCharacters(lib.characterPack, lib.config.characters, bannedCharacters);
+						}
+						characters.sort((a, b) => {
+							const translationA = get.translation(a) || a;
+							const translationB = get.translation(b) || b;
+							return translationA.localeCompare(translationB, "zh-Hans") || String(a).localeCompare(String(b));
+						});
+						if (!characters.length) {
+							alert("当前斗转星移斗地主池没有可评分的启用武将，请先在禁将页面开启武将并保存。");
+							return;
+						}
+
+						const storedRatings = normalizeDoudizhuRatings(get.config("doudizhu_character_rating_data", "doudizhu") || {});
+						const editingRatings = {};
+						for (const name of characters) {
+							editingRatings[name] = {
+								zhu: getDoudizhuRating(storedRatings, name, "zhu"),
+								fan: getDoudizhuRating(storedRatings, name, "fan"),
+							};
+						}
+
+						const applyPanelStyle = function (node, cssText) {
+							node.style.cssText = "position:relative;display:block;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+							return node;
+						};
+						const applyFlexStyle = function (node, cssText) {
+							node.style.cssText = "position:relative;display:flex;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+							return node;
+						};
+						const applyGridStyle = function (node, cssText) {
+							node.style.cssText = "position:relative;display:grid;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+							return node;
+						};
+						const createTextNode = function (parent, text, cssText) {
+							return applyPanelStyle(ui.create.div("", text, parent), cssText);
+						};
+						const closePanel = function () {
+							ui.window.classList.remove("shortcutpaused");
+							ui.window.classList.remove("systempaused");
+							overlay.remove();
+						};
+						const overlay = ui.create.div(".popup-container", ui.window, function (event) {
+							if (event.target == overlay) {
+								closePanel();
+							}
+						});
+						overlay.style.cssText = "position:fixed;left:0;top:0;width:100%;height:100%;z-index:10000;background:rgba(0,0,0,0.72);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;transition:none;text-shadow:none;";
+						ui.window.classList.add("shortcutpaused");
+						ui.window.classList.add("systempaused");
+
+						const panel = ui.create.div("", overlay);
+						applyFlexStyle(panel, "width:min(980px,94vw);height:min(720px,90vh);background:rgba(28,27,25,0.97);border:1px solid rgba(226,198,126,0.58);border-radius:8px;box-shadow:0 18px 48px rgba(0,0,0,0.55);color:#f7ecd9;flex-direction:column;overflow:hidden;");
+						panel.addEventListener("click", event => event.stopPropagation());
+
+						const header = ui.create.div("", panel);
+						applyFlexStyle(header, "align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.12);");
+						const title = ui.create.div("", header);
+						applyPanelStyle(title, "flex:1;min-width:0;");
+						createTextNode(title, "斗地主武将评分", "font-size:20px;font-weight:700;line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+						const subTitle = createTextNode(title, "斗转星移「" + (plan.name || "斗地主池") + "」当前启用：" + characters.length + "名", "margin-top:4px;font-size:13px;line-height:18px;color:rgba(247,236,217,0.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+						const searchInput = document.createElement("input");
+						searchInput.type = "search";
+						searchInput.placeholder = "搜索武将";
+						searchInput.style.cssText = "position:relative;display:block;width:160px;height:32px;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.08);color:#f7ecd9;padding:0 10px;outline:none;box-sizing:border-box;transition:none;";
+						header.appendChild(searchInput);
+						const saveButton = ui.create.div(".menubutton.large", "保存", header);
+						applyPanelStyle(saveButton, "margin:0;min-width:66px;height:32px;line-height:32px;border-radius:6px;text-align:center;background:rgba(205,158,70,0.95);color:#191714;cursor:pointer;");
+						const closeButton = ui.create.div(".menubutton.large", "关闭", header);
+						applyPanelStyle(closeButton, "margin:0;min-width:66px;height:32px;line-height:32px;border-radius:6px;text-align:center;background:rgba(255,255,255,0.1);color:#f7ecd9;cursor:pointer;");
+						closeButton.listen(closePanel);
+
+						const table = ui.create.div("", panel);
+						applyPanelStyle(table, "flex:1;min-height:0;overflow:auto;padding:0 12px 12px 12px;");
+						const tableHeader = ui.create.div("", table);
+						applyGridStyle(tableHeader, "position:sticky;top:0;z-index:1;grid-template-columns:68px minmax(150px,1fr) 282px 282px;gap:10px;align-items:center;min-width:820px;padding:10px 8px;background:rgba(28,27,25,0.98);border-bottom:1px solid rgba(255,255,255,0.12);color:rgba(247,236,217,0.74);font-size:13px;");
+						createTextNode(tableHeader, "头像", "");
+						createTextNode(tableHeader, "武将", "");
+						createTextNode(tableHeader, "地主评分", "");
+						createTextNode(tableHeader, "农民评分", "");
+
+						const rows = [];
+						const setButtonActive = function (button, active) {
+							button.style.background = active ? "rgba(205,158,70,0.95)" : "rgba(255,255,255,0.08)";
+							button.style.color = active ? "#191714" : "#f7ecd9";
+							button.style.borderColor = active ? "rgba(255,232,170,0.7)" : "rgba(255,255,255,0.16)";
+							button.style.fontWeight = active ? "700" : "400";
+						};
+						const createScoreGroup = function (row, name, role) {
+							const group = ui.create.div("", row);
+							applyGridStyle(group, "grid-template-columns:repeat(10,24px);gap:4px;align-items:center;");
+							const buttons = [];
+							for (let score = 1; score <= 10; score++) {
+								const button = ui.create.div("", String(score), group);
+								applyPanelStyle(button, "height:24px;line-height:24px;text-align:center;border:1px solid rgba(255,255,255,0.16);border-radius:5px;cursor:pointer;font-size:13px;");
+								button.listen(function () {
+									editingRatings[name][role] = score;
+									for (const item of buttons) {
+										setButtonActive(item.button, item.score == score);
+									}
+								});
+								buttons.push({ button, score });
+							}
+							for (const item of buttons) {
+								setButtonActive(item.button, item.score == editingRatings[name][role]);
+							}
+						};
+
+						for (const name of characters) {
+							const row = ui.create.div("", table);
+							applyGridStyle(row, "grid-template-columns:68px minmax(150px,1fr) 282px 282px;gap:10px;align-items:center;min-width:820px;padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);");
+							const avatar = ui.create.div("", row);
+							applyPanelStyle(avatar, "width:52px;height:64px;border-radius:6px;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.2);");
+							avatar.setBackground(name, "character");
+							const nameNode = ui.create.div("", row);
+							applyPanelStyle(nameNode, "min-width:0;");
+							const translatedName = get.translation(name) || name;
+							createTextNode(nameNode, translatedName, "font-size:16px;line-height:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+							createTextNode(nameNode, name, "margin-top:3px;font-size:12px;line-height:16px;color:rgba(247,236,217,0.58);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+							createScoreGroup(row, name, "zhu");
+							createScoreGroup(row, name, "fan");
+							rows.push({
+								node: row,
+								searchText: (translatedName + " " + name).toLowerCase(),
+							});
+						}
+
+						searchInput.addEventListener("input", function () {
+							const value = this.value.trim().toLowerCase();
+							let count = 0;
+							for (const row of rows) {
+								const visible = !value || row.searchText.includes(value);
+								row.node.style.display = visible ? "grid" : "none";
+								if (visible) {
+									count++;
+								}
+							}
+							subTitle.textContent = "斗转星移「" + (plan.name || "斗地主池") + "」当前显示：" + count + "/" + characters.length + "名";
+						});
+						saveButton.listen(function () {
+							const nextRatings = {
+								...storedRatings,
+							};
+							for (const name of characters) {
+								nextRatings[name] = {
+									zhu: editingRatings[name].zhu,
+									fan: editingRatings[name].fan,
+								};
+							}
+							game.saveConfig("doudizhu_character_rating_data", nextRatings, "doudizhu");
+							closePanel();
+							alert("斗地主武将评分已保存");
+						});
+					},
+				},
+				reset_character_rating: {
+					name: "重置武将评分",
+					intro: "清除斗地主武将评分配置。清除后所有未重新填写的武将都会按默认5分处理。",
+					clear: true,
+					onclick() {
+						if (confirm("是否清除斗地主武将评分配置？")) {
+							game.saveConfig("doudizhu_character_rating_data", null, "doudizhu");
+							alert("斗地主武将评分已重置");
+						}
 					},
 				},
 				free_choose: {

@@ -1,4 +1,5 @@
 import { lib, game, ui, get, ai, _status } from "noname";
+import { getDoudizhuRating, normalizeDoudizhuRatings, sortDoudizhuCandidates } from "./doudizhu-rating.js";
 export const type = "mode";
 /**
  * @type { () => importModeConfig }
@@ -175,6 +176,90 @@ export default () => {
 		game: {
 			canReplaceViewpoint: () => true,
 			recommendDizhu: ["re_guojia", "re_huanggai", "re_lvbu", "re_guanyu", "re_sunquan", "re_xusheng", "re_wuyi", "re_sunben", "xuyou", "zhangchunhua", "caochong", "zhangsong", "zhongyao", "wangyi", "caochun", "maliang", "sp_diaochan", "quyi", "sp_zhaoyun", "shamoke", "lijue", "liuzan", "wenyang", "shen_lvmeng", "shen_ganning", "jiakui", "wangyuanji", "lingcao", "miheng", "sp_key_yuri", "key_hinata", "key_rin", "key_kyousuke", "ns_chendao", "jiakui", "haozhao"],
+			isDoudizhuRatingEnabled() {
+				if (_status.connectMode && lib.configOL) {
+					if (typeof lib.configOL.doudizhu_character_rating == "boolean") {
+						return lib.configOL.doudizhu_character_rating;
+					}
+					if (typeof lib.configOL.connect_doudizhu_character_rating == "boolean") {
+						return lib.configOL.connect_doudizhu_character_rating;
+					}
+				}
+				return get.config("doudizhu_character_rating", "doudizhu") !== false;
+			},
+			getDoudizhuRatings() {
+				var ratings = normalizeDoudizhuRatings(get.config("doudizhu_character_rating_data", "doudizhu"));
+				for (var name in lib.characterReplace) {
+					var list = lib.characterReplace[name];
+					if (!Array.isArray(list) || !list.length) {
+						continue;
+					}
+					var zhu = getDoudizhuRating(ratings, name, "zhu"),
+						fan = getDoudizhuRating(ratings, name, "fan");
+					for (var i = 0; i < list.length; i++) {
+						zhu = Math.max(zhu, getDoudizhuRating(ratings, list[i], "zhu"));
+						fan = Math.max(fan, getDoudizhuRating(ratings, list[i], "fan"));
+					}
+					ratings[name] = { zhu, fan };
+				}
+				return ratings;
+			},
+			getDoudizhuCharacterRating(name, role) {
+				if (!game.isDoudizhuRatingEnabled()) {
+					return 5;
+				}
+				return getDoudizhuRating(game.getDoudizhuRatings(), name, role);
+			},
+			getDoudizhuTargetScore() {
+				if (!game.isDoudizhuRatingEnabled() || !game.zhu) {
+					return null;
+				}
+				if (game.zhu.name1 || game.zhu.name2) {
+					var score = game.getDoudizhuCharacterRating(game.zhu.name1, "zhu");
+					if (game.zhu.name2) {
+						score = Math.max(score, game.getDoudizhuCharacterRating(game.zhu.name2, "zhu"));
+					}
+					return score;
+				}
+				if (Array.isArray(game.zhu._characterChoice) && game.zhu._characterChoice.length) {
+					var list = game.getDoudizhuSortedCandidates(game.zhu._characterChoice, "zhu");
+					return list[0] ? game.getDoudizhuCharacterRating(list[0], "zhu") : null;
+				}
+				return null;
+			},
+			getDoudizhuSortedCandidates(list, role, targetScore) {
+				if (!game.isDoudizhuRatingEnabled()) {
+					return Array.isArray(list) ? list.slice() : [];
+				}
+				return sortDoudizhuCandidates(list, role, game.getDoudizhuRatings(), { targetScore });
+			},
+			takeDoudizhuCandidates(list, num, role, targetScore) {
+				if (!Array.isArray(list) || num <= 0) {
+					return [];
+				}
+				if (!game.isDoudizhuRatingEnabled()) {
+					return list.randomRemove(num);
+				}
+				var sorted = game.getDoudizhuSortedCandidates(list, role, targetScore),
+					result = [];
+				for (var i = 0; i < sorted.length && result.length < num; i++) {
+					if (list.includes(sorted[i])) {
+						result.push(sorted[i]);
+						list.remove(sorted[i]);
+					}
+				}
+				return result;
+			},
+			chooseDoudizhuCharacters(list, player, num) {
+				if (!Array.isArray(list) || !list.length) {
+					return [];
+				}
+				var role = player && player.identity == "zhu" ? "zhu" : "fan";
+				return game.getDoudizhuSortedCandidates(list, role, role == "fan" ? game.getDoudizhuTargetScore() : null).slice(0, num || 1);
+			},
+			isDoudizhuRecommendedDizhu(name) {
+				return game.recommendDizhu.includes(name) || (game.isDoudizhuRatingEnabled() && game.getDoudizhuCharacterRating(name, "zhu") >= 7);
+			},
 			addRecord(bool) {
 				if (typeof bool == "boolean") {
 					var data = lib.config.gameRecord.doudizhu.data;
@@ -428,10 +513,10 @@ export default () => {
 					for (var player of game.players) {
 						if (player != game.me) {
 							if (player == game.zhu) {
-								var list = event.map[player.playerid].randomGets(2);
+								var list = game.chooseDoudizhuCharacters(event.map[player.playerid], player, 2);
 								player.init(list[0], list[1]);
 							} else {
-								player.init(event.map[player.playerid].randomGet());
+								player.init(game.chooseDoudizhuCharacters(event.map[player.playerid], player, 1)[0]);
 							}
 						}
 						player.markSkill("doudizhu_cardPile");
@@ -469,7 +554,7 @@ export default () => {
 					event.list.randomSort();
 					_status.characterlist = event.list.slice(0);
 					for (var player of game.players) {
-						event.map[player.playerid] = event.list.randomRemove(4);
+						event.map[player.playerid] = game.takeDoudizhuCandidates(event.list, 4, "fan");
 					}
 					event.controls = ["不叫地主", "一倍", "两倍", "三倍"];
 					event.dialog = ui.create.dialog("本局城池：" + get.translation(game.zhuSkill), [event.map[game.me.playerid], "character"]);
@@ -517,7 +602,7 @@ export default () => {
 						player.showIdentity();
 					}
 					event.dialog.close();
-					event.map[game.zhu.playerid].addArray(event.list.randomRemove(3));
+					event.map[game.zhu.playerid].addArray(game.takeDoudizhuCandidates(event.list, 3, "zhu"));
 					"step 5";
 					var list = ["请选择你的武将", [event.map[game.me.playerid], "character"]];
 					if (game.me.identity == "fan") {
@@ -537,7 +622,7 @@ export default () => {
 					game.me.init(result.links[0]);
 					for (var player of game.players) {
 						if (player != game.me) {
-							player.init(event.map[player.playerid].randomGet());
+							player.init(game.chooseDoudizhuCharacters(event.map[player.playerid], player, 1)[0]);
 						}
 						if (player == game.zhu) {
 							player.addSkill(game.zhuSkill);
@@ -582,7 +667,7 @@ export default () => {
 						if (ix.length) {
 							var name = ix.randomGet();
 							event.list.push(name);
-							if (game.recommendDizhu.includes(name)) {
+							if (game.isDoudizhuRecommendedDizhu(name)) {
 								event.list2.push(name);
 							}
 							list4.addArray(ix);
@@ -593,7 +678,7 @@ export default () => {
 							continue;
 						}
 						event.list.push(i);
-						if (game.recommendDizhu.includes(i)) {
+						if (game.isDoudizhuRecommendedDizhu(i)) {
 							event.list2.push(i);
 						}
 					}
@@ -605,7 +690,7 @@ export default () => {
 						if (!event.map[id]) {
 							event.map[id] = [];
 						}
-						event.map[id].addArray(event.list2.randomRemove(1));
+						event.map[id].addArray(game.takeDoudizhuCandidates(event.list2, 1, "zhu"));
 						event.list.removeArray(event.map[id]);
 						event.map[id].addArray(event.list.randomRemove(4 - event.map[id].length));
 						event.list2.removeArray(event.map[id]);
@@ -631,7 +716,7 @@ export default () => {
 							player.showIdentity();
 						}
 						event.dialog.close();
-						event.map[game.zhu.playerid].addArray(event.list.randomRemove(3));
+						event.map[game.zhu.playerid].addArray(game.takeDoudizhuCandidates(event.list, 3, "zhu"));
 					} else {
 						event.current = event.current.next;
 						event.goto(1);
@@ -643,7 +728,7 @@ export default () => {
 					game.me.init(result.links[0]);
 					for (var player of game.players) {
 						if (player != game.me) {
-							player.init(event.map[player.playerid].randomGet());
+							player.init(game.chooseDoudizhuCharacters(event.map[player.playerid], player, 1)[0]);
 						}
 					}
 					if (!game.zhu.isInitFilter("noZhuHp")) {
@@ -713,7 +798,7 @@ export default () => {
 					event.list.randomSort();
 					_status.characterlist = event.list.slice(0);
 					for (var player of game.players) {
-						player._characterChoice = event.list.randomRemove(get.config("choice_" + player.identity));
+						player._characterChoice = game.takeDoudizhuCandidates(event.list, get.config("choice_" + player.identity), player.identity, player.identity == "fan" ? game.getDoudizhuTargetScore() : null);
 						if (player.identity == "fan") {
 							player._friend = player.next.identity == "fan" ? player.next : player.previous;
 						}
@@ -734,7 +819,7 @@ export default () => {
 					game.me.init(result.links[0]);
 					for (var i = 0; i < game.players.length; i++) {
 						if (game.players[i] != game.me) {
-							game.players[i].init(game.players[i]._characterChoice.randomGet());
+							game.players[i].init(game.chooseDoudizhuCharacters(game.players[i]._characterChoice, game.players[i], 1)[0]);
 						}
 						_status.characterlist.remove(game.players[i].name1);
 						_status.characterlist.remove(game.players[i].name2);
@@ -783,7 +868,7 @@ export default () => {
 					return game.players.randomGet(game.me, game.zhu);
 				};
 				next.ai = function (player, list, list2, back) {
-					var listc = list.slice(0, 2);
+					var listc = game.chooseDoudizhuCharacters(list, player, get.config("double_character") ? 2 : 1);
 					for (var i = 0; i < listc.length; i++) {
 						var listx = lib.characterReplace[listc[i]];
 						if (listx && listx.length) {
@@ -1043,7 +1128,7 @@ export default () => {
 					event.list.randomSort();
 					_status.characterlist = list4.slice(0);
 					var num = get.config("choice_" + game.me.identity);
-					list = event.list.slice(0, num);
+					list = game.getDoudizhuSortedCandidates(event.list, game.me.identity, game.me.identity == "fan" ? game.getDoudizhuTargetScore() : null).slice(0, num);
 					delete event.swapnochoose;
 					var dialog;
 					if (event.swapnodialog) {
@@ -1083,7 +1168,7 @@ export default () => {
 							}
 
 							event.list.randomSort();
-							list = event.list.slice(0, num);
+							list = game.getDoudizhuSortedCandidates(event.list, game.me.identity, game.me.identity == "fan" ? game.getDoudizhuTargetScore() : null).slice(0, num);
 
 							var buttons = ui.create.div(".buttons");
 							var node = _status.event.dialog.buttons[0].parentNode;
@@ -1205,10 +1290,26 @@ export default () => {
 						}
 					}
 
+					var aiPlayers = [];
 					for (var i = 0; i < game.players.length; i++) {
 						if (game.players[i] != game.me) {
+							aiPlayers.push(game.players[i]);
+						}
+					}
+					aiPlayers.sort(function (a, b) {
+						if (a == game.zhu) {
+							return -1;
+						}
+						if (b == game.zhu) {
+							return 1;
+						}
+						return 0;
+					});
+					for (var i = 0; i < aiPlayers.length; i++) {
+						var player = aiPlayers[i];
+						if (player != game.me) {
 							event.list.randomSort();
-							event.ai(game.players[i], event.list.splice(0, get.config("choice_" + game.players[i].identity)), null, event.list);
+							event.ai(player, game.takeDoudizhuCandidates(event.list, get.config("choice_" + player.identity), player.identity, player.identity == "fan" ? game.getDoudizhuTargetScore() : null), null, event.list);
 						}
 					}
 					"step 3";
@@ -1281,7 +1382,7 @@ export default () => {
 
 					var map = {};
 					for (var player of game.players) {
-						player._characterChoice = event.list.randomRemove(lib.configOL["choice_" + player.identity]);
+						player._characterChoice = game.takeDoudizhuCandidates(event.list, lib.configOL["choice_" + player.identity], player.identity, player.identity == "fan" ? game.getDoudizhuTargetScore() : null);
 						if (player.identity == "fan") {
 							player._friend = player.next.identity == "fan" ? player.next : player.previous;
 						}
@@ -1320,7 +1421,7 @@ export default () => {
 					"step 2";
 					for (var i in lib.playerOL) {
 						if (!result[i] || result[i] == "ai" || !result[i].links || !result[i].links.length) {
-							result[i] = lib.playerOL[i]._characterChoice.randomGet();
+							result[i] = game.chooseDoudizhuCharacters(lib.playerOL[i]._characterChoice, lib.playerOL[i], 1)[0];
 						} else {
 							result[i] = result[i].links[0];
 						}
@@ -1398,7 +1499,7 @@ export default () => {
 						if (ix.length) {
 							var name = ix.randomGet();
 							event.list.push(name);
-							if (game.recommendDizhu.includes(name)) {
+							if (game.isDoudizhuRecommendedDizhu(name)) {
 								event.list2.push(name);
 							}
 							list4.addArray(ix);
@@ -1409,7 +1510,7 @@ export default () => {
 							continue;
 						}
 						event.list.push(i);
-						if (game.recommendDizhu.includes(i)) {
+						if (game.isDoudizhuRecommendedDizhu(i)) {
 							event.list2.push(i);
 						}
 					}
@@ -1418,7 +1519,7 @@ export default () => {
 						if (!event.map[id]) {
 							event.map[id] = [];
 						}
-						event.map[id].addArray(event.list2.randomRemove(1));
+						event.map[id].addArray(game.takeDoudizhuCandidates(event.list2, 1, "zhu"));
 						event.list.removeArray(event.map[id]);
 						event.map[id].addArray(event.list.randomRemove(4 - event.map[id].length));
 						event.list2.removeArray(event.map[id]);
@@ -1451,7 +1552,7 @@ export default () => {
 							player.identityShown = true;
 						}
 						game.broadcastAll("closeDialog", event.videoId);
-						event.map[game.zhu.playerid].addArray(event.list.randomRemove(3));
+						event.map[game.zhu.playerid].addArray(game.takeDoudizhuCandidates(event.list, 3, "zhu"));
 					} else {
 						event.current = event.current.next;
 						event.goto(1);
@@ -1477,7 +1578,7 @@ export default () => {
 					}
 					for (var i in result) {
 						if (result[i] == "ai") {
-							result[i] = event.list2.randomRemove(lib.configOL.double_character ? 2 : 1);
+							result[i] = game.chooseDoudizhuCharacters(event.map[i], lib.playerOL[i], lib.configOL.double_character ? 2 : 1);
 						} else {
 							result[i] = result[i].links;
 						}
@@ -1551,7 +1652,7 @@ export default () => {
 					event.controls = ["不叫地主", "一倍", "两倍", "三倍"];
 					for (var player of game.players) {
 						var id = player.playerid;
-						event.map[id] = event.list.randomRemove(4);
+						event.map[id] = game.takeDoudizhuCandidates(event.list, 4, "fan");
 					}
 					event.start = game.players.randomGet();
 					event.current = event.start;
@@ -1618,7 +1719,7 @@ export default () => {
 						player.identityShown = true;
 						player._characterChoice = event.map[player.playerid];
 					}
-					event.map[game.zhu.playerid].addArray(event.list.randomRemove(3));
+					event.map[game.zhu.playerid].addArray(game.takeDoudizhuCandidates(event.list, 3, "zhu"));
 					game.broadcastAll(
 						function (id, map) {
 							var dialog = get.idDialog(id);
@@ -1660,7 +1761,7 @@ export default () => {
 					"step 4";
 					for (var i in lib.playerOL) {
 						if (!result[i] || result[i] == "ai" || !result[i].links || !result[i].links.length) {
-							result[i] = event.map[i].randomGet();
+							result[i] = game.chooseDoudizhuCharacters(event.map[i], lib.playerOL[i], 1)[0];
 						} else {
 							result[i] = result[i].links[0];
 						}
@@ -1839,7 +1940,7 @@ export default () => {
 					"step 4";
 					for (var i in result) {
 						if (result[i] == "ai") {
-							result[i] = event.map[i].randomRemove(lib.playerOL[i] == game.zhu ? 2 : 1);
+							result[i] = game.chooseDoudizhuCharacters(event.map[i], lib.playerOL[i], lib.playerOL[i] == game.zhu ? 2 : 1);
 						} else {
 							result[i] = result[i].links;
 						}
@@ -1963,7 +2064,7 @@ export default () => {
 					for (var i = 0; i < game.players.length; i++) {
 						var num3 = Math.min(num, lib.configOL["choice_" + game.players[i].identity]);
 						var str = "选择角色";
-						list.push([game.players[i], [str, [event.list.randomRemove(num3), "characterx"]], selectButton, true]);
+						list.push([game.players[i], [str, [game.takeDoudizhuCandidates(event.list, num3, game.players[i].identity, game.players[i].identity == "fan" ? game.getDoudizhuTargetScore() : null), "characterx"]], selectButton, true]);
 					}
 					game.me.chooseButtonOL(list, function (player, result) {
 						if (game.online || player == game.me) {
@@ -1978,13 +2079,27 @@ export default () => {
 							}
 						}
 					}
+					var resultList = [];
 					for (var i in result) {
+						resultList.push(i);
+					}
+					resultList.sort(function (a, b) {
+						if (lib.playerOL[a] == game.zhu) {
+							return -1;
+						}
+						if (lib.playerOL[b] == game.zhu) {
+							return 1;
+						}
+						return 0;
+					});
+					for (var index = 0; index < resultList.length; index++) {
+						var i = resultList[index];
 						if (result[i] == "ai") {
-							var listc = event.list.randomRemove(lib.configOL.double_character ? 2 : 1);
-							for (var i = 0; i < listc.length; i++) {
-								var listx = lib.characterReplace[listc[i]];
+							var listc = game.takeDoudizhuCandidates(event.list, lib.configOL.double_character ? 2 : 1, lib.playerOL[i].identity, lib.playerOL[i].identity == "fan" ? game.getDoudizhuTargetScore() : null);
+							for (var j = 0; j < listc.length; j++) {
+								var listx = lib.characterReplace[listc[j]];
 								if (listx && listx.length) {
-									listc[i] = listx.randomGet();
+									listc[j] = listx.randomGet();
 								}
 							}
 							result[i] = listc;
