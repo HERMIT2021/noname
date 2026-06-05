@@ -729,6 +729,7 @@ table {
 	z-index: 7;
 	transition-property: opacity;
 	overflow: hidden;
+	touch-action: none;
 }
 #arena:not(.phone) #roundmenu {
 	display: none !important;

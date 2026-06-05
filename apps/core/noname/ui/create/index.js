@@ -2594,23 +2594,97 @@ export class Create {
 			return false;
 		};
 		ui.click.resetround = resetround;
-		if (lib.config.touchscreen) {
-			ui.roundmenu.addEventListener("touchstart", function (e) {
-				_status.draggingroundmenu = true;
-				ui.roundmenu._dragorigin = {
-					clientX: e.touches[0].clientX,
-					clientY: e.touches[0].clientY,
+		const hasTouchInput = "ontouchstart" in window || "ontouchstart" in document || navigator.maxTouchPoints > 0;
+		const startRoundDrag = function (e) {
+			if (!e.touches || !e.touches.length) {
+				return;
+			}
+			_status.draggingroundmenu = true;
+			ui.roundmenu._dragorigin = {
+				clientX: e.touches[0].clientX,
+				clientY: e.touches[0].clientY,
+			};
+			if (!ui.roundmenu._dragtransform) {
+				ui.roundmenu._dragtransform = [0, 0];
+			}
+			ui.roundmenu._dragorigintransform = ui.roundmenu._dragtransform.slice(0);
+			delete ui.roundmenu._dragtouches;
+			ui.roundmenu._resetTimeout = setTimeout(function () {
+				resetround();
+				delete ui.roundmenu._resetTimeout;
+			}, 1000);
+			if (e.cancelable) {
+				e.preventDefault();
+			}
+			e.stopPropagation();
+		};
+		if (hasTouchInput) {
+			ui.roundmenu.addEventListener("touchstart", startRoundDrag, { passive: false });
+			if (!lib.config.touchscreen) {
+				const moveRoundDrag = function (e) {
+					if (!_status.draggingroundmenu || !ui.roundmenu._dragorigin || !ui.roundmenu._dragtransform || !e.touches || !e.touches.length) {
+						return;
+					}
+					if (e.cancelable) {
+						e.preventDefault();
+					}
+					e.stopPropagation();
+					delete _status._swipeorigin;
+					var translate = ui.roundmenu._dragtransform.slice(0);
+					var dx = e.touches[0].clientX / game.documentZoom - ui.roundmenu._dragorigin.clientX / game.documentZoom;
+					var dy = e.touches[0].clientY / game.documentZoom - ui.roundmenu._dragorigin.clientY / game.documentZoom;
+					translate[0] += dx;
+					translate[1] += dy;
+					if (dx * dx + dy * dy > 100 && ui.roundmenu._resetTimeout) {
+						clearTimeout(ui.roundmenu._resetTimeout);
+						delete ui.roundmenu._resetTimeout;
+					}
+					ui.roundmenu._dragtouches = e.touches[0];
+					ui.click.checkroundtranslate(translate);
+					_status.clicked = true;
 				};
-				if (!ui.roundmenu._dragtransform) {
-					ui.roundmenu._dragtransform = [0, 0];
-				}
-				ui.roundmenu._dragorigintransform = ui.roundmenu._dragtransform.slice(0);
-				ui.roundmenu._resetTimeout = setTimeout(function () {
-					resetround();
-					delete ui.roundmenu._resetTimeout;
-				}, 1000);
-			});
-		} else {
+				const endRoundDrag = function (e) {
+					if (!_status.draggingroundmenu) {
+						return;
+					}
+					if (e.cancelable) {
+						e.preventDefault();
+					}
+					e.stopPropagation();
+					delete _status._swipeorigin;
+					if (ui.roundmenu._resetTimeout) {
+						clearTimeout(ui.roundmenu._resetTimeout);
+						delete ui.roundmenu._resetTimeout;
+					}
+					var translate;
+					if (ui.roundmenu._dragorigin && ui.roundmenu._dragtransform && ui.roundmenu._dragtouches) {
+						var dx = ui.roundmenu._dragtouches.clientX / game.documentZoom - ui.roundmenu._dragorigin.clientX / game.documentZoom;
+						var dy = ui.roundmenu._dragtouches.clientY / game.documentZoom - ui.roundmenu._dragorigin.clientY / game.documentZoom;
+						if (dx * dx + dy * dy < 1000) {
+							ui.click.roundmenu();
+							ui.roundmenu._dragtransform = ui.roundmenu._dragorigintransform;
+							translate = ui.roundmenu._dragtransform;
+							ui.roundmenu.style.transform = "translate(" + translate[0] + "px," + translate[1] + "px)";
+						} else {
+							translate = ui.roundmenu._dragtransform;
+							translate[0] += dx;
+							translate[1] += dy;
+							ui.click.checkroundtranslate();
+						}
+						delete ui.roundmenu._dragorigin;
+					} else {
+						ui.click.roundmenu();
+					}
+					_status.clicked = false;
+					game.saveConfig("roundmenu_transform", translate);
+					delete _status.draggingroundmenu;
+				};
+				document.addEventListener("touchmove", moveRoundDrag, { passive: false });
+				document.addEventListener("touchend", endRoundDrag, { passive: false });
+				document.addEventListener("touchcancel", endRoundDrag, { passive: false });
+			}
+		}
+		if (!lib.config.touchscreen) {
 			ui.roundmenu.oncontextmenu = resetround;
 		}
 		if (!lib.config.remember_round_button) {
