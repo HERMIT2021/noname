@@ -192,7 +192,7 @@ export function shiweiyan() {
 						// 	document.body.removeChild(ui._shiweiyanPw);
 						// };
 						setTimeout(() => {
-							document.body.removeChild(ui._shiweiyanPw);
+							ui._shiweiyanPw?.remove();
 						}, 700);
 					});
 				}
@@ -216,6 +216,7 @@ export function shiweiyan() {
 	if (lib.skill.potzhuangshi) {
 		function createPowLine(name, right) {
 			let con = ui.create.div(`${name}`, document.body);
+			if (!con) return null;
 			con.style.cssText += `
 				width: 4px;
 				right:${right}px;
@@ -239,18 +240,22 @@ export function shiweiyan() {
 				img.style.right = "0";
 				img.style.zIndex = "5";
 			},
-			createPower( loseHpNum, discardNum) {
+			createPower(loseHpNum, discardNum) {
 					// 155 124 93 62 31
 					if (discardNum > 0) {
-						ui.shiweiyanCd = createPowLine(".shiweiyanCd", 24);
+						if (ui.shiweiyanCd) ui.shiweiyanCd.remove();
+						const cd = createPowLine(".shiweiyanCd", 24);
+						ui.shiweiyanCd = cd;
 						setTimeout(() => {
-							ui.shiweiyanCd.style.height = discardNum * 31 + "px";
+							if (cd) cd.style.height = discardNum * 31 + "px";
 						}, 0);
 					}
 					if (loseHpNum > 0) {
-						ui.shiweiyanTl = createPowLine(".shiweiyanTl", 16);
+						if (ui.shiweiyanTl) ui.shiweiyanTl.remove();
+						const tl = createPowLine(".shiweiyanTl", 16);
+						ui.shiweiyanTl = tl;
 						setTimeout(() => {
-							ui.shiweiyanTl.style.height = loseHpNum * 31 + "px";
+							if (tl) tl.style.height = loseHpNum * 31 + "px";
 						}, 0);
 					}
 					
@@ -276,7 +281,7 @@ export function shiweiyan() {
 					player.addTip("potzhuangshi_limit", `不计次数 ${number}`);
 					await player.loseHp(number);
 				}
-				lib.skill.potzhuangshi.createPower( loseHpNum, discardNum);
+				lib.skill.potzhuangshi.createPower(loseHpNum, discardNum);
 				//使命成功
 				let name = "SS_SWY_yinzhan";
 				if (player.getStorage("potkuanggu") != 1) {

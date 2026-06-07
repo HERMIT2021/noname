@@ -1804,6 +1804,12 @@ export class Library {
 					item: effectSpeedItems,
 					intro: "调整使用牌和打出牌时，卡牌飞出、停留、收回等动画速度",
 				},
+				effect_speed_card_back: {
+					name: "出牌收回速度",
+					init: "1",
+					item: effectSpeedItems,
+					intro: "单独调整使用牌后，卡牌从屏幕中间飞向角色/牌区并消失的后段动画速度",
+				},
 				effect_speed_basic: {
 					name: "基本牌特效速度",
 					init: "1",
@@ -5898,8 +5904,10 @@ export class Library {
 						map.connect_zhong_card.show();
 						map.connect_special_identity.hide();
 						map.connect_double_character.show();
+						map.connect_allow_same_character.show();
 					} else if (config.connect_identity_mode == "stratagem") {
 						map.connect_double_character.show();
+						map.connect_allow_same_character.show();
 						map.connect_player_number.show();
 						map.connect_choice_zhu.show();
 						map.connect_limit_zhu.hide();
@@ -5930,8 +5938,10 @@ export class Library {
 						map.connect_zhong_card.hide();
 						map.connect_special_identity.hide();
 						map.connect_double_character.hide();
+						map.connect_allow_same_character.hide();
 					} else {
 						map.connect_double_character.show();
+						map.connect_allow_same_character.show();
 						map.connect_player_number.show();
 						map.connect_choice_zhu.show();
 						map.connect_limit_zhu.show();
@@ -6121,6 +6131,12 @@ export class Library {
 					frequent: true,
 					restart: true,
 				},
+				connect_allow_same_character: {
+					name: "允许同名武将",
+					init: false,
+					restart: true,
+					intro: "关闭后，选将时不同玩家不能获得同一源武将（含同名替换武将）。",
+				},
 				connect_change_card: {
 					name: "启用手气卡",
 					init: false,
@@ -6203,6 +6219,7 @@ export class Library {
 						map.change_choice.show();
 						map.auto_mark_identity.show();
 						map.double_character.show();
+						map.allow_same_character.show();
 						map.free_choose.show();
 						map.change_identity.show();
 						if (config.double_character) {
@@ -6249,6 +6266,7 @@ export class Library {
 						map.change_identity.show();
 						map.special_identity.hide();
 						map.double_character.show();
+						map.allow_same_character.show();
 						if (config.double_character) {
 							map.double_hp.show();
 						} else {
@@ -6274,6 +6292,7 @@ export class Library {
 						map.zhong_card.hide();
 						map.special_identity.hide();
 						map.double_character.hide();
+						map.allow_same_character.hide();
 						map.double_hp.hide();
 						map.choose_group.hide();
 						map.auto_mark_identity.hide();
@@ -6319,6 +6338,7 @@ export class Library {
 							map.special_identity.hide();
 						}
 						map.double_character.show();
+						map.allow_same_character.show();
 						if (config.double_character) {
 							map.double_hp.show();
 						} else {
@@ -6379,6 +6399,12 @@ export class Library {
 					init: false,
 					frequent: true,
 					restart: true,
+				},
+				allow_same_character: {
+					name: "允许同名武将",
+					init: false,
+					restart: true,
+					intro: "关闭后，选将时不同玩家不能获得同一源武将（含同名替换武将）。",
 				},
 				special_identity: {
 					name: "特殊身份",
@@ -7846,6 +7872,7 @@ export class Library {
 					}
 					if (config.connect_doudizhu_mode !== "normal") {
 						map.connect_double_character.hide();
+						map.connect_allow_same_character[config.connect_doudizhu_mode === "kaihei" ? "show" : "hide"]();
 						if (config.connect_doudizhu_mode !== "kaihei") {
 							map.connect_choice_zhu.hide();
 							map.connect_choice_fan.hide();
@@ -7858,6 +7885,7 @@ export class Library {
 						map.connect_feiyang_version.hide();
 					} else {
 						map.connect_double_character.show();
+						map.connect_allow_same_character.show();
 						map.connect_choice_zhu.show();
 						map.connect_choice_fan.show();
 						map.connect_enhance_dizhu.show();
@@ -7883,6 +7911,12 @@ export class Library {
 					init: false,
 					frequent: true,
 					restart: true,
+				},
+				connect_allow_same_character: {
+					name: "允许同名武将",
+					init: false,
+					restart: true,
+					intro: "关闭后，选将时不同玩家不能获得同一源武将（含同名替换武将）。",
 				},
 				connect_choice_zhu: {
 					name: "地主候选武将数",
@@ -7980,9 +8014,11 @@ export class Library {
 						if (config.doudizhu_mode === "kaihei") {
 							map.choice_zhu.show();
 							map.choice_fan.show();
+							map.allow_same_character.show();
 						} else {
 							map.choice_zhu.hide();
 							map.choice_fan.hide();
+							map.allow_same_character.hide();
 						}
 						map.double_character.hide();
 						map.free_choose.hide();
@@ -7996,6 +8032,7 @@ export class Library {
 						map.feiyang_version.hide();
 					} else {
 						map.double_character.show();
+						map.allow_same_character.show();
 						map.choice_zhu.show();
 						map.choice_fan.show();
 						map.free_choose.show();
@@ -8032,6 +8069,12 @@ export class Library {
 					init: false,
 					frequent: true,
 					restart: true,
+				},
+				allow_same_character: {
+					name: "允许同名武将",
+					init: false,
+					restart: true,
+					intro: "关闭后，选将时不同玩家不能获得同一源武将（含同名替换武将）。",
 				},
 				double_hp: {
 					name: "双将体力上限",

@@ -1,4 +1,94 @@
 import { lib, game, ui, get, ai, _status } from "../../../noname.js";
+function getAnimationPlayer() {
+	return window.dcdAnim || window.decadeUI?.animation;
+}
+
+function waitForDecadeAnimation(callback, onerror, times = 0) {
+	const animation = window.decadeUI?.animation;
+	if (animation) {
+		callback(animation);
+		return;
+	}
+	if (times < 30) {
+		setTimeout(() => waitForDecadeAnimation(callback, onerror, times + 1), 100);
+		return;
+	}
+	if (typeof onerror == "function") onerror();
+}
+
+export function installDcdAnimCompat() {
+	if (window.dcdAnim && !window.dcdAnim._wmmhCompat) {
+		return;
+	}
+	window.dcdAnim = {
+		_wmmhCompat: true,
+		loadSpine(sprite, type, onload, onerror) {
+			waitForDecadeAnimation(
+				animation => {
+					if (typeof animation.loadSpine == "function") {
+						animation.loadSpine(sprite, type, onload, onerror);
+						return;
+					}
+					if (typeof onload == "function") onload();
+				},
+				onerror
+			);
+		},
+		playSpine(sprite, option) {
+			const animation = window.decadeUI?.animation;
+			if (!animation || typeof animation.playSpine != "function") {
+				console.warn("无名美化：未找到可用的十周年UI骨骼播放接口", sprite);
+				return null;
+			}
+			return animation.playSpine(sprite, option);
+		},
+		stopSpine(id) {
+			const animation = window.decadeUI?.animation;
+			if (animation && typeof animation.stopSpine == "function" && id) {
+				animation.stopSpine(id);
+			}
+		},
+	};
+}
+
+function loadSpine(sprite, type, onload, onerror) {
+	const animation = getAnimationPlayer();
+	if (!animation) {
+		waitForDecadeAnimation(
+			animation => {
+				if (typeof animation.loadSpine == "function") {
+					animation.loadSpine(sprite, type, onload, onerror);
+					return;
+				}
+				if (typeof onload == "function") onload();
+			},
+			onerror
+		);
+		return;
+	}
+	if (typeof animation.loadSpine == "function") {
+		animation.loadSpine(sprite, type, onload, onerror);
+		return;
+	}
+	if (typeof onload == "function") onload();
+}
+
+function playSpine(sprite, option) {
+	const animation = getAnimationPlayer();
+	if (!animation || typeof animation.playSpine != "function") {
+		console.warn("无名美化：未找到可用的骨骼播放接口", sprite);
+		return null;
+	}
+	return animation.playSpine(sprite, option);
+}
+
+function stopSpine(id) {
+	const animation = getAnimationPlayer();
+	if (animation && typeof animation.stopSpine == "function" && id) {
+		animation.stopSpine(id);
+	}
+}
+
 export function colMenu(title, configName, endId) {
 	if (!endId) {
 		endId = configName + "_end";
@@ -733,8 +823,8 @@ export class WolongYanceAn {
 		this.shitiImgArr.forEach(item => {
 			item.remove();
 		});
-		this.qixingAn && dcdAnim.stopSpine(this.qixingAn);
-		this.baguaAn && dcdAnim.stopSpine(this.baguaAn);
+		this.qixingAn && stopSpine(this.qixingAn);
+		this.baguaAn && stopSpine(this.baguaAn);
 	}
 	//动画播放
 	play() {
@@ -766,28 +856,28 @@ export class WolongYanceAn {
 	}
 
 	playShiti(x, y) {
-		dcdAnim.loadSpine(this.WMWOLONGYANCE.shiti.name, "skel", () => {
+		loadSpine(this.WMWOLONGYANCE.shiti.name, "skel", () => {
 			if (this.dev) {
 				this.WMWOLONGYANCE.shiti.loop = true;
 			}
-			dcdAnim.playSpine(this.WMWOLONGYANCE.shiti, {
+			playSpine(this.WMWOLONGYANCE.shiti, {
 				x,
 				y,
 			});
 		});
 	}
 	playQixing() {
-		dcdAnim.loadSpine(this.WMWOLONGYANCE.qixing.name, "skel", () => {
+		loadSpine(this.WMWOLONGYANCE.qixing.name, "skel", () => {
 			this.WMWOLONGYANCE.qixing.action = "play" + this.num;
 			if (this.dev) {
 				this.WMWOLONGYANCE.qixing.loop = true;
 			}
-			this.qixingAn = dcdAnim.playSpine(this.WMWOLONGYANCE.qixing);
+			this.qixingAn = playSpine(this.WMWOLONGYANCE.qixing);
 		});
 	}
 	playBagua() {
-		dcdAnim.loadSpine(this.WMWOLONGYANCE.bagua.name, "skel", () => {
-			this.baguaAn = dcdAnim.playSpine(this.WMWOLONGYANCE.bagua);
+		loadSpine(this.WMWOLONGYANCE.bagua.name, "skel", () => {
+			this.baguaAn = playSpine(this.WMWOLONGYANCE.bagua);
 		});
 	}
 }
@@ -839,17 +929,17 @@ export class WoLongIcon {
 		console.log(this.iconList[index].style);
 		this.iconList[index].style.cssText += `background-image:url(${lib.assetURL}extension/无名美化/image/wolongyance/paiju_jingce_icon_${type}.png);`;
 		if (flag) {
-			dcdAnim.loadSpine(this.WMWOLONGYANCE.chenggong.name, "skel", () => {
-				let iconan = dcdAnim.playSpine(this.WMWOLONGYANCE.chenggong, {
+			loadSpine(this.WMWOLONGYANCE.chenggong.name, "skel", () => {
+				let iconan = playSpine(this.WMWOLONGYANCE.chenggong, {
 					parent: this.iconList[index],
 				});
-				this.iconAnList.push(iconan);
+				if (iconan) this.iconAnList.push(iconan);
 			});
 		}
 	}
 	clear() {
 		this.iconAnList.forEach(item => {
-			dcdAnim.stopSpine(item);
+			stopSpine(item);
 		});
 		this.iconList.forEach(item => {
 			item.remove();

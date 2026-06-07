@@ -175,6 +175,28 @@ export default () => {
 		},
 		game: {
 			canReplaceViewpoint: () => true,
+			allowSameCharacter() {
+				return _status.connectMode ? lib.configOL.allow_same_character || lib.configOL.connect_allow_same_character : get.config("allow_same_character");
+			},
+			removeSameCharacterChoice(list, ...names) {
+				if (!Array.isArray(list)) return;
+				for (const name of names) {
+					if (!name) continue;
+					const source = get.sourceCharacter(name);
+					if (game.allowSameCharacter()) {
+						list.remove(source);
+						continue;
+					}
+					for (let i = 0; i < list.length; i++) {
+						if (get.sourceCharacter(list[i]) == source) list.splice(i--, 1);
+					}
+				}
+			},
+			ensureDoudizhuCharacterChoice(player, source) {
+				if (!player || !Array.isArray(player._characterChoice) || player._characterChoice.length) return;
+				const targetScore = player.identity == "fan" ? game.getDoudizhuTargetScore() : null;
+				game.addDoudizhuCandidates(player._characterChoice, source, 1, player.identity, targetScore);
+			},
 			recommendDizhu: ["re_guojia", "re_huanggai", "re_lvbu", "re_guanyu", "re_sunquan", "re_xusheng", "re_wuyi", "re_sunben", "xuyou", "zhangchunhua", "caochong", "zhangsong", "zhongyao", "wangyi", "caochun", "maliang", "sp_diaochan", "quyi", "sp_zhaoyun", "shamoke", "lijue", "liuzan", "wenyang", "shen_lvmeng", "shen_ganning", "jiakui", "wangyuanji", "lingcao", "miheng", "sp_key_yuri", "key_hinata", "key_rin", "key_kyousuke", "ns_chendao", "jiakui", "haozhao"],
 			isDoudizhuRatingEnabled() {
 				if (_status.connectMode && lib.configOL) {
@@ -257,8 +279,19 @@ export default () => {
 				var role = player && player.identity == "zhu" ? "zhu" : "fan";
 				return game.getDoudizhuSortedCandidates(list, role, role == "fan" ? game.getDoudizhuTargetScore() : null).slice(0, num || 1);
 			},
+			addDoudizhuCandidates(target, source, num, role, targetScore) {
+				if (!Array.isArray(target) || !Array.isArray(source) || num <= 0) {
+					return [];
+				}
+				var list = game.takeDoudizhuCandidates(source, num, role, targetScore);
+				target.addArray(list);
+				return list;
+			},
 			isDoudizhuRecommendedDizhu(name) {
-				return game.recommendDizhu.includes(name) || (game.isDoudizhuRatingEnabled() && game.getDoudizhuCharacterRating(name, "zhu") >= 7);
+				if (game.isDoudizhuRatingEnabled()) {
+					return game.getDoudizhuCharacterRating(name, "zhu") >= 7;
+				}
+				return game.recommendDizhu.includes(name);
 			},
 			addRecord(bool) {
 				if (typeof bool == "boolean") {
@@ -690,9 +723,12 @@ export default () => {
 						if (!event.map[id]) {
 							event.map[id] = [];
 						}
-						event.map[id].addArray(game.takeDoudizhuCandidates(event.list2, 1, "zhu"));
-						event.list.removeArray(event.map[id]);
-						event.map[id].addArray(event.list.randomRemove(4 - event.map[id].length));
+						if (!game.addDoudizhuCandidates(event.map[id], event.list2, 1, "zhu").length) {
+							game.addDoudizhuCandidates(event.map[id], event.list, 1, "zhu");
+						} else {
+							event.list.removeArray(event.map[id]);
+						}
+						game.addDoudizhuCandidates(event.map[id], event.list, 4 - event.map[id].length, "fan");
 						event.list2.removeArray(event.map[id]);
 					}
 					event.dialog = ui.create.dialog("你的选将框", [event.map[game.me.playerid], "character"]);
@@ -817,9 +853,23 @@ export default () => {
 						});
 					"step 1";
 					game.me.init(result.links[0]);
+					if (!game.allowSameCharacter()) {
+						for (var player of game.players) {
+							if (player != game.me) {
+								game.removeSameCharacterChoice(player._characterChoice, game.me.name1, game.me.name2);
+								game.ensureDoudizhuCharacterChoice(player, event.list);
+							}
+						}
+					}
 					for (var i = 0; i < game.players.length; i++) {
 						if (game.players[i] != game.me) {
 							game.players[i].init(game.chooseDoudizhuCharacters(game.players[i]._characterChoice, game.players[i], 1)[0]);
+							for (var current of game.players) {
+								if (current != game.players[i]) {
+									game.removeSameCharacterChoice(current._characterChoice, game.players[i].name1, game.players[i].name2);
+									game.ensureDoudizhuCharacterChoice(current, event.list);
+								}
+							}
 						}
 						_status.characterlist.remove(game.players[i].name1);
 						_status.characterlist.remove(game.players[i].name2);
@@ -888,8 +938,7 @@ export default () => {
 						}
 					}
 					if (back) {
-						list.remove(get.sourceCharacter(player.name1));
-						list.remove(get.sourceCharacter(player.name2));
+						game.removeSameCharacterChoice(list, player.name1, player.name2);
 						for (var i = 0; i < list.length; i++) {
 							back.push(list[i]);
 						}
@@ -1280,8 +1329,7 @@ export default () => {
 					} else {
 						game.me.init(event.choosed[0]);
 					}
-					event.list.remove(get.sourceCharacter(game.me.name1));
-					event.list.remove(get.sourceCharacter(game.me.name2));
+					game.removeSameCharacterChoice(event.list, game.me.name1, game.me.name2);
 					if (game.me == game.zhu) {
 						if (!game.me.isInitFilter("noZhuHp")) {
 							game.me.hp++;
@@ -1519,9 +1567,12 @@ export default () => {
 						if (!event.map[id]) {
 							event.map[id] = [];
 						}
-						event.map[id].addArray(game.takeDoudizhuCandidates(event.list2, 1, "zhu"));
-						event.list.removeArray(event.map[id]);
-						event.map[id].addArray(event.list.randomRemove(4 - event.map[id].length));
+						if (!game.addDoudizhuCandidates(event.map[id], event.list2, 1, "zhu").length) {
+							game.addDoudizhuCandidates(event.map[id], event.list, 1, "zhu");
+						} else {
+							event.list.removeArray(event.map[id]);
+						}
+						game.addDoudizhuCandidates(event.map[id], event.list, 4 - event.map[id].length, "fan");
 						event.list2.removeArray(event.map[id]);
 					}
 					_status.characterlist = event.list.slice(0);
@@ -2075,7 +2126,7 @@ export default () => {
 					for (var i in result) {
 						if (result[i] && result[i].links) {
 							for (var j = 0; j < result[i].links.length; j++) {
-								event.list.remove(get.sourceCharacter(result[i].links[j]));
+								game.removeSameCharacterChoice(event.list, result[i].links[j]);
 							}
 						}
 					}

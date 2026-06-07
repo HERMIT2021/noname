@@ -56,6 +56,10 @@ class DiaochanPlay extends PlayCustomAnByVideo {
 	}
 }
 export function modiaochan() {
+	if (!lib.skill.olqingshi) {
+		console.warn("无名美化：未找到技能 olqingshi，已跳过魔貂蝉特效注册");
+		return;
+	}
 	Object.assign(lib.skill.olqingshi, {
 		init() {
 			ui.modiaochan = new DiaochanPlay({

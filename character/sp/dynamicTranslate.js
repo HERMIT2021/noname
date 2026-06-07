@@ -57,24 +57,14 @@ const dynamicTranslates = {
 		return "锁定技，结束阶段开始时，你失去1点体力，然后摸两张牌。";
 	},
 	jieyuan(player) {
-		var str = "当你对一名其他角色造成伤害时，";
-		if (!player.hasSkill("fenxin_fan")) {
-			str += "若其体力值大于或等于你的体力值，";
+		var level = player.storage.jieyuan || 1;
+		if (level == 2) {
+			return "你造成伤害时，可选择一项：1.获得牌堆中的两张黑色牌；2.弃置一张黑色牌，此伤害+2。";
 		}
-		str += "你可弃置一张";
-		if (!player.hasSkill("fenxin_nei")) {
-			str += "黑色手";
+		if (level == 3) {
+			return "你受到伤害时，可选择一项：1.获得牌堆中的两张红色牌；2.弃置一张红色牌，此伤害-2。";
 		}
-		str += "牌，令此伤害+1；当你受到一名其他角色造成的伤害时，";
-		if (!player.hasSkill("fenxin_zhong")) {
-			str += "若其体力值大于或等于你的体力值，";
-		}
-		str += "你可弃置一张";
-		if (!player.hasSkill("fenxin_nei")) {
-			str += "红色手";
-		}
-		str += "牌，令此伤害-1。";
-		return str;
+		return "你造成伤害时，可选择一项：1.获得牌堆中的一张黑色牌；2.弃置一张黑色牌，此伤害+1。你受到伤害时，可选择一项：1.获得牌堆中的一张红色牌；2.弃置一张红色牌，此伤害-1。你在发动时可背水：删除另一个发动时机下的所有效果并升级此技能。";
 	},
 	youlong(player) {
 		const bool = player.storage.youlong;

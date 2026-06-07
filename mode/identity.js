@@ -465,6 +465,29 @@ export default () => {
 			},
 		],
 		game: {
+			allowSameCharacter: function () {
+				return _status.connectMode ? lib.configOL.allow_same_character || lib.configOL.connect_allow_same_character : get.config("allow_same_character");
+			},
+			removeSameCharacterChoice: function (list, ...names) {
+				if (!Array.isArray(list)) {
+					return;
+				}
+				for (const name of names) {
+					if (!name) {
+						continue;
+					}
+					const source = get.sourceCharacter(name);
+					if (game.allowSameCharacter()) {
+						list.remove(source);
+						continue;
+					}
+					for (let i = 0; i < list.length; i++) {
+						if (get.sourceCharacter(list[i]) == source) {
+							list.splice(i--, 1);
+						}
+					}
+				}
+			},
 			canReplaceViewpoint: () => true,
 			getState: function () {
 				var state = {};
@@ -1461,7 +1484,7 @@ export default () => {
 					for (var i in result) {
 						if (result[i] && result[i].links) {
 							for (var j = 0; j < result[i].links.length; j++) {
-								event.list2.remove(get.sourceCharacter(result[i].links[j]));
+								game.removeSameCharacterChoice(event.list2, result[i].links[j]);
 							}
 						}
 					}
@@ -1679,8 +1702,7 @@ export default () => {
 						}
 					}
 					if (back) {
-						list.remove(get.sourceCharacter(player.name1));
-						list.remove(get.sourceCharacter(player.name2));
+						game.removeSameCharacterChoice(list, player.name1, player.name2);
 						for (var i = 0; i < list.length; i++) {
 							back.push(list[i]);
 						}
@@ -2143,8 +2165,7 @@ export default () => {
 						list = event.list.slice(0, num);
 					} else if (game.zhu != game.me) {
 						event.ai(game.zhu, event.list, getZhuList());
-						event.list.remove(get.sourceCharacter(game.zhu.name1));
-						event.list.remove(get.sourceCharacter(game.zhu.name2));
+						game.removeSameCharacterChoice(event.list, game.zhu.name1, game.zhu.name2);
 						if (_status.brawl && _status.brawl.chooseCharacter) {
 							list = _status.brawl.chooseCharacter(event.list, num);
 							if (list === false || list === "nozhu") {
@@ -2360,8 +2381,7 @@ export default () => {
 					} else {
 						game.me.init(event.choosed[0]);
 					}
-					event.list.remove(get.sourceCharacter(game.me.name1));
-					event.list.remove(get.sourceCharacter(game.me.name2));
+						game.removeSameCharacterChoice(event.list, game.me.name1, game.me.name2);
 					if (!event.stratagemMode && game.me == game.zhu && game.players.length > 4) {
 						if (!game.me.isInitFilter("noZhuHp")) {
 							game.me.hp++;
@@ -2622,10 +2642,8 @@ export default () => {
 					if (!game.zhu.name) {
 						game.zhu.init(result.links[0], result.links[1]);
 					}
-					event.list.remove(get.sourceCharacter(game.zhu.name1));
-					event.list.remove(get.sourceCharacter(game.zhu.name2));
-					event.list2.remove(get.sourceCharacter(game.zhu.name1));
-					event.list2.remove(get.sourceCharacter(game.zhu.name2));
+					game.removeSameCharacterChoice(event.list, game.zhu.name1, game.zhu.name2);
+					game.removeSameCharacterChoice(event.list2, game.zhu.name1, game.zhu.name2);
 
 					if (game.players.length > 4) {
 						if (!game.zhu.isInitFilter("noZhuHp")) {
@@ -2705,7 +2723,7 @@ export default () => {
 					for (var i in result) {
 						if (result[i] && result[i].links) {
 							for (var j = 0; j < result[i].links.length; j++) {
-								event.list2.remove(get.sourceCharacter(result[i].links[j]));
+								game.removeSameCharacterChoice(event.list2, result[i].links[j]);
 							}
 						}
 					}

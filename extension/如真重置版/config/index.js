@@ -64,5 +64,16 @@ export const config = async () => {
 				setTimeout(() => game.reload(), 100);
 			},
 		},
+		czgRewardSpeed: {
+			name: "珍宝阁奖励弹出速度",
+			init: "fast",
+			item: {
+				normal: "默认",
+				fast: "较快",
+				veryfast: "很快",
+				instant: "瞬间",
+			},
+			intro: "调整珍宝阁开盒后，道具奖励淡入、上浮、错峰出现的速度。",
+		},
 	};
 };

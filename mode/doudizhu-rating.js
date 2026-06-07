@@ -86,6 +86,10 @@ export function sortDoudizhuCandidates(candidates, role, ratings, options = {}) 
 	list.sort((a, b) => {
 		const scoreA = getDoudizhuRating(ratings, a, role);
 		const scoreB = getDoudizhuRating(ratings, b, role);
+		const zhuScoreA = getDoudizhuRating(ratings, a, "zhu");
+		const zhuScoreB = getDoudizhuRating(ratings, b, "zhu");
+		const fanScoreA = getDoudizhuRating(ratings, a, "fan");
+		const fanScoreB = getDoudizhuRating(ratings, b, "fan");
 		if (role == "fan" && targetScore != null) {
 			const inRangeA = scoreA >= minScore && scoreA <= maxScore;
 			const inRangeB = scoreB >= minScore && scoreB <= maxScore;
@@ -103,6 +107,13 @@ export function sortDoudizhuCandidates(candidates, role, ratings, options = {}) 
 		}
 		if (scoreA != scoreB) {
 			return scoreB - scoreA;
+		}
+		if (role == "zhu") {
+			const zhuAdvantageA = zhuScoreA - fanScoreA;
+			const zhuAdvantageB = zhuScoreB - fanScoreB;
+			if (zhuAdvantageA != zhuAdvantageB) {
+				return zhuAdvantageB - zhuAdvantageA;
+			}
 		}
 		return String(a).localeCompare(String(b));
 	});

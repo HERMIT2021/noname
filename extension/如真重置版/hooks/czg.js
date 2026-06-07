@@ -88,14 +88,55 @@ export function cangZhenGe() {
 		const animation = spineObj.spineData.animations[0];
 		spineObj.state.setAnimationWith(0, animation, loop);
 	}
+	function canPlayBoxAnimation() {
+		return boxbeijing && boxbeijing.state && typeof boxbeijing.state.setAnimation == "function" && typeof boxbeijing.state.addAnimation == "function";
+	}
+	function openRewardSafely(count) {
+		openRewardResult(count);
+		totalRewards.totalCount += count;
+		refreshStatData();
+	}
+	function playBoxAnimation(count) {
+		if (!canPlayBoxAnimation()) {
+			openRewardSafely(count);
+			return;
+		}
+		boxbeijing.state.setAnimation(0, "play2", false);
+		boxbeijing.state.addAnimation(0, "play1", true, 4);
+		let lis = {
+			complete: function (track) {
+				if (canPlayBoxAnimation()) {
+					boxbeijing.state.setAnimation(0, "play1", true);
+					boxbeijing.state.removeListener(lis);
+				}
+				openRewardSafely(count);
+			},
+		};
+		boxbeijing.state.listeners = [lis];
+	}
+	function getRewardAnimationSpeed() {
+		switch (lib.config.extension_如真重置版_czgRewardSpeed) {
+			case "normal":
+				return { delay: 1, duration: 1 };
+			case "veryfast":
+				return { delay: 0.45, duration: 0.65 };
+			case "instant":
+				return { delay: 0.15, duration: 0.35 };
+			case "fast":
+			default:
+				return { delay: 0.65, duration: 0.8 };
+		}
+	}
 
-	function drawItem(itemInfo, count, resource, hasSpine) {
+	function drawItem(itemInfo, count, resource, hasSpine, index = 0) {
 		// 奖励道具
 		const rewardItem = new PIXI.Container();
+		rewardItem.alpha = 0;
+		rewardItem.scale.set(0.52);
 		// 边框
 		const board = new PIXI.Sprite.from(lib.assetURL + "extension/如真重置版/resource/cangZhenGe/game_hist_headbg.png");
 		rewardItem.addChild(board);
-		board.visible = false;
+		board.visible = true;
 		board.scale.set(boardFactor);
 
 		let item;
@@ -105,24 +146,15 @@ export function cangZhenGe() {
 			item = new PIXI.Sprite.from(lib.assetURL + `extension/如真重置版/resource/cangZhenGe/items/${itemInfo.id}.png`);
 		}
 
-		rewardItem.scale.set(0.6);
 		item.x = boardWidth * 0.04;
 		item.y = boardWidth * 0.03;
-		// item.scale.set(0.94)
-		const ease = new Ease.Ease();
-		item.scale.set(2);
-		const scaleTime = 150;
-		ease.add(item, { scale: boardFactor * 0.92 }, { repeat: false, duration: scaleTime });
+		item.scale.set(boardFactor * 0.92);
+		rewardItem.addChild(item);
+		rewardItem.sortableChildren = true;
 
-		// 加上这个延时, 可以防止突然变化大小的闪屏
-		setTimeout(() => {
-			rewardItem.addChild(item);
-		}, 20);
-		setTimeout(() => {
-			// ease.destroy()
-			// item.visible = false
-			board.visible = true;
-			if (hasSpine) {
+		const speed = getRewardAnimationSpeed();
+		if (hasSpine) {
+			setTimeout(() => {
 				let chouzhong = new PIXI.spine.Spine(resource.gongxihuode_daojuchuxian.spineData);
 				rewardItem.addChild(chouzhong);
 				setDefaultAni(chouzhong, false);
@@ -130,88 +162,104 @@ export function cangZhenGe() {
 				chouzhong.position.set(-localPos.x + (boardWidth - localPos.width) / 2, -localPos.y + (boardWidth - localPos.height) / 2);
 				chouzhong.state.timeScale = 0.7;
 				chouzhong.scale.set(1.1);
-			}
+			}, (120 + Math.min(index, 11) * 28) * speed.delay);
+		}
 
-			if (itemInfo.gaoji) {
-				// 如果是高级道具, 添加边框特效
-				let gaojidaoju = new PIXI.spine.Spine(resource.gongxihuode_gaojidaoju.spineData);
-				rewardItem.addChild(gaojidaoju);
-				setDefaultAni(gaojidaoju, true);
-				let localPos = gaojidaoju.getLocalBounds();
-				gaojidaoju.position.set(-localPos.x + (boardWidth - localPos.width) / 2 + 2, -localPos.y + (boardWidth - localPos.height) / 2);
-				gaojidaoju.state.timeScale = 1;
-				gaojidaoju.scale.set(0.86 * boardFactor);
-				gaojidaoju.zIndex = -1;
-			}
-		}, scaleTime * 1.3);
-		rewardItem.sortableChildren = true;
+		if (itemInfo.gaoji) {
+			// 如果是高级道具, 添加边框特效
+			let gaojidaoju = new PIXI.spine.Spine(resource.gongxihuode_gaojidaoju.spineData);
+			rewardItem.addChild(gaojidaoju);
+			setDefaultAni(gaojidaoju, true);
+			let localPos = gaojidaoju.getLocalBounds();
+			gaojidaoju.position.set(-localPos.x + (boardWidth - localPos.width) / 2 + 2, -localPos.y + (boardWidth - localPos.height) / 2);
+			gaojidaoju.state.timeScale = 1;
+			gaojidaoju.scale.set(0.86 * boardFactor);
+			gaojidaoju.zIndex = -1;
+		}
 
+		// 添加宝珠物品的数量
+		const countStyle = new PIXI.TextStyle({
+			fontFamily: "shousha",
+			fontSize: parseInt(20 * boardFactor),
+			fill: "white",
+			letterSpacing: 1,
+			dropShadow: true,
+			dropShadowColor: "black",
+			dropShadowBlur: 1,
+			dropShadowDistance: 1,
+		});
+
+		const itemCount = new PIXI.Text(`x${count}`, countStyle);
+		itemCount.x = board.width - itemCount.width - 5;
+		itemCount.y = board.y + board.height - itemCount.height - 5;
+
+		rewardItem.addChild(itemCount);
+
+		// 添加宝主物品的文字显示
+		const style = new PIXI.TextStyle({
+			fontFamily: "shousha",
+			fontSize: parseInt(20 * boardFactor),
+			fill: "white",
+			wordWrap: true,
+			// wordWrapWidth: 12,
+			align: "center",
+			lineJoin: "round",
+			leading: 0,
+		});
+
+		let name = itemInfo.name;
+		let newName = "";
+		for (let i = 0; i < name.length; i += 7) {
+			if (i > 0) {
+				newName += " ";
+			}
+			newName += name.slice(i, i + 7);
+		}
+		const itemName = new PIXI.Text(newName, style);
+
+		// const itemName = new PIXI.Text(itemInfo.name, style);
+		itemName.x = (board.width - itemName.width) / 2;
+		itemName.y = board.y + board.height + 10;
+
+		rewardItem.addChild(itemName);
+
+		const ease = new Ease.Ease();
+		const delay = Math.min(index, 11) * 45 * speed.delay;
 		setTimeout(() => {
-			// 添加宝珠物品的数量
-			const countStyle = new PIXI.TextStyle({
-				fontFamily: "shousha",
-				fontSize: parseInt(20 * boardFactor),
-				fill: "white",
-				letterSpacing: 1,
-				dropShadow: true,
-				dropShadowColor: "black",
-				dropShadowBlur: 1,
-				dropShadowDistance: 1,
-			});
-
-			const itemCount = new PIXI.Text(`x${count}`, countStyle);
-			itemCount.x = board.width - itemCount.width - 5;
-			itemCount.y = board.y + board.height - itemCount.height - 5;
-
-			rewardItem.addChild(itemCount);
-
-			// 添加宝主物品的文字显示
-			const style = new PIXI.TextStyle({
-				fontFamily: "shousha",
-				fontSize: parseInt(20 * boardFactor),
-				fill: "white",
-				wordWrap: true,
-				// wordWrapWidth: 12,
-				align: "center",
-				lineJoin: "round",
-				leading: 0,
-			});
-
-			let name = itemInfo.name;
-			let newName = "";
-			for (let i = 0; i < name.length; i += 7) {
-				if (i > 0) {
-					newName += " ";
-				}
-				newName += name.slice(i, i + 7);
-			}
-			const itemName = new PIXI.Text(newName, style);
-
-			// const itemName = new PIXI.Text(itemInfo.name, style);
-			itemName.x = (board.width - itemName.width) / 2;
-			itemName.y = board.y + board.height + 10;
-
-			rewardItem.addChild(itemName);
-		}, 600);
+			const startY = rewardItem.y;
+			rewardItem.y = startY + 18 * boardFactor;
+			ease.add(rewardItem, { alpha: 1, y: startY, scale: 0.6 }, { repeat: false, duration: 360 * speed.duration });
+		}, delay);
 
 		return rewardItem;
 	}
 
 	function onAssetsLoaded(loader, resource) {
-		boxbeijing = new PIXI.spine.Spine(resource.aar_cangbaoge.spineData);
-		// debugger
-		// set the position
-		let localPos = boxbeijing.getLocalBounds(); // 骨骼的本地坐标
-		let scale;
-		scale = (app.screen.width / localPos.width) * 0.4;
+		if (!resource.aar_cangbaoge?.spineData) {
+			boxbeijing = null;
+			console.warn("如真重置版：珍宝阁盒子动画资源加载失败，已跳过盒子动画");
+		} else {
+			boxbeijing = new PIXI.spine.Spine(resource.aar_cangbaoge.spineData);
+			if (!canPlayBoxAnimation()) {
+				boxbeijing = null;
+				console.warn("如真重置版：珍宝阁盒子动画初始化失败，已跳过盒子动画");
+			}
+		}
+		if (boxbeijing) {
+			// debugger
+			// set the position
+			let localPos = boxbeijing.getLocalBounds(); // 骨骼的本地坐标
+			let scale;
+			scale = (app.screen.width / localPos.width) * 0.4;
 
-		// 设置绝对偏移
-		boxbeijing.scale.set(scale); // 设置新的大小后, 本地坐标会进行偏移
-		// 设置相对canvas的中心
-		boxbeijing.position.set(-localPos.x + (app.screen.width - localPos.width) / 2 + 20, -localPos.y + (app.screen.height - localPos.height) / 2 - 10);
+			// 设置绝对偏移
+			boxbeijing.scale.set(scale); // 设置新的大小后, 本地坐标会进行偏移
+			// 设置相对canvas的中心
+			boxbeijing.position.set(-localPos.x + (app.screen.width - localPos.width) / 2 + 20, -localPos.y + (app.screen.height - localPos.height) / 2 - 10);
 
-		app.stage.addChild(boxbeijing);
-		boxbeijing.state.setAnimation(0, "play1", true);
+			app.stage.addChild(boxbeijing);
+			boxbeijing.state.setAnimation(0, "play1", true);
+		}
 
 		// 接着加载第二批资源
 		app.loader
@@ -607,9 +655,10 @@ export function cangZhenGe() {
 
 		for (let i = 0; i < results.length; i++) {
 			let itemInfo = results[i];
+			const rewardSpeed = getRewardAnimationSpeed();
 
-			const _drawItem = i => {
-				let rewardItem = drawItem(itemInfo, itemInfo.count || 1, resource, i < 12);
+			const _drawItem = (i, revealIndex = 0) => {
+				let rewardItem = drawItem(itemInfo, itemInfo.count || 1, resource, i < 12, revealIndex);
 
 				if (results.length <= 6) {
 					if (results.length <= 4) {
@@ -637,34 +686,20 @@ export function cangZhenGe() {
 			};
 
 			if (i < 12) {
-				let firstIndex = [];
-				let secondIndex = [];
-				let lastIndex = [];
+				let revealOrder = [];
 				if (results.length === 4) {
-					firstIndex = [1, 2];
-					secondIndex = [0, 3];
+					revealOrder = [1, 2, 0, 3];
 				} else if (results.length === 5) {
-					firstIndex = [1, 2, 3];
-					secondIndex = [0, 4];
+					revealOrder = [2, 1, 3, 0, 4];
 				} else {
-					firstIndex = [2, 3, 8, 9];
-					secondIndex = [1, 4, 7, 10];
-					lastIndex = [0, 5, 6, 11];
+					revealOrder = [2, 3, 8, 9, 1, 4, 7, 10, 0, 5, 6, 11];
 				}
-				if (firstIndex.includes(i)) {
-					_drawItem(i);
-				} else if (secondIndex.includes(i)) {
-					setTimeout(() => {
-						_drawItem(i);
-					}, 350);
-				} else {
-					// 最后一批出现
-					setTimeout(() => {
-						_drawItem(i);
-					}, 700);
-				}
+				const order = revealOrder.indexOf(i);
+				setTimeout(() => {
+					_drawItem(i, Math.max(0, order));
+				}, Math.max(0, order) * 65 * rewardSpeed.delay);
 			} else {
-				_drawItem(i);
+				_drawItem(i, 0);
 			}
 		}
 
@@ -737,49 +772,13 @@ export function cangZhenGe() {
 	openAll.listen(function () {
 		// game.playAudio("../../extension/如真重置版/resource/cangZhenGe/mp3/knock.mp3");
 		PIXI.sound.play("czgknock");
-
-		if (boxbeijing) {
-			boxbeijing.state.setAnimation(0, "play2", false);
-			boxbeijing.state.addAnimation(0, "play1", true, 4);
-			// game.playAudio("../../extension/如真重置版/resource/cangZhenGe/mp3/guo.mp3");
-			PIXI.sound.play("czgguo");
-
-			let lis = {
-				complete: function (track) {
-					boxbeijing.state.setAnimation(0, "play1", true);
-					boxbeijing.state.remove;
-					// 打开奖励窗口
-					let c = rzczb.czgSettings.drawCount || 50;
-					openRewardResult(c);
-					boxbeijing.state.removeListener(lis);
-					totalRewards.totalCount += c;
-					refreshStatData();
-				},
-			};
-
-			boxbeijing.state.listeners = [lis];
-		}
+		PIXI.sound.play("czgguo");
+		playBoxAnimation(rzczb.czgSettings.drawCount || 50);
 	});
 	//
 	openOne.listen(function () {
-		if (boxbeijing) {
-			boxbeijing.state.setAnimation(0, "play2", false);
-			boxbeijing.state.addAnimation(0, "play1", true, 4);
-
-			let lis = {
-				complete: function (track) {
-					boxbeijing.state.setAnimation(0, "play1", true);
-					boxbeijing.state.remove;
-					// 打开奖励窗口
-					openRewardResult(1);
-					totalRewards.totalCount += 1;
-					refreshStatData();
-					boxbeijing.state.removeListener(lis);
-				},
-			};
-
-			boxbeijing.state.listeners = [lis];
-		}
+		PIXI.sound.play("czgknock");
+		playBoxAnimation(1);
 	});
 
 	// 画预览的道具
