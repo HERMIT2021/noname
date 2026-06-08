@@ -1,0 +1,6547 @@
+{
+	"summary": {
+		"heroList": "log/yidongban.unique.txt",
+		"heroCount": 569,
+		"localCharacterCount": 2377,
+		"matchedNames": 349,
+		"missingNames": 220,
+		"multipleNames": 36,
+		"singleNames": 313
+	},
+	"matches": [
+		{
+			"name": "刘备",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liubei",
+					"name": "刘备",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "关羽",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guanyu",
+					"name": "关羽",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "张飞",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangfei",
+					"name": "张飞",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "诸葛亮",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_zhugeliang",
+					"name": "诸葛亮",
+					"pack": "diy"
+				},
+				{
+					"id": "zhugeliang",
+					"name": "诸葛亮",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "赵云",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhaoyun",
+					"name": "赵云",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "马超",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "machao",
+					"name": "马超",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "黄月英",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "huangyueying",
+					"name": "黄月英",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "孙权",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunquan",
+					"name": "孙权",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "甘宁",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ganning",
+					"name": "甘宁",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "吕蒙",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_lvmeng",
+					"name": "吕蒙",
+					"pack": "diy"
+				},
+				{
+					"id": "lvmeng",
+					"name": "吕蒙",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "黄盖",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "huanggai",
+					"name": "黄盖",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "周瑜",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhouyu",
+					"name": "周瑜",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "大乔",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "daqiao",
+					"name": "大乔",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "陆逊",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "luxun",
+					"name": "陆逊",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "曹操",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_caocao",
+					"name": "曹操",
+					"pack": "diy"
+				},
+				{
+					"id": "caocao",
+					"name": "曹操",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "司马懿",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "simayi",
+					"name": "司马懿",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "夏侯惇",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xiahoudun",
+					"name": "夏侯惇",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "张辽",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangliao",
+					"name": "张辽",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "许褚",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xuzhu",
+					"name": "许褚",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "郭嘉",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guojia",
+					"name": "郭嘉",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "甄姬",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "华佗",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "huatuo",
+					"name": "华佗",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "吕布",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ol_jsrg_lvbu",
+					"name": "吕布",
+					"pack": "collab"
+				},
+				{
+					"id": "lvbu",
+					"name": "吕布",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "貂蝉",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "diaochan",
+					"name": "貂蝉",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "孙尚香",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunshangxiang",
+					"name": "孙尚香",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "黄忠",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_huangzhong",
+					"name": "黄忠",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "魏延",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_weiyan",
+					"name": "魏延",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "夏侯渊",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_xiahouyuan",
+					"name": "夏侯渊",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "曹仁",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "old_caoren",
+					"name": "曹仁",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "小乔",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xiaoqiao",
+					"name": "小乔",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "周泰",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "old_zhoutai",
+					"name": "周泰",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "张角",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_zhangjiao",
+					"name": "张角",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "于吉",
+			"status": "multiple",
+			"count": 3,
+			"candidates": [
+				{
+					"id": "ns_yuji",
+					"name": "于吉",
+					"pack": "diy"
+				},
+				{
+					"id": "ns_yujisp",
+					"name": "于吉",
+					"pack": "diy"
+				},
+				{
+					"id": "re_yuji",
+					"name": "于吉",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "典韦",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dianwei",
+					"name": "典韦",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "荀彧",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xunyu",
+					"name": "荀彧",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "庞统",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "pangtong",
+					"name": "庞统",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "卧龙诸葛",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "太史慈",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "taishici",
+					"name": "太史慈",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "庞德",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_pangde",
+					"name": "庞德",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "颜良文丑",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yanwen",
+					"name": "颜良文丑",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "袁绍",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_yuanshao",
+					"name": "袁绍",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "徐晃",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_xuhuang",
+					"name": "徐晃",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "曹丕",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caopi",
+					"name": "曹丕",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "孙坚",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_sunjian",
+					"name": "孙坚",
+					"pack": "diy"
+				},
+				{
+					"id": "sunjian",
+					"name": "孙坚",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "董卓",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dongzhuo",
+					"name": "董卓",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "祝融",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhurong",
+					"name": "祝融",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "孟获",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "menghuo",
+					"name": "孟获",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "贾诩",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jiaxu",
+					"name": "贾诩",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "鲁肃",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_lusu",
+					"name": "鲁肃",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "张郃",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhanghe",
+					"name": "张郃",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "邓艾",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dengai",
+					"name": "邓艾",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "姜维",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jiangwei",
+					"name": "姜维",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "刘禅",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liushan",
+					"name": "刘禅",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "孙策",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunce",
+					"name": "孙策",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "张昭张纮",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangzhang",
+					"name": "张昭张纮",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "左慈",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_zuoci",
+					"name": "左慈",
+					"pack": "diy"
+				},
+				{
+					"id": "zuoci",
+					"name": "左慈",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "蔡文姬",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "孙茹",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_sunru",
+					"name": "孙茹",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "凌操",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "伏完",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "fuwan",
+					"name": "伏完",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "刘协",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liuxie",
+					"name": "刘协",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "灵雎",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "lingju",
+					"name": "灵雎",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "界·袁术",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "SP公孙瓒",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_gongsunzan",
+					"name": "SP公孙瓒",
+					"pack": "offline"
+				}
+			]
+		},
+		{
+			"name": "SP孙尚香",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_sunshangxiang",
+					"name": "SP孙尚香",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "杨修",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yangxiu",
+					"name": "杨修",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP庞德",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_pangde",
+					"name": "SP庞德",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP关羽",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jsp_guanyu",
+					"name": "SP关羽",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP马超",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_machao",
+					"name": "SP马超",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP赵云",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_zhaoyun",
+					"name": "SP赵云",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP貂蝉",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_diaochan",
+					"name": "SP貂蝉",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP贾诩",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_jiaxu",
+					"name": "SP贾诩",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP曹仁",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_caoren",
+					"name": "SP曹仁",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP蔡文姬",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "陈琳",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "chenlin",
+					"name": "陈琳",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "曹洪",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caohong",
+					"name": "曹洪",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "关银屏",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guanyinping",
+					"name": "关银屏",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "夏侯霸",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xiahouba",
+					"name": "夏侯霸",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "大乔小乔",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "daxiaoqiao",
+					"name": "大乔小乔",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "诸葛恪",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhugeke",
+					"name": "诸葛恪",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "张宝",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_zhangbao",
+					"name": "张宝",
+					"pack": "diy"
+				},
+				{
+					"id": "zhangbao",
+					"name": "张宝",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "乐进",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yuejin",
+					"name": "乐进",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "曹昂",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caoang",
+					"name": "曹昂",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "诸葛瑾",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhugejin",
+					"name": "诸葛瑾",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "张星彩",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangxingcai",
+					"name": "张星彩",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "祖茂",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zumao",
+					"name": "祖茂",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "丁奉",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dingfeng",
+					"name": "丁奉",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "潘凤",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_panfeng",
+					"name": "潘凤",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "马良",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "maliang",
+					"name": "马良",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "诸葛诞",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhugedan",
+					"name": "诸葛诞",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "程昱",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "chengyu",
+					"name": "程昱",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "何太后",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "hetaihou",
+					"name": "何太后",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "留赞",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_liuzan",
+					"name": "留赞",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "李丰",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_lifeng",
+					"name": "李丰",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "朱灵",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_zhuling",
+					"name": "朱灵",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "孙鲁育",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_sunluyu",
+					"name": "孙鲁育",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "文聘",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wenpin",
+					"name": "文聘",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "孙皓",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunhao",
+					"name": "孙皓",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP姜维",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_jiangwei",
+					"name": "SP姜维",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "兀突骨",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wutugu",
+					"name": "兀突骨",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "曹植",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caozhi",
+					"name": "曹植",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "高顺",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "gaoshun",
+					"name": "高顺",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "陈宫",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "chengong",
+					"name": "陈宫",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "法正",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xin_fazheng",
+					"name": "法正",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "凌统",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "lingtong",
+					"name": "凌统",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "马谡",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_masu",
+					"name": "马谡",
+					"pack": "diy"
+				},
+				{
+					"id": "xin_masu",
+					"name": "马谡",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "吴国太",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wuguotai",
+					"name": "吴国太",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "徐盛",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xusheng",
+					"name": "徐盛",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "于禁",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yujin",
+					"name": "于禁",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "张春华",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangchunhua",
+					"name": "张春华",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "曹彰",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "王异",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wangyi",
+					"name": "王异",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "荀攸",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xunyou",
+					"name": "荀攸",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "关兴张苞",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "廖化",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liaohua",
+					"name": "廖化",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "界·马岱",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "步练师",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "bulianshi",
+					"name": "步练师",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "程普",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "chengpu",
+					"name": "程普",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "韩当",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "handang",
+					"name": "韩当",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "界·华雄",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "刘表",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liubiao",
+					"name": "刘表",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "钟会",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhonghui",
+					"name": "钟会",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "曹冲",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "strong_caochong",
+					"name": "曹冲",
+					"pack": "collab"
+				},
+				{
+					"id": "caochong",
+					"name": "曹冲",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "郭淮",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guohuai",
+					"name": "郭淮",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "满宠",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "manchong",
+					"name": "满宠",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "关平",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guanping",
+					"name": "关平",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "简雍",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jianyong",
+					"name": "简雍",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "刘封",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liufeng",
+					"name": "刘封",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "潘璋马忠",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "panzhangmazhong",
+					"name": "潘璋马忠",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "虞翻",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yufan",
+					"name": "虞翻",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "朱然",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhuran",
+					"name": "朱然",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "伏皇后",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "李儒",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xin_liru",
+					"name": "李儒",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "界·法正",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "徐庶",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xin_xushu",
+					"name": "徐庶",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "界·王异",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·关兴张苞",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "马岱",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "old_madai",
+					"name": "马岱",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "神关羽",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_guanyu",
+					"name": "神关羽",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "神吕蒙",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_lvmeng",
+					"name": "神吕蒙",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "神周瑜",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_zhouyu",
+					"name": "神周瑜",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "神诸葛亮",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_zhugeliang",
+					"name": "神诸葛亮",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "神曹操",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_caocao",
+					"name": "神曹操",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "神吕布",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_lvbu",
+					"name": "神吕布",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "神赵云",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_zhaoyun",
+					"name": "神赵云",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "神司马懿",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_simayi",
+					"name": "神司马懿",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "界·周泰",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·于吉",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·张角",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "华雄",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "huaxiong",
+					"name": "华雄",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "袁术",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_yuanshu",
+					"name": "袁术",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "界·刘备",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·关羽",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·张飞",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·赵云",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·马超",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "SP徐庶",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·甘宁",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·吕蒙",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·黄盖",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·周瑜",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·大乔",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·陆逊",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·曹操",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·司马懿",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·夏侯惇",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·张辽",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·许褚",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·郭嘉",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "李典",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "old_re_lidian",
+					"name": "李典",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "界·华佗",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·吕布",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "公孙瓒",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "曹真",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caozhen",
+					"name": "曹真",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "韩浩史涣",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "hanhaoshihuan",
+					"name": "韩浩史涣",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "陈群",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "chenqun",
+					"name": "陈群",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "吴懿",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wuyi",
+					"name": "吴懿",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "周仓",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhoucang",
+					"name": "周仓",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "张松",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangsong",
+					"name": "张松",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "孙鲁班",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunluban",
+					"name": "孙鲁班",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "朱桓",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhuhuan",
+					"name": "朱桓",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "顾雍",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guyong",
+					"name": "顾雍",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "沮授",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yj_jushou",
+					"name": "沮授",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "蔡夫人",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caifuren",
+					"name": "蔡夫人",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "曹叡",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caorui",
+					"name": "曹叡",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "曹休",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caoxiu",
+					"name": "曹休",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "钟繇",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhongyao",
+					"name": "钟繇",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "刘谌",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liuchen",
+					"name": "刘谌",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "夏侯氏",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xiahoushi",
+					"name": "夏侯氏",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "张嶷",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangyi",
+					"name": "张嶷",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "孙休",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunxiu",
+					"name": "孙休",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "朱治",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhuzhi",
+					"name": "朱治",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "全琮",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "quancong",
+					"name": "全琮",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "公孙渊",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "gongsunyuan",
+					"name": "公孙渊",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "郭图逢纪",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guotufengji",
+					"name": "郭图逢纪",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "张鲁",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhanglu",
+					"name": "张鲁",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "士燮",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shixie",
+					"name": "士燮",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "蹋顿",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "tadun",
+					"name": "蹋顿",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "严白虎",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "关索",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guansuo",
+					"name": "关索",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "王朗",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "司马朗",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "simalang",
+					"name": "司马朗",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP黄月英",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jsp_huangyueying",
+					"name": "SP黄月英",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "王基",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wangji",
+					"name": "王基",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "步骘",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "buzhi",
+					"name": "步骘",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "李通",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "litong",
+					"name": "李通",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "糜竺",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "mizhu",
+					"name": "糜竺",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "董白",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_dongbai",
+					"name": "董白",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "赵襄",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhaoxiang",
+					"name": "赵襄",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "贺齐",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "heqi",
+					"name": "贺齐",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "马忠",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "mazhong",
+					"name": "马忠",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "阚泽",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_kanze",
+					"name": "阚泽",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "王允",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_wangyun",
+					"name": "王允",
+					"pack": "diy"
+				},
+				{
+					"id": "wangyun",
+					"name": "王允",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "麹义",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "戏志才",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xizhicai",
+					"name": "戏志才",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "孙乾",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunqian",
+					"name": "孙乾",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "郭皇后",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guohuanghou",
+					"name": "郭皇后",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "李严",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liyan",
+					"name": "李严",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "孙登",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sundeng",
+					"name": "孙登",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "刘虞",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liuyu",
+					"name": "刘虞",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "岑昏",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shi_cenhun",
+					"name": "岑昏",
+					"pack": "collab"
+				},
+				{
+					"id": "cenhun",
+					"name": "岑昏",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "孙资刘放",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunziliufang",
+					"name": "孙资刘放",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "黄皓",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "huanghao",
+					"name": "黄皓",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "张让",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "scs_zhangrang",
+					"name": "张让",
+					"pack": "mobile"
+				},
+				{
+					"id": "zhangrang",
+					"name": "张让",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "辛宪英",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_xinxianying",
+					"name": "辛宪英",
+					"pack": "diy"
+				},
+				{
+					"id": "xinxianying",
+					"name": "辛宪英",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "吴苋",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wuxian",
+					"name": "吴苋",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "徐氏",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xushi",
+					"name": "徐氏",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "曹节",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caojie",
+					"name": "曹节",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "嵇康",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jikang",
+					"name": "嵇康",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "秦宓",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "qinmi",
+					"name": "秦宓",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "薛综",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xuezong",
+					"name": "薛综",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "蔡邕",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caiyong",
+					"name": "蔡邕",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "界·黄月英",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·诸葛亮",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·孙权",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·孙尚香",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·甄姬",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·貂蝉",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "刘焉",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liuyan",
+					"name": "刘焉",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "潘濬",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "panjun",
+					"name": "潘濬",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "赵统赵广",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_zhaotongzhaoguang",
+					"name": "赵统赵广",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "董允",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dongyun",
+					"name": "董允",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "吕虔",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "lvqian",
+					"name": "吕虔",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "sp庞统",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "sp太史慈",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "鲁芝",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "luzhi",
+					"name": "鲁芝",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "马云騄",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "mayunlu",
+					"name": "马云騄",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "张梁",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "严颜",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yanyan",
+					"name": "严颜",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "王平",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wangping",
+					"name": "王平",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "陆绩",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "luji",
+					"name": "陆绩",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "孙亮",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunliang",
+					"name": "孙亮",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "蒯越蒯良",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "许攸",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xuyou",
+					"name": "许攸",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "卢植",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yl_luzhi",
+					"name": "卢植",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "刘琦",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_liuqi",
+					"name": "刘琦",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "界·伊籍",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "马钧",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yj_majun",
+					"name": "马钧",
+					"pack": "newjiang"
+				}
+			]
+		},
+		{
+			"name": "李傕",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "lijue",
+					"name": "李傕",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "郭汜",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guosi",
+					"name": "郭汜",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "徐荣",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xurong",
+					"name": "徐荣",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "界·卧龙诸葛",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·典韦",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·荀彧",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "SP司马昭",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "simazhao",
+					"name": "SP司马昭",
+					"pack": "mobile"
+				},
+				{
+					"id": "sp_simazhao",
+					"name": "SP司马昭",
+					"pack": "offline"
+				}
+			]
+		},
+		{
+			"name": "王元姬",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·庞德",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·庞统",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·颜良文丑",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·袁绍",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "神刘备",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_liubei",
+					"name": "神刘备",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "神陆逊",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_luxun",
+					"name": "神陆逊",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "张济",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangji",
+					"name": "张济",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "樊稠",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "fanchou",
+					"name": "樊稠",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "界·徐晃",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·孟获",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·祝融",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "严畯",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yanjun",
+					"name": "严畯",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "杜畿",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "鲍三娘",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "baosanniang",
+					"name": "鲍三娘",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "卑弥呼",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·曹丕",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·孙坚",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·董卓",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "吕岱",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "周鲂",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhoufang",
+					"name": "周鲂",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "刘繇",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "曹婴",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caoying",
+					"name": "曹婴",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "审配",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_shenpei",
+					"name": "审配",
+					"pack": "diy"
+				},
+				{
+					"id": "shenpei",
+					"name": "审配",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "界·邓艾",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·姜维",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·蔡文姬",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "沙摩柯",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shamoke",
+					"name": "沙摩柯",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "界·左慈",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·孙策",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·张昭张纮",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·刘禅",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "胡金定",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "何进",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "hejin",
+					"name": "何进",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "牛金",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "niujin",
+					"name": "牛金",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "韩遂",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "hansui",
+					"name": "韩遂",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "诸葛果",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhugeguo",
+					"name": "诸葛果",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "曹纯",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caochun",
+					"name": "曹纯",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "祢衡",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_miheng",
+					"name": "祢衡",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "陶谦",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_taoqian",
+					"name": "陶谦",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "刘晔",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_liuye",
+					"name": "刘晔",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "界·黄忠",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·魏延",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·夏侯渊",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·曹仁",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·小乔",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "庞德公",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_pangdegong",
+					"name": "庞德公",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "司马徽",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "simahui",
+					"name": "司马徽",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "甘夫人",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_ganfuren",
+					"name": "甘夫人",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "孔融",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_kongrong",
+					"name": "孔融",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "纪灵",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_jiling",
+					"name": "纪灵",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "田丰",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "邹氏",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "zoushi",
+					"name": "邹氏",
+					"pack": "sp"
+				},
+				{
+					"id": "re_zoushi",
+					"name": "邹氏",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "蒋琬费祎",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jiangfei",
+					"name": "蒋琬费祎",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "臧霸",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "糜夫人",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "mifuren",
+					"name": "糜夫人",
+					"pack": "sp"
+				},
+				{
+					"id": "dc_mifuren",
+					"name": "糜夫人",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "陈武董袭",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "chendong",
+					"name": "陈武董袭",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "张任",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "蒋钦",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_jiangqing",
+					"name": "蒋钦",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "李傕郭汜",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "liqueguosi",
+					"name": "李傕郭汜",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "吕范",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "lvfan",
+					"name": "吕范",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "神太史慈",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_taishici",
+					"name": "神太史慈",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_taishici",
+					"name": "神太史慈",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "王凌",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wangling",
+					"name": "王凌",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "卞夫人",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ol_bianfuren",
+					"name": "卞夫人",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "神郭嘉",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_guojia",
+					"name": "神郭嘉",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_guojia",
+					"name": "神郭嘉",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "神荀彧",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_xunyu",
+					"name": "神荀彧",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_xunyu",
+					"name": "神荀彧",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "神孙策",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_sunce",
+					"name": "神孙策",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_sunce",
+					"name": "神孙策",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "毌丘俭",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "guanqiujian",
+					"name": "毌丘俭",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "陈到",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "chendao",
+					"name": "陈到",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "诸葛瞻",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhugezhan",
+					"name": "诸葛瞻",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "周妃",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhoufei",
+					"name": "周妃",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "陆抗",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "lukang",
+					"name": "陆抗",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "张绣",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_zhangxiu",
+					"name": "张绣",
+					"pack": "diy"
+				},
+				{
+					"id": "zhangxiu",
+					"name": "张绣",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "郝昭",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "haozhao",
+					"name": "郝昭",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "仲帝袁术",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "神张辽",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_zhangliao",
+					"name": "神张辽",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "神甘宁",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shen_ganning",
+					"name": "神甘宁",
+					"pack": "extra"
+				}
+			]
+		},
+		{
+			"name": "张琪瑛",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "许贡",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xugong",
+					"name": "许贡",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "张恭",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhanggong",
+					"name": "张恭",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "吕凯",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "lvkai",
+					"name": "吕凯",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "卫温诸葛直",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "weiwenzhugezhi",
+					"name": "卫温诸葛直",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "张翼",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "贾逵",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jiakui",
+					"name": "贾逵",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "界·徐盛",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·吴国太",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·高顺",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "杨彪",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_yangbiao",
+					"name": "杨彪",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "陈登",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_chendeng",
+					"name": "陈登",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "董承",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_dongcheng",
+					"name": "董承",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "杨仪",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_yangyi",
+					"name": "杨仪",
+					"pack": "diy"
+				},
+				{
+					"id": "ol_yangyi",
+					"name": "杨仪",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "界·于禁",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·曹植",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·凌统",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·韩当",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·程普",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·钟会",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·曹彰",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·廖化",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·步练师",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·刘表",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "邓芝",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_dengzhi",
+					"name": "邓芝",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "郑玄",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhengxuan",
+					"name": "郑玄",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "星·张辽",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "星·甘宁",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "星·徐晃",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "星·张郃",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "苏飞",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yj_sufei",
+					"name": "苏飞",
+					"pack": "newjiang"
+				}
+			]
+		},
+		{
+			"name": "傅肜",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ol_furong",
+					"name": "傅肜",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "界·公孙瓒",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "丁原",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ol_dingyuan",
+					"name": "丁原",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "界·李儒",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·满宠",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·简雍",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·虞翻",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "司马师",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "simashi",
+					"name": "司马师",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "羊徽瑜",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yanghuiyu",
+					"name": "羊徽瑜",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "界·朱然",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "胡车儿",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_hucheer",
+					"name": "胡车儿",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "公孙康",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "gongsunkang",
+					"name": "公孙康",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "界·郭淮",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·潘璋马忠",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·伏皇后",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "王粲",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wangcan",
+					"name": "王粲",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "陈震",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_chenzhen",
+					"name": "陈震",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "孙邵",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sunshao",
+					"name": "孙邵",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "荀谌",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "re_xunchen",
+					"name": "荀谌",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "南华老仙",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_xinnanhua",
+					"name": "南华老仙",
+					"pack": "diy"
+				},
+				{
+					"id": "re_nanhualaoxian",
+					"name": "南华老仙",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "费祎",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ol_feiyi",
+					"name": "费祎",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "骆统",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_luotong",
+					"name": "骆统",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "杜预",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_duyu",
+					"name": "杜预",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "辛毗",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xinpi",
+					"name": "辛毗",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "吴景",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wujing",
+					"name": "吴景",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "界·陈群",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "王甫赵累",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wangfuzhaolei",
+					"name": "王甫赵累",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "周处",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jin_zhouchu",
+					"name": "周处",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "周群",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "zhouqun",
+					"name": "周群",
+					"pack": "mobile"
+				},
+				{
+					"id": "ol_zhouqun",
+					"name": "周群",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "界·周仓",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "羊祜",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_yanghu",
+					"name": "羊祜",
+					"pack": "diy"
+				},
+				{
+					"id": "dc_yanghu",
+					"name": "羊祜",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "华歆",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "huaxin",
+					"name": "华歆",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "许靖",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_xujing",
+					"name": "许靖",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "蔡贞姬",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caizhenji",
+					"name": "蔡贞姬",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "向宠",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "xiangchong",
+					"name": "向宠",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "刘璋",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_liuzhang",
+					"name": "刘璋",
+					"pack": "diy"
+				},
+				{
+					"id": "liuzhang",
+					"name": "刘璋",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "张仲景",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "张温",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangwen",
+					"name": "张温",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "谯周",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yj_qiaozhou",
+					"name": "谯周",
+					"pack": "newjiang"
+				}
+			]
+		},
+		{
+			"name": "文鸯",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "diy_wenyang",
+					"name": "文鸯",
+					"pack": "diy"
+				},
+				{
+					"id": "wenyang",
+					"name": "文鸯",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "袁涣",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yuanhuan",
+					"name": "袁涣",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "宗预",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "花鬘",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "huaman",
+					"name": "花鬘",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "孙翊",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_sunyi",
+					"name": "孙翊",
+					"pack": "diy"
+				},
+				{
+					"id": "re_sunyi",
+					"name": "孙翊",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "高览",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_gaolan",
+					"name": "高览",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "马元义",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "mayuanyi",
+					"name": "马元义",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "崔琰",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "cuiyan",
+					"name": "崔琰",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "蒋琬·改",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "阎圃",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yanpu",
+					"name": "阎圃",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "界·顾雍",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·蔡夫人",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·孙鲁班",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·曹真",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "星·黄忠",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "毛玠",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "sp_maojie",
+					"name": "毛玠",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "王双",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wangshuang",
+					"name": "王双",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "孙寒华",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_sunhanhua",
+					"name": "孙寒华",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "谋·刘赪",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·徐晃",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·吕蒙",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·于禁",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·黄忠",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·孙休",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·华雄",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "桥公",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "qiaogong",
+					"name": "桥公",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "张昌蒲",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangchangpu",
+					"name": "张昌蒲",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "皇甫嵩",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "huangfusong",
+					"name": "皇甫嵩",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "朱儁",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhujun",
+					"name": "朱儁",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "谋·杨婉",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·马超",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·张飞",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·赵云",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "傅佥",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "fuqian",
+					"name": "傅佥",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "阮慧",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ruanhui",
+					"name": "阮慧",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "界·沮授",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·孙尚香",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "马日磾",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "mamidi",
+					"name": "马日磾",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "王濬",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_wangjun",
+					"name": "王濬",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "界·全琮",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·夏侯氏",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·曹操",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·曹仁",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·周瑜",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·甄姬",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "曹嵩",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caosong",
+					"name": "曹嵩",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "界·吴懿",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "裴秀",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "fj_peixiu",
+					"name": "裴秀",
+					"pack": "newjiang"
+				},
+				{
+					"id": "ol_peixiu",
+					"name": "裴秀",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "界·朱治",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·貂蝉",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·袁绍",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·庞统",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·刘备",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·姜维",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·法正",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·陈宫",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·甘宁",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·黄盖",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·孙权",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·张嶷",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "十常侍",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "shichangshi",
+					"name": "十常侍",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "杨阜",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yangfu",
+					"name": "杨阜",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "谋·大乔",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·孟获",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "牵招",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ol_qianzhao",
+					"name": "牵招",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "濮阳兴",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "tw_puyangxing",
+					"name": "濮阳兴",
+					"pack": "tw"
+				}
+			]
+		},
+		{
+			"name": "界·曹休",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·孙策",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "郭女王",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "星·魏延",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "界·朱桓",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·祝融",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "阎象",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yanxiang",
+					"name": "阎象",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "星·周不疑",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "神华佗",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "dc_shen_huatuo",
+					"name": "神华佗",
+					"pack": "extra"
+				},
+				{
+					"id": "dc_shen_huatuo",
+					"name": "神华佗",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "谋·卢植",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "鲍信",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "baoxin",
+					"name": "鲍信",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "谋·诸葛亮",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·关羽",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "胡班",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_huban",
+					"name": "胡班",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "陈珪",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "chengui",
+					"name": "陈珪",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "谋·曹丕",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·黄月英",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·小乔",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "木鹿大王",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "muludawang",
+					"name": "木鹿大王",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "霍峻",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_huojun",
+					"name": "霍峻",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "神鲁肃",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_lusu",
+					"name": "神鲁肃",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_lusu",
+					"name": "神鲁肃",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "谋·夏侯惇",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "曹髦",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "caomao",
+					"name": "曹髦",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "谋·公孙瓒",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "司马孚",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yj_simafu",
+					"name": "司马孚",
+					"pack": "newjiang"
+				}
+			]
+		},
+		{
+			"name": "谋·韩当",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·陆逊",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "来敏",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "laimin",
+					"name": "来敏",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "张奋",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangfen",
+					"name": "张奋",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "文钦",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ol_wenqin",
+					"name": "文钦",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "SP甄姬",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "贾充",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_jiachong",
+					"name": "贾充",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "谋·贾诩",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·诸葛瑾",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "司马昭",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ns_simazhao",
+					"name": "司马昭",
+					"pack": "diy"
+				}
+			]
+		},
+		{
+			"name": "势·太史慈",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "星·董卓",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·董昭",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "王经",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "mb_wangjing",
+					"name": "王经",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "友·诸葛亮",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "友·庞统",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "友·徐庶",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·郭淮",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "清河公主",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "qinghegongzhu",
+					"name": "清河公主",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "娄圭",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·于吉",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "杨弘",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "yanghong",
+					"name": "杨弘",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "张布",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zhangbu",
+					"name": "张布",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "谋·吕布",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "吴珂",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "wuke",
+					"name": "吴珂",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "势·魏延",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "孙韶",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·陈到",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "庞羲",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·陆郁生",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·黄祖",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "笮融",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "zerong",
+					"name": "笮融",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "势·张燕",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·田丰",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "乐就",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_yuejiu",
+					"name": "乐就",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "势·国渊",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "SP曹操",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_caocaosp",
+					"name": "SP曹操",
+					"pack": "diy"
+				},
+				{
+					"id": "sp_ol_caocao",
+					"name": "SP曹操",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "势·辛宪英",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "孟达",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "dc_mengda",
+					"name": "孟达",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "蒋济",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "jiangji",
+					"name": "蒋济",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "玄·毌丘俭",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "崔芙",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·鲁肃",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·陈祗",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·钟会",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·王昶",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "SP于禁",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "tw_yujin",
+					"name": "SP于禁",
+					"pack": "tw"
+				}
+			]
+		},
+		{
+			"name": "势·邓艾",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·桓阶",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "神姜维",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_jiangwei",
+					"name": "神姜维",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_jiangwei",
+					"name": "神姜维",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "张既",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "ol_tw_zhangji",
+					"name": "张既",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "骥·张辽",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "骥·李典",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "骥·乐进",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "星·法正",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "阳球",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·朱然",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "朱绩",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·张郃",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "国战于禁",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "谋·田豫",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "神马超",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_machao",
+					"name": "神马超",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_machao",
+					"name": "神马超",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "彻里吉",
+			"status": "single",
+			"count": 1,
+			"candidates": [
+				{
+					"id": "cheliji",
+					"name": "彻里吉",
+					"pack": "yingbian"
+				}
+			]
+		},
+		{
+			"name": "马腾",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·孙綝",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		},
+		{
+			"name": "势·孙峻",
+			"status": "missing",
+			"count": 0,
+			"candidates": []
+		}
+	],
+	"missing": [
+		"甄姬",
+		"卧龙诸葛",
+		"蔡文姬",
+		"凌操",
+		"界·袁术",
+		"SP蔡文姬",
+		"曹彰",
+		"关兴张苞",
+		"界·马岱",
+		"界·华雄",
+		"伏皇后",
+		"界·法正",
+		"界·王异",
+		"界·关兴张苞",
+		"界·周泰",
+		"界·于吉",
+		"界·张角",
+		"界·刘备",
+		"界·关羽",
+		"界·张飞",
+		"界·赵云",
+		"界·马超",
+		"SP徐庶",
+		"界·甘宁",
+		"界·吕蒙",
+		"界·黄盖",
+		"界·周瑜",
+		"界·大乔",
+		"界·陆逊",
+		"界·曹操",
+		"界·司马懿",
+		"界·夏侯惇",
+		"界·张辽",
+		"界·许褚",
+		"界·郭嘉",
+		"界·华佗",
+		"界·吕布",
+		"公孙瓒",
+		"严白虎",
+		"王朗",
+		"麹义",
+		"界·黄月英",
+		"界·诸葛亮",
+		"界·孙权",
+		"界·孙尚香",
+		"界·甄姬",
+		"界·貂蝉",
+		"sp庞统",
+		"sp太史慈",
+		"张梁",
+		"蒯越蒯良",
+		"界·伊籍",
+		"界·卧龙诸葛",
+		"界·典韦",
+		"界·荀彧",
+		"王元姬",
+		"界·庞德",
+		"界·庞统",
+		"界·颜良文丑",
+		"界·袁绍",
+		"界·徐晃",
+		"界·孟获",
+		"界·祝融",
+		"杜畿",
+		"卑弥呼",
+		"界·曹丕",
+		"界·孙坚",
+		"界·董卓",
+		"吕岱",
+		"刘繇",
+		"界·邓艾",
+		"界·姜维",
+		"界·蔡文姬",
+		"界·左慈",
+		"界·孙策",
+		"界·张昭张纮",
+		"界·刘禅",
+		"胡金定",
+		"界·黄忠",
+		"界·魏延",
+		"界·夏侯渊",
+		"界·曹仁",
+		"界·小乔",
+		"田丰",
+		"臧霸",
+		"张任",
+		"仲帝袁术",
+		"张琪瑛",
+		"张翼",
+		"界·徐盛",
+		"界·吴国太",
+		"界·高顺",
+		"界·于禁",
+		"界·曹植",
+		"界·凌统",
+		"界·韩当",
+		"界·程普",
+		"界·钟会",
+		"界·曹彰",
+		"界·廖化",
+		"界·步练师",
+		"界·刘表",
+		"星·张辽",
+		"星·甘宁",
+		"星·徐晃",
+		"星·张郃",
+		"界·公孙瓒",
+		"界·李儒",
+		"界·满宠",
+		"界·简雍",
+		"界·虞翻",
+		"界·朱然",
+		"界·郭淮",
+		"界·潘璋马忠",
+		"界·伏皇后",
+		"界·陈群",
+		"界·周仓",
+		"张仲景",
+		"宗预",
+		"蒋琬·改",
+		"界·顾雍",
+		"界·蔡夫人",
+		"界·孙鲁班",
+		"界·曹真",
+		"星·黄忠",
+		"谋·刘赪",
+		"谋·徐晃",
+		"谋·吕蒙",
+		"谋·于禁",
+		"谋·黄忠",
+		"界·孙休",
+		"谋·华雄",
+		"谋·杨婉",
+		"谋·马超",
+		"谋·张飞",
+		"谋·赵云",
+		"界·沮授",
+		"谋·孙尚香",
+		"界·全琮",
+		"谋·夏侯氏",
+		"谋·曹操",
+		"谋·曹仁",
+		"谋·周瑜",
+		"谋·甄姬",
+		"界·吴懿",
+		"界·朱治",
+		"谋·貂蝉",
+		"谋·袁绍",
+		"谋·庞统",
+		"谋·刘备",
+		"谋·姜维",
+		"谋·法正",
+		"谋·陈宫",
+		"谋·甘宁",
+		"谋·黄盖",
+		"谋·孙权",
+		"界·张嶷",
+		"谋·大乔",
+		"谋·孟获",
+		"界·曹休",
+		"谋·孙策",
+		"郭女王",
+		"星·魏延",
+		"界·朱桓",
+		"谋·祝融",
+		"星·周不疑",
+		"谋·卢植",
+		"谋·诸葛亮",
+		"谋·关羽",
+		"谋·曹丕",
+		"谋·黄月英",
+		"谋·小乔",
+		"谋·夏侯惇",
+		"谋·公孙瓒",
+		"谋·韩当",
+		"谋·陆逊",
+		"SP甄姬",
+		"谋·贾诩",
+		"谋·诸葛瑾",
+		"势·太史慈",
+		"星·董卓",
+		"势·董昭",
+		"友·诸葛亮",
+		"友·庞统",
+		"友·徐庶",
+		"谋·郭淮",
+		"娄圭",
+		"势·于吉",
+		"谋·吕布",
+		"势·魏延",
+		"孙韶",
+		"势·陈到",
+		"庞羲",
+		"势·陆郁生",
+		"势·黄祖",
+		"势·张燕",
+		"势·田丰",
+		"势·国渊",
+		"势·辛宪英",
+		"玄·毌丘俭",
+		"崔芙",
+		"势·鲁肃",
+		"势·陈祗",
+		"势·钟会",
+		"势·王昶",
+		"势·邓艾",
+		"势·桓阶",
+		"骥·张辽",
+		"骥·李典",
+		"骥·乐进",
+		"星·法正",
+		"阳球",
+		"谋·朱然",
+		"朱绩",
+		"谋·张郃",
+		"国战于禁",
+		"谋·田豫",
+		"马腾",
+		"势·孙綝",
+		"势·孙峻"
+	],
+	"multiple": [
+		{
+			"name": "诸葛亮",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_zhugeliang",
+					"name": "诸葛亮",
+					"pack": "diy"
+				},
+				{
+					"id": "zhugeliang",
+					"name": "诸葛亮",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "吕蒙",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_lvmeng",
+					"name": "吕蒙",
+					"pack": "diy"
+				},
+				{
+					"id": "lvmeng",
+					"name": "吕蒙",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "曹操",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_caocao",
+					"name": "曹操",
+					"pack": "diy"
+				},
+				{
+					"id": "caocao",
+					"name": "曹操",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "吕布",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ol_jsrg_lvbu",
+					"name": "吕布",
+					"pack": "collab"
+				},
+				{
+					"id": "lvbu",
+					"name": "吕布",
+					"pack": "standard"
+				}
+			]
+		},
+		{
+			"name": "于吉",
+			"status": "multiple",
+			"count": 3,
+			"candidates": [
+				{
+					"id": "ns_yuji",
+					"name": "于吉",
+					"pack": "diy"
+				},
+				{
+					"id": "ns_yujisp",
+					"name": "于吉",
+					"pack": "diy"
+				},
+				{
+					"id": "re_yuji",
+					"name": "于吉",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "孙坚",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_sunjian",
+					"name": "孙坚",
+					"pack": "diy"
+				},
+				{
+					"id": "sunjian",
+					"name": "孙坚",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "左慈",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_zuoci",
+					"name": "左慈",
+					"pack": "diy"
+				},
+				{
+					"id": "zuoci",
+					"name": "左慈",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "张宝",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_zhangbao",
+					"name": "张宝",
+					"pack": "diy"
+				},
+				{
+					"id": "zhangbao",
+					"name": "张宝",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "马谡",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_masu",
+					"name": "马谡",
+					"pack": "diy"
+				},
+				{
+					"id": "xin_masu",
+					"name": "马谡",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "曹冲",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "strong_caochong",
+					"name": "曹冲",
+					"pack": "collab"
+				},
+				{
+					"id": "caochong",
+					"name": "曹冲",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "王允",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_wangyun",
+					"name": "王允",
+					"pack": "diy"
+				},
+				{
+					"id": "wangyun",
+					"name": "王允",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "岑昏",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shi_cenhun",
+					"name": "岑昏",
+					"pack": "collab"
+				},
+				{
+					"id": "cenhun",
+					"name": "岑昏",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "张让",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "scs_zhangrang",
+					"name": "张让",
+					"pack": "mobile"
+				},
+				{
+					"id": "zhangrang",
+					"name": "张让",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "辛宪英",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_xinxianying",
+					"name": "辛宪英",
+					"pack": "diy"
+				},
+				{
+					"id": "xinxianying",
+					"name": "辛宪英",
+					"pack": "yijiang"
+				}
+			]
+		},
+		{
+			"name": "SP司马昭",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "simazhao",
+					"name": "SP司马昭",
+					"pack": "mobile"
+				},
+				{
+					"id": "sp_simazhao",
+					"name": "SP司马昭",
+					"pack": "offline"
+				}
+			]
+		},
+		{
+			"name": "审配",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_shenpei",
+					"name": "审配",
+					"pack": "diy"
+				},
+				{
+					"id": "shenpei",
+					"name": "审配",
+					"pack": "mobile"
+				}
+			]
+		},
+		{
+			"name": "邹氏",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "zoushi",
+					"name": "邹氏",
+					"pack": "sp"
+				},
+				{
+					"id": "re_zoushi",
+					"name": "邹氏",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "糜夫人",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "mifuren",
+					"name": "糜夫人",
+					"pack": "sp"
+				},
+				{
+					"id": "dc_mifuren",
+					"name": "糜夫人",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "神太史慈",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_taishici",
+					"name": "神太史慈",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_taishici",
+					"name": "神太史慈",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "神郭嘉",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_guojia",
+					"name": "神郭嘉",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_guojia",
+					"name": "神郭嘉",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "神荀彧",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_xunyu",
+					"name": "神荀彧",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_xunyu",
+					"name": "神荀彧",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "神孙策",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_sunce",
+					"name": "神孙策",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_sunce",
+					"name": "神孙策",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "张绣",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_zhangxiu",
+					"name": "张绣",
+					"pack": "diy"
+				},
+				{
+					"id": "zhangxiu",
+					"name": "张绣",
+					"pack": "shenhua"
+				}
+			]
+		},
+		{
+			"name": "杨仪",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_yangyi",
+					"name": "杨仪",
+					"pack": "diy"
+				},
+				{
+					"id": "ol_yangyi",
+					"name": "杨仪",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "南华老仙",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_xinnanhua",
+					"name": "南华老仙",
+					"pack": "diy"
+				},
+				{
+					"id": "re_nanhualaoxian",
+					"name": "南华老仙",
+					"pack": "sp2"
+				}
+			]
+		},
+		{
+			"name": "周群",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "zhouqun",
+					"name": "周群",
+					"pack": "mobile"
+				},
+				{
+					"id": "ol_zhouqun",
+					"name": "周群",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "羊祜",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_yanghu",
+					"name": "羊祜",
+					"pack": "diy"
+				},
+				{
+					"id": "dc_yanghu",
+					"name": "羊祜",
+					"pack": "huicui"
+				}
+			]
+		},
+		{
+			"name": "刘璋",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_liuzhang",
+					"name": "刘璋",
+					"pack": "diy"
+				},
+				{
+					"id": "liuzhang",
+					"name": "刘璋",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "文鸯",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "diy_wenyang",
+					"name": "文鸯",
+					"pack": "diy"
+				},
+				{
+					"id": "wenyang",
+					"name": "文鸯",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "孙翊",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_sunyi",
+					"name": "孙翊",
+					"pack": "diy"
+				},
+				{
+					"id": "re_sunyi",
+					"name": "孙翊",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "裴秀",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "fj_peixiu",
+					"name": "裴秀",
+					"pack": "newjiang"
+				},
+				{
+					"id": "ol_peixiu",
+					"name": "裴秀",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "神华佗",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "dc_shen_huatuo",
+					"name": "神华佗",
+					"pack": "extra"
+				},
+				{
+					"id": "dc_shen_huatuo",
+					"name": "神华佗",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "神鲁肃",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_lusu",
+					"name": "神鲁肃",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_lusu",
+					"name": "神鲁肃",
+					"pack": "shiji"
+				}
+			]
+		},
+		{
+			"name": "SP曹操",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "ns_caocaosp",
+					"name": "SP曹操",
+					"pack": "diy"
+				},
+				{
+					"id": "sp_ol_caocao",
+					"name": "SP曹操",
+					"pack": "sp"
+				}
+			]
+		},
+		{
+			"name": "神姜维",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_jiangwei",
+					"name": "神姜维",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_jiangwei",
+					"name": "神姜维",
+					"pack": "xianding"
+				}
+			]
+		},
+		{
+			"name": "神马超",
+			"status": "multiple",
+			"count": 2,
+			"candidates": [
+				{
+					"id": "shen_machao",
+					"name": "神马超",
+					"pack": "extra"
+				},
+				{
+					"id": "shen_machao",
+					"name": "神马超",
+					"pack": "xianding"
+				}
+			]
+		}
+	]
+}

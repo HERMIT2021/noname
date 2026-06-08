@@ -1788,6 +1788,60 @@ export class Game {
 			next.setContent("replaceHandcards");
 		}
 	}
+	getGlobalItemCount(id) {
+		const packageInfo = lib.config.extension_斗转星移_package || {};
+		const count = Number(packageInfo[id]?.count);
+		return Number.isSafeInteger(count) && count > 0 ? count : 0;
+	}
+	setGlobalItemCount(id, count) {
+		const normalized = Number.isSafeInteger(Number(count)) && Number(count) > 0 ? Number(count) : 0;
+		const packageInfo = lib.config.extension_斗转星移_package || {};
+		if (!packageInfo[id]) packageInfo[id] = {};
+		packageInfo[id].count = normalized;
+		game.saveConfig("extension_斗转星移_package", packageInfo);
+		try {
+			const yjcm = JSON.parse(localStorage.getItem("yjcm_game_backpack_data") || "{}");
+			yjcm[id] = normalized;
+			localStorage.setItem("yjcm_game_backpack_data", JSON.stringify(yjcm));
+		} catch (e) {}
+		if (id == "yuanbao") window.rzshRefreshYuanbao?.();
+		return normalized;
+	}
+	changeGlobalItemCount(id, changeCount) {
+		if (!Number.isInteger(changeCount)) return this.getGlobalItemCount(id);
+		return this.setGlobalItemCount(id, Math.max(0, this.getGlobalItemCount(id) + changeCount));
+	}
+	useGlobalItem(id, propName, reason = "使用道具") {
+		if (this.getGlobalItemCount(id) <= 0) {
+			const text = `${reason}需要消耗1张${propName}，当前${propName}不足`;
+			window.dzxy?.create?.bottomBarTip?.(text, document.body) || alert(text);
+			return false;
+		}
+		this.changeGlobalItemCount(id, -1);
+		window.dzxy?.propToast?.addToast?.(id, 0, `${propName}-1`);
+		return true;
+	}
+	getUnlockedCharacters() {
+		return Array.isArray(lib.config.extension_斗转星移_unlocked_characters) ? lib.config.extension_斗转星移_unlocked_characters.slice() : [];
+	}
+	isCharacterUnlocked(name) {
+		if (!get.config("only_choose_unlocked_character")) return true;
+		if (!name || !lib.character[name]) return false;
+		return this.getUnlockedCharacters().includes(get.sourceCharacter(name));
+	}
+	unlockCharacter(name) {
+		if (!name || !lib.character[name]) return false;
+		const source = get.sourceCharacter(name);
+		const list = this.getUnlockedCharacters();
+		if (list.includes(source)) return true;
+		list.push(source);
+		game.saveConfig("extension_斗转星移_unlocked_characters", list);
+		return true;
+	}
+	filterUnlockedCharacters(list) {
+		if (!get.config("only_choose_unlocked_character") || !Array.isArray(list)) return list;
+		return list.filter(name => this.isCharacterUnlocked(name));
+	}
 	/**
 	 * @param { string } name
 	 */

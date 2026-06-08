@@ -1047,12 +1047,29 @@ const skills = {
 			player.chat("发牌！");
 			await game.asyncDraw(targets.sortBySeat(), 4);
 		},
+		getAIScore(player) {
+			let score = 0,
+				enemyGift = 0;
+			game.countPlayer(target => {
+				const attitude = get.attitude(player, target),
+					hand = target.countCards("h"),
+					change = 4 - hand;
+				score += attitude * change;
+				if (attitude < 0 && change > 0) {
+					enemyGift += -attitude * change;
+				}
+			});
+			return score - enemyGift;
+		},
 		ai: {
-			//贯彻搅屎棍精神，有大直接开
-			order: 114514,
+			order(item, player) {
+				return lib.skill.potzhengshuo.getAIScore(player) > 0 ? 10 : 0;
+			},
 			threaten: 10086,
 			result: {
-				player: 73547,
+				player(player) {
+					return lib.skill.potzhengshuo.getAIScore(player);
+				},
 			},
 		},
 	},

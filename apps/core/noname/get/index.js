@@ -1417,6 +1417,7 @@ export class Get {
 			line: "effect_speed_line",
 			skill: "effect_speed_skill",
 			card: "effect_speed_card",
+			cardBack: "effect_speed_card_back",
 		};
 		const configName = configMap[type] || configMap.card;
 		const readSpeed = (name, fallback = 1) => {

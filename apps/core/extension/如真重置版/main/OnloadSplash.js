@@ -1904,12 +1904,16 @@ export default {
 					const vipbg2 = rzshcreatex("vipbg2");
 					uiinit(vipbg2);
 					//元宝数
-					const vipmoney = new PIXI.Text("20000");
+					const getYuanbaoCount = () => window.dzxy?.Props?.getCount?.("yuanbao") || 0;
+					const vipmoney = new PIXI.Text(String(getYuanbaoCount()));
 					// 设置字体、字号和颜色，字体不生效，因为字体载入太慢
 					vipmoney.style.fontFamily = "shousha";
 					vipmoney.style.fontSize = 16;
 					vipmoney.position.set(600 * ppw, 10 * pph);
 					vipmoney.style.fill = "#C0C0C0";
+					window.rzshRefreshYuanbao = () => {
+						vipmoney.text = String(getYuanbaoCount());
+					};
 					uihometop.addChild(player_nan, lvlup, guanico, vipbg1, vip_v7, vipbg2, vipmoney);
 					//下面是右边的4个底圈，不可交互
 					for (let i = 0; i <= 3; i++) {

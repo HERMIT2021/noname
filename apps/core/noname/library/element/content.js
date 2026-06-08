@@ -3711,6 +3711,11 @@ export const Content = {
 		if (_status.connectMode || (lib.config.mode == "single" && _status.mode != "wuxianhuoli") || (lib.config.mode == "doudizhu" && _status.mode == "online") || (lib.config.mode != "identity" && lib.config.mode != "guozhan" && lib.config.mode != "doudizhu" && lib.config.mode != "single")) {
 			event.changeCard = "disabled";
 		}
+		const useGlobalPropsForChangeCard = ["identity", "doudizhu"].includes(lib.config.mode) && event.changeCard != "disabled";
+		if (useGlobalPropsForChangeCard) {
+			const shouqikaCount = game.getGlobalItemCount?.("shouqika") || 0;
+			event.changeCard = shouqikaCount > 0 ? shouqikaCount : "disabled";
+		}
 
 		await Promise.all(waitings);
 
@@ -3726,7 +3731,15 @@ export const Content = {
 		};
 
 		while (true) {
-			if (event.changeCard == "once") {
+			if (typeof event.changeCard == "number") {
+				if (event.changeCard > 1) event.changeCard--;
+				else if (event.changeCard == 1) event.changeCard = "disabled";
+				else {
+					event.bool = false;
+					_status.imchoosing = false;
+					break;
+				}
+			} else if (event.changeCard == "once") {
 				event.changeCard = "disabled";
 			} else if (event.changeCard == "twice") {
 				event.changeCard = "once";
@@ -3746,6 +3759,7 @@ export const Content = {
 			if (!event.bool) {
 				break;
 			}
+			if (["identity", "doudizhu"].includes(lib.config.mode) && game.useGlobalItem?.("shouqika", "手气卡", `${get.translation(lib.config.mode)}置换手牌`) === false) break;
 
 			if (game.changeCoin) {
 				game.changeCoin(-3);

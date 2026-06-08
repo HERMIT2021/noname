@@ -8139,6 +8139,51 @@ const skills = {
 		round: 1,
 		popup: false,
 		logAudio: index => (typeof index === "number" ? "friendyance" + index + ".mp3" : 1),
+		getPredictNum(player) {
+			if (typeof player.storage.friendyance === "number") {
+				return player.countMark("friendyance");
+			}
+			return 3 + (player.hasSkill("friendzhugelianggongli") && get.info("friendgongli").isFriendOf(player, "friend_pangtong") ? 1 : 0);
+		},
+		getAIUsableCards(player) {
+			return player
+				.getCards("hs")
+				.filter(card => {
+					if (!game.checkMod(card, player, "unchanged", "cardEnabled2", player)) {
+						return false;
+					}
+					return player.getUseValue(card) > 0;
+				})
+				.sort((a, b) => player.getUseValue(b) - player.getUseValue(a));
+		},
+		getAIPlan(player, num, force) {
+			const cards = lib.skill.friendyance.getAIUsableCards(player).slice(0, num);
+			if (!force && cards.length < num) {
+				return null;
+			}
+			while (cards.length < num) {
+				cards.push(null);
+			}
+			const plans = [
+				{ type: "type2", control: "类型预测", guesses: cards.map(card => (card ? get.type2(card, player) : "basic")) },
+				{ type: "color", control: "颜色预测", guesses: cards.map(card => (card ? get.color(card, player) : "black")) },
+			];
+			plans.sort((a, b) => b.guesses.toUniqued().length - a.guesses.toUniqued().length);
+			return plans[0];
+		},
+		shouldAIYance(player, triggername) {
+			const num = lib.skill.friendyance.getPredictNum(player);
+			if (player.identity == "zhu" && get.mode() == "doudizhu") {
+				return true;
+			}
+			if (triggername === "roundStart") {
+				return !!lib.skill.friendyance.getAIPlan(player, num);
+			}
+			return !!lib.skill.friendyance.getAIPlan(player, num) || player.countCards("h") >= num + 1;
+		},
+		hasAIUsablePrediction(player, type, guess) {
+			return lib.skill.friendyance.getAIUsableCards(player).some(card => get[type](card, player) === guess);
+		},
 		async cost(event, trigger, player) {
 			const result = await player
 				.chooseButton([
@@ -8158,7 +8203,15 @@ const skills = {
 					const player = get.player();
 					return typeof player.storage.friendyance !== "number" || player.hasMark("friendyance");
 				})
-				.set("ai", button => (button.link == "minigame" ? 2 : 1))
+				.set("ai", button => {
+					const { player, triggername } = get.event();
+					const goYance = lib.skill.friendyance.shouldAIYance(player, triggername);
+					if (button.link === "trick") {
+						return goYance ? 1 : 3;
+					}
+					return goYance ? 5 : -1;
+				})
+				.set("triggername", event.triggername)
 				.forResult();
 			event.result = {
 				bool: result.bool,
@@ -8195,12 +8248,20 @@ const skills = {
 			if (!num) {
 				return;
 			}
+			const aiPlan = lib.skill.friendyance.getAIPlan(player, num, player.identity == "zhu" && get.mode() == "doudizhu");
 			player.addSkill("friendyance_record");
 			const storage = player.storage["friendyance_record"];
 			const { control } = await player
 				.chooseControl("颜色预测", "类型预测")
 				.set("prompt", "卧龙演策：请选择预测方式")
-				.set("ai", () => get.rand(0, 1))
+				.set("ai", () => {
+					const { controls, aiPlan } = get.event();
+					if (aiPlan) {
+						return controls.indexOf(aiPlan.control);
+					}
+					return 0;
+				})
+				.set("aiPlan", aiPlan)
 				.forResult();
 			const type = lib.inpile.map(c => get.type2(c)).unique();
 			const color = Object.keys(lib.color);
@@ -8224,7 +8285,16 @@ const skills = {
 				.set("filterButton", button => {
 					return parseInt(button.link.at(-1)) === ui.selected.buttons.length;
 				})
-				.set("ai", () => 1 + Math.random())
+				.set("ai", button => {
+					const { aiPlan } = get.event();
+					if (!aiPlan) {
+						return 1 + Math.random();
+					}
+					const index = ui.selected.buttons.length,
+						guess = button.link.replace(`_${button.link.at(-1)}`, "");
+					return guess === aiPlan.guesses[index] ? 10 : 0;
+				})
+				.set("aiPlan", aiPlan && aiPlan.type === storage[2] ? aiPlan : null)
 				.forResult();
 			if (!links?.length) {
 				return;
@@ -8273,7 +8343,13 @@ const skills = {
 							if (player.hasSkill("friendzhugelianggongli") && get.info("friendgongli").isFriendOf(player, "friend_xushu") && storage[0].length === 0) {
 								return;
 							}
-							return get[storage[2]](card) === storage[1][storage[0].length] ? num + 1145141919810 : num * 0.00001;
+							const guess = storage[1][storage[0].length];
+							if (get[storage[2]](card, player) === guess) {
+								return num + 1145141919810;
+							}
+							if (lib.skill.friendyance.hasAIUsablePrediction(player, storage[2], guess)) {
+								return num * 0.00001;
+							}
 						}
 					},
 				},

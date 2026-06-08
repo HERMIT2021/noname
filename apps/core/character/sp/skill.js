@@ -3658,131 +3658,91 @@ const skills = {
 	},
 	//OL曹笨
 	olshanjia: {
+		init(player, skill) {
+			player.addSkill("olshanjia_count");
+		},
+		onremove(player, skill) {
+			player.removeSkill("olshanjia_count");
+		},
+		locked: false,
 		audio: "shanjia",
 		enable: "phaseUse",
-		prompt() {
-			return lib.translate.olshanjia_info.split("③")[1];
+		prompt: "摸三张牌，然后弃置X张牌（X为3-你本局失去过的装备区里的牌数）",
+		intro: {
+			content: "本局游戏内已失去过#张装备区里的牌",
 		},
 		usable: 1,
+		sync(player) {
+			let num = 0;
+			for (const history of player.actionHistory) {
+				for (const evt of history.lose) {
+					num += evt.es?.length || 0;
+				}
+			}
+			player.storage.olshanjia = num;
+			if (num > 0) player.markSkill("olshanjia");
+		},
 		async content(event, trigger, player) {
 			await player.draw(3);
-			const { bool } = await player
-				.chooseToUse(
-					function (card, player, event) {
-						if (get.name(card) !== "sha") {
-							return false;
-						}
-						return lib.filter.cardEnabled.apply(this, arguments);
-					},
-					get.translation(event.name) + "：是否使用一张【杀】？"
-				)
-				.set("oncard", () => {
-					get.event().player?.chat("雪豹我们走");
-				})
-				.set("addCount", false)
-				.forResult();
-			if (!bool) {
-				player.chat("雪豹闭嘴");
+			lib.skill.olshanjia.sync(player);
+			const num = Math.max(0, 3 - player.storage.olshanjia);
+			let result;
+			if (num > 0) {
+				result = await player.chooseToDiscard("he", true, num).set("ai", get.disvalue).forResult();
 			}
-			player.addTempSkill("olshanjia_effect", { global: ["phaseChange", "phaseBeforeStart", "phaseAfter"] });
-			//player.storage["olshanjia_effect"].set(event.getParent("phaseUse"), player.countMark("olshanjia"));
+			let noBasic = true,
+				noTrick = true;
+			if (result?.cards?.length) {
+				for (const card of result.cards) {
+					const type = get.type(card, "trick", card.original == "h" ? player : false);
+					if (type == "basic") noBasic = false;
+					if (type == "trick") noTrick = false;
+				}
+			}
+			if (noTrick) {
+				player.addTempSkill("olshanjia_nodis", "phaseUseAfter");
+			}
+			if (noBasic) {
+				player.addTempSkill("olshanjia_sha", "phaseUseAfter");
+				await player.chooseUseTarget("缮甲：是否视为使用一张不计入次数且无次数限制的普通【杀】？", { card: new lib.element.VCard({ name: "sha", isCard: true }), addCount: false });
+			}
 		},
 		ai: {
 			order: 10,
-			result: { player: 1 },
-		},
-		group: "olshanjia_init",
-		intro: {
-			name: "损",
-			content: "mark",
+			result: { player: 2 },
+			threaten: 3,
 		},
 		subSkill: {
-			effect: {
-				charlotte: true,
-				onremove: true,
-				/*init(player, skill) {
-					player.storage[skill] = player.storage[skill] || new Map();
-				},*/
-				audio: "shanjia",
-				trigger: { player: ["useCard", "phaseUseEnd"] },
+			count: {
+				forced: true,
+				silent: true,
+				popup: false,
+				trigger: { player: "loseEnd" },
 				filter(event, player) {
-					/*const storage = player.storage["olshanjia_effect"];
-					if (!storage) {
-						return false;
-					}*/
-					if (event.name === "phaseUse") {
-						/*if (typeof storage.get(event) !== "number") {
-							return false;
-						}*/
-						return !player.hasHistory("lose", evt => {
-							if (evt.type !== "discard" || evt.getParent(3).name !== "olshanjia_effect") {
-								return false;
-							}
-							return evt.cards2.some(card => get.type(card, player) !== "equip");
-						});
-					}
-					if (
-						!player.hasHistory("lose", evt => {
-							const evtx = evt.relatedEvent || evt.getParent();
-							return evtx === event && evt.hs.length > 0;
-						})
-					) {
-						return false;
-					}
-					return player.countMark("olshanjia_effect") < player.countMark("olshanjia");
+					return event.es?.length > 0;
 				},
-				direct: true,
-				async content(event, trigger, player) {
-					if (trigger.name === "useCard") {
-						/*const storage = player.storage["olshanjia_effect"];
-						const num = storage.get(trigger.getParent("phaseUse"));
-						player.storage["olshanjia_effect"].set(trigger.getParent("phaseUse"), num - 1);*/
-						player.addMark(event.name, 1, false);
-						await player
-							.chooseToDiscard({
-								position: "he",
-								forced: true,
-								prompt: "缮甲：请弃置一张牌",
-							})
-							.set("logSkill", event.name);
-					} else {
-						await player
-							.chooseUseTarget({
-								card: new lib.element.VCard({ name: "sha", isCard: true }),
-								addCount: false,
-								nodistance: true,
-								prompt: "缮甲：是否视为使用一张无距离限制的【杀】？",
-							})
-							.set("logSkill", event.name);
-					}
+				content() {
+					lib.skill.olshanjia.sync(player);
 				},
 			},
-			init: {
-				audio: "shanjia",
-				trigger: {
-					player: ["enterGame", "loseAfter"],
-					global: ["phaseBefore", "loseAsyncAfter", "equipAfter", "addJudgeAfter", "addToExpansionAfter", "gainAfter"],
+			sha: {
+				mark: true,
+				charlotte: true,
+				intro: { content: "可视为使用一张不计入次数且无次数限制的普通【杀】" },
+				mod: {
+					cardUsable(card) {
+						if (card.name == "sha") return Infinity;
+					},
 				},
-				getIndex(event, player, name) {
-					if (event.name === "phase" || name === "enterGame") {
-						return 1;
-					}
-					return (event.getl?.(player)?.cards2 ?? []).filter(card => get.type(card, player) === "equip");
-				},
-				filter(event, player, name) {
-					if (event.name === "phase" || name === "enterGame") {
-						return event.name !== "phase" || game.phaseNumber === 0;
-					}
-					return player.hasMark("olshanjia");
-				},
-				forced: true,
-				locked: false,
-				async content(event, trigger, player) {
-					if (trigger.name === "phase" || event.triggername === "enterGame") {
-						player.addMark("olshanjia", 3);
-					} else {
-						player.removeMark("olshanjia", 1);
-					}
+			},
+			nodis: {
+				mark: true,
+				charlotte: true,
+				intro: { content: "本阶段使用牌无距离限制" },
+				mod: {
+					targetInRange() {
+						return true;
+					},
 				},
 			},
 		},
@@ -35871,92 +35831,134 @@ const skills = {
 	jieyuan: {
 		audio: ["jieyuan_more.mp3", "jieyuan_less.mp3"],
 		group: ["jieyuan_more", "jieyuan_less"],
+		onremove(player) {
+			delete player.storage.jieyuan;
+		},
 		subSkill: {
 			more: {
 				audio: true,
 				trigger: { source: "damageBegin1" },
 				direct: true,
 				filter(event, player) {
-					if (
-						!player.countCards(player.hasSkill("fenxin_nei") ? "he" : "h", function (card) {
-							if (player.hasSkill("fenxin_nei") || (_status.connectMode && get.position(card) == "h")) {
-								return true;
-							}
-							return get.color(card) == "black";
-						})
-					) {
-						return false;
-					}
-					return (event.player.hp >= player.hp || player.hasSkill("fenxin_fan")) && player != event.player;
+					if (player.storage.jieyuan == 3) return false;
+					return player != event.player;
 				},
 				content() {
 					"step 0";
-					var goon = get.attitude(player, trigger.player) < 0;
-					var next = player.chooseToDiscard(get.prompt("jieyuan", trigger.player), player.hasSkill("fenxin_nei") ? "he" : "h");
-					if (!player.hasSkill("fenxin_nei")) {
-						next.set("filterCard", function (card) {
-							return get.color(card) == "black";
-						});
-						next.set("prompt2", "弃置一张黑色手牌令伤害+1");
+					var level = player.storage.jieyuan || 1;
+					event._level = level;
+					if (level == 1) {
+						event._choiceList = ["获得牌堆中的一张黑色牌", "弃置一张黑色牌，此伤害+1", "背水（获得一张黑色牌并弃牌加伤，删除受伤效果并升为2级）"];
 					} else {
-						next.set("prompt2", "弃置一张手牌令伤害+1");
+						event._choiceList = ["获得牌堆中的两张黑色牌", "弃置一张黑色牌，此伤害+2"];
 					}
-					next.set("ai", function (card) {
-						if (_status.event.goon) {
-							return 8 - get.value(card);
-						}
-						return 0;
+					player.chooseControl().set("choiceList", event._choiceList).set("prompt", level == 1 ? "竭缘：请选择一项（造成伤害时）" : "竭缘(2级)：请选择一项（造成伤害时）").set("ai", function () {
+						var player = _status.event.player;
+						var trigger = _status.event.getTrigger();
+						if (get.attitude(player, trigger.player) < 0) return 2; // 弃牌加伤
+						return 1; // 获得牌
 					});
-					next.set("goon", goon);
-					next.logSkill = ["jieyuan_more", trigger.player];
 					"step 1";
+					var idx = result.index;
+					event._isBackwater = (event._level == 1 && idx == 2);
+					if (idx == 0 || event._isBackwater) {
+						// 获得牌堆中的牌（选项一，或背水时额外得牌）
+						var num = event._level == 1 ? 1 : 2;
+						var cards = [];
+						for (var i = 0; i < num; i++) {
+							var card = get.cardPile2(function (card) {
+								return get.color(card) == "black";
+							}, "random");
+							if (card) cards.push(card);
+						}
+						if (cards.length) {
+							if (!event._isBackwater) player.logSkill("jieyuan_more");
+							player.gain(cards, "gain2", "log");
+						}
+					}
+					if (idx == 1 || event._isBackwater) {
+						// 弃置黑色牌令伤害+N
+						var dmg = event._level == 1 ? 1 : 2;
+						player.chooseToDiscard("h", 1, "弃置一张黑色手牌令伤害+" + dmg).set("filterCard", function (card) {
+							return get.color(card) == "black";
+						}).set("logSkill", ["jieyuan_more", trigger.player]).set("ai", function (card) {
+							if (_status.event.goon) return 8 - get.value(card);
+							return 0;
+						}).set("goon", get.attitude(player, trigger.player) < 0);
+						if (event._isBackwater) {
+							player.storage.jieyuan = 2;
+							player.popup("背水", "wood");
+							game.log(player, "发动了", "#y【背水】", "，删除受伤效果并将〖竭缘〗升为2级");
+						}
+					}
+					if (idx == 0) event.finish();
+					"step 2";
 					if (result.bool) {
-						trigger.num++;
+						trigger.num += event._level == 1 ? 1 : 2;
 					}
 				},
 			},
 			less: {
 				audio: true,
 				trigger: { player: "damageBegin2" },
-				filter(event, player) {
-					if (
-						!player.countCards(player.hasSkill("fenxin_nei") ? "he" : "h", function (card) {
-							if (player.hasSkill("fenxin_nei") || (_status.connectMode && get.position(card) == "h")) {
-								return true;
-							}
-							return get.color(card) == "red";
-						})
-					) {
-						return false;
-					}
-					return event.source && (event.source.hp >= player.hp || player.hasSkill("fenxin_zhong")) && player != event.source;
-				},
 				direct: true,
+				filter(event, player) {
+					if (player.storage.jieyuan == 2) return false;
+					return event.source && player != event.source;
+				},
 				content() {
 					"step 0";
-					var next = player.chooseToDiscard(get.prompt("jieyuan"), player.hasSkill("fenxin_nei") ? "he" : "h");
-					if (!player.hasSkill("fenxin_nei")) {
-						next.set("filterCard", function (card) {
-							return get.color(card) == "red";
-						});
-						next.set("prompt2", "弃置一张红色手牌令伤害-1");
+					var level = player.storage.jieyuan || 1;
+					event._level = level;
+					if (level == 1) {
+						event._choiceList = ["获得牌堆中的一张红色牌", "弃置一张红色牌，此伤害-1", "背水（获得一张红色牌并弃牌减伤，删除造成伤害效果并升为3级）"];
 					} else {
-						next.set("prompt2", "弃置一张手牌令伤害-1");
+						event._choiceList = ["获得牌堆中的两张红色牌", "弃置一张红色牌，此伤害-2"];
 					}
-					next.set("ai", function (card) {
+					player.chooseControl().set("choiceList", event._choiceList).set("prompt", level == 1 ? "竭缘：请选择一项（受到伤害时）" : "竭缘(3级)：请选择一项（受到伤害时）").set("ai", function () {
 						var player = _status.event.player;
-						if (player.hp == 1 || _status.event.getTrigger().num > 1) {
-							return 9 - get.value(card);
-						}
-						if (player.hp == 2) {
-							return 8 - get.value(card);
-						}
-						return 7 - get.value(card);
+						if (player.hp <= 1) return 2; // 弃牌减伤
+						return 1; // 获得牌
 					});
-					next.logSkill = "jieyuan_less";
 					"step 1";
+					var idx = result.index;
+					event._isBackwater = (event._level == 1 && idx == 2);
+					if (idx == 0 || event._isBackwater) {
+						// 获得牌堆中的牌（选项一，或背水时额外得牌）
+						var num = event._level == 1 ? 1 : 2;
+						var cards = [];
+						for (var i = 0; i < num; i++) {
+							var card = get.cardPile2(function (card) {
+								return get.color(card) == "red";
+							}, "random");
+							if (card) cards.push(card);
+						}
+						if (cards.length) {
+							if (!event._isBackwater) player.logSkill("jieyuan_less");
+							player.gain(cards, "gain2", "log");
+						}
+					}
+					if (idx == 1 || event._isBackwater) {
+						// 弃置红色牌令伤害-N
+						var dmg = event._level == 1 ? 1 : 2;
+						player.chooseToDiscard("h", 1, "弃置一张红色手牌令伤害-" + dmg).set("filterCard", function (card) {
+							return get.color(card) == "red";
+						}).set("logSkill", "jieyuan_less").set("ai", function (card) {
+							var player = _status.event.player;
+							if (player.hp == 1 || _status.event.getTrigger().num > 1) return 9 - get.value(card);
+							if (player.hp == 2) return 8 - get.value(card);
+							return 7 - get.value(card);
+						});
+						if (event._isBackwater) {
+							player.storage.jieyuan = 3;
+							player.popup("背水", "wood");
+							game.log(player, "发动了", "#y【背水】", "，删除造成伤害效果并将〖竭缘〗升为3级");
+						}
+					}
+					if (idx == 0) event.finish();
+					"step 2";
 					if (result.bool) {
-						trigger.num--;
+						trigger.num -= event._level == 1 ? 1 : 2;
 					}
 				},
 			},
@@ -35967,77 +35969,104 @@ const skills = {
 		},
 	},
 	fenxin: {
-		mode: ["identity", "versus"],
-		available(mode) {
-			if (mode == "identity" && _status.mode == "purple") {
-				return false;
-			}
-			if (mode == "versus" && _status.mode != "two") {
-				return false;
-			}
-		},
+		mode: ["identity", "doudizhu"],
 		audio: 2,
-		trigger: { global: ["dieAfter", "damageEnd"] },
+		trigger: { source: "die" },
 		filter(event, player) {
-			var list = ["fan", "zhong", "nei"];
-			if (get.mode() == "identity") {
-				return event.name == "die" && list.includes(event.player.identity) && !player.hasSkill("fenxin_" + event.player.identity);
-			}
-			return event.name == "damage" && event.player != player && list.some(identity => !player.hasSkill("fenxin_" + identity)) && event.player.getAllHistory("damage").indexOf(event) == 0;
+			return event.player != player;
 		},
-		forced: true,
-		logTarget: "player",
+		direct: true,
 		content() {
 			"step 0";
-			if (get.mode() == "identity") {
-				event._result = {
-					bool: true,
-					links: ["fenxin_" + trigger.player.identity],
-				};
-			} else {
-				player
-					.chooseButton(
-						[
-							"焚心：请选择〖竭缘〗的升级方式",
-							[
-								[
-									["fenxin_fan", "发动〖竭缘〗增加伤害无体力值限制"],
-									["fenxin_zhong", "发动〖竭缘〗减少伤害无体力值限制"],
-									["fenxin_nei", "将〖竭缘〗中的黑色手牌和红色手牌改为一张牌"],
-								].filter(list => !player.hasSkill(list[0])),
-								"textbutton",
-							],
-						],
-						true
-					)
-					.set("ai", function (button) {
-						return ["fenxin_fan", "fenxin_zhong", "fenxin_nei"].indexOf(button.link) + 1;
-					});
+			var target = trigger.player,
+				choiceMap = [];
+			event.target = target;
+			var sameCamp = function(id1, id2) {
+				if (id1 == id2) return true;
+				if ((id1 == "zhu" || id1 == "zhong") && (id2 == "zhu" || id2 == "zhong")) return true;
+				return false;
+			};
+			event._sameCamp = sameCamp(player.identity, target.identity);
+			var choices = [];
+			// 选项1：获得技能（阵营不同才能拿）
+			if (!event._sameCamp) {
+				choices.push("获得其武将牌上的所有技能（限定技、觉醒技、使命技、主公技和持恒技除外）");
+				choiceMap.push("gain");
 			}
+			// 选项2：交换身份牌（双方均非明置）
+			event._canSwap = !player.identityShown && !target.identityShown;
+			if (event._canSwap) {
+				choices.push("与其交换身份牌");
+				choiceMap.push("swap");
+			}
+			if (choices.length == 0) {
+				event.finish();
+				return;
+			}
+			player.chooseControl().set("choiceList", choices).set("prompt", "焚心：请选择一项").set("ai", function () {
+				var player = _status.event.player;
+				var target = _status.event.getTrigger().player;
+				var evt = _status.event.getParent();
+				var map = evt._choiceMap;
+				if (evt._canSwap && player.identity == "fan" && target.identity == "zhong") return map.indexOf("swap");
+				if (evt._sameCamp) return map.indexOf("swap");
+				return Math.max(0, map.indexOf("gain"));
+			});
+			event._choiceMap = choiceMap;
 			"step 1";
-			if (result.bool) {
-				var identity = result.links[0];
-				player.addSkill(identity);
-				player.markSkill("fenxin");
+			var target = event.target;
+			if (!result || result.control == undefined) {
+				event.finish();
+				return;
 			}
-		},
-		intro: {
-			mark(dialog, content, player) {
-				if (player.hasSkill("fenxin_zhong")) {
-					dialog.addText("你发动“竭缘”减少伤害无体力值限制");
+			if (event._choiceMap[result.index] == "gain") {
+				// 选项1：获得技能
+				if (event._sameCamp) {
+					event.finish();
+					return;
 				}
-				if (player.hasSkill("fenxin_fan")) {
-					dialog.addText("你发动“竭缘”增加伤害无体力值限制");
+				// 用getStockSkills获取目标全部技能（支持双将），参考神张辽/羊徽瑜/谋曹丕
+				var skills = target.getStockSkills(true, true).filter(function (skill) {
+					if (player.hasSkill(skill, null, false, false)) return false;
+					var info = get.info(skill);
+					if (!info) return false;
+					// 排除：限定技、觉醒技、使命技、主公技、持恒技、隐匿技、守誓技
+					if (info.limited || info.juexingji || info.shimingji || info.zhuSkill
+						|| info.charlotte || info.hiddenSkill || info.dutySkill || info.persevereSkill) return false;
+					// 排除不可获得的unique技能
+					if (info.unique && !info.gainable) return false;
+					return true;
+				});
+				if (skills.length) {
+					player.logSkill("fenxin");
+					player.addSkills(skills);
+					// 设置语音归属（参考羊徽瑜）
+					game.broadcastAll(function (list) {
+						game.expandSkills(list);
+						for (var i of list) {
+							var info = lib.skill[i];
+							if (!info) continue;
+							if (!info.audioname2) info.audioname2 = {};
+							info.audioname2.lingju = "fenxin";
+						}
+					}, skills);
+					game.log(player, "发动", "#y【焚心】", "，获得了", get.translation(target), "的技能：", get.translation(skills));
 				}
-				if (player.hasSkill("fenxin_nei")) {
-					dialog.addText("将“竭缘”中的黑色手牌和红色手牌改为一张牌");
+			} else if (event._choiceMap[result.index] == "swap") {
+				// 选项2：交换身份牌
+				if (!event._canSwap) {
+					event.finish();
+					return;
 				}
-			},
-		},
-		subSkill: {
-			fan: { charlotte: true },
-			zhong: { charlotte: true },
-			nei: { charlotte: true },
+				var myId = player.identity;
+				var targetId = target.identity;
+				player.identity = targetId;
+				target.identity = myId;
+				player.setIdentity();
+				target.setIdentity();
+				player.logSkill("fenxin");
+				game.log(player, "发动", "#y【焚心】", "，与", get.translation(target), "交换了身份牌");
+			}
 		},
 		ai: { combo: "jieyuan" },
 	},
@@ -36193,18 +36222,19 @@ const skills = {
 		audio: 2,
 		trigger: { player: "equipEnd" },
 		frequent: true,
+		hasQirangCard(card, cards) {
+			if (Array.isArray(cards) && cards.some(card => card?.hasGaintag?.("qirang"))) return true;
+			if (card?.hasGaintag?.("qirang")) return true;
+			return card?.cards?.some(card => card?.hasGaintag?.("qirang"));
+		},
 		content() {
 			var card = get.cardPile(function (card) {
 				return get.type(card, "trick") == "trick";
 			});
 			if (card) {
 				var next = player.gain(card, "gain2");
-				if (get.type(card) == "trick") {
-					next.gaintag.add("qirang");
-				} else {
-					player.addMark("qirang_mark", 1, false);
-					player.addTempSkill("qirang_mark", { player: "phaseBegin" });
-				}
+				next.gaintag.add("qirang");
+				player.addTempSkill("qirang_effect");
 			}
 		},
 		ai: {
@@ -36217,119 +36247,37 @@ const skills = {
 			},
 			threaten: 1.3,
 		},
-		group: "qirang_use",
 		subSkill: {
-			mark: {
+			effect: {
 				charlotte: true,
-				onremove(player) {
-					var evt = _status.event;
-					if (evt.name != "phase") {
-						evt = evt.getParent("phase");
-					}
-					if (evt && evt.player == player) {
-						if (!evt.qirang_num) {
-							evt.qirang_num = 0;
-						}
-						evt.qirang_num += player.storage.qirang_mark;
-					}
-					delete player.storage.qirang_mark;
-				},
-				intro: {
-					content: "下回合发动〖羽化〗时卜算量+#",
-				},
-			},
-			use: {
-				audio: "qirang",
-				trigger: { player: "useCard2" },
-				direct: true,
+				trigger: { player: "useCard" },
+				forced: true,
+				popup: false,
 				filter(event, player) {
-					if (get.type(event.card) != "trick") {
-						return false;
-					}
-					if (!event.targets || event.targets.length != 1) {
-						return false;
-					}
-					var info = get.info(event.card);
-					if (info.allowMultiple == false) {
-						return false;
-					}
-					if (
-						!player.hasHistory("lose", function (evt) {
-							if ((evt.relatedEvent || evt.getParent()) != event) {
-								return false;
-							}
-							for (var i in evt.gaintag_map) {
-								if (evt.gaintag_map[i].includes("qirang")) {
-									return true;
-								}
-							}
-							return false;
-						})
-					) {
-						return false;
-					}
-					if (!info.multitarget) {
-						if (
-							game.hasPlayer(function (current) {
-								return !event.targets.includes(current) && lib.filter.targetEnabled2(event.card, player, current) && lib.filter.targetInRange(event.card, player, current);
-							})
-						) {
-							return true;
-						}
-					}
-					return false;
+					return get.type(event.card, "trick") == "trick" && lib.skill.qirang.hasQirangCard(event.card, event.cards);
 				},
-				content() {
-					"step 0";
-					var prompt2 = "为" + get.translation(trigger.card) + "增加一个目标";
-					player
-						.chooseTarget(get.prompt("qirang"), function (card, player, target) {
-							var player = _status.event.player;
-							if (_status.event.targets.includes(target)) {
-								return false;
-							}
-							return lib.filter.targetEnabled2(_status.event.card, player, target) && lib.filter.targetInRange(_status.event.card, player, target);
-						})
-						.set("prompt2", prompt2)
-						.set("ai", function (target) {
-							var trigger = _status.event.getTrigger();
-							var player = _status.event.player;
-							return get.effect(target, trigger.card, player, player) * (_status.event.targets.includes(target) ? -1 : 1);
-						})
-						.set("targets", trigger.targets)
-						.set("card", trigger.card);
-					"step 1";
-					if (result.bool) {
-						if (!event.isMine() && !event.isOnline()) {
-							game.delayx();
-						}
-						event.targets = result.targets;
-					} else {
-						event.finish();
-					}
-					"step 2";
-					if (event.targets) {
-						player.logSkill("qirang_use", event.targets);
-						trigger.targets.addArray(event.targets);
-					}
+				async content(event, trigger, player) {
+					player.logSkill("qirang");
+					await player.draw();
+				},
+				mod: {
+					targetInRange(card, player) {
+						if (get.type(card, "trick") == "trick" && lib.skill.qirang.hasQirangCard(card)) return true;
+					},
 				},
 			},
 		},
 	},
 	yuhua: {
-		trigger: { player: ["phaseZhunbeiBegin", "phaseJieshuBegin"] },
+		trigger: { player: "phaseJieshuBegin" },
 		forced: true,
 		audio: 2,
+		filter(event, player) {
+			return player.countCards("h") > player.hp;
+		},
 		async content(event, trigger, player) {
-			let num = 1,
-				evt = trigger.getParent();
-			if (evt.qirang_num) {
-				num += evt.qirang_num;
-			}
-			const result = await player.chooseToGuanxing(Math.min(5, num)).set("prompt", "观星：点击或拖动将牌移动到牌堆顶或牌堆底").forResult();
-			if ((!result.bool || !result.moved[0].length) && event.triggername == "phaseZhunbeiBegin") {
-				player.addTempSkill("guanxing_fail");
-			}
+			const types = player.getCards("h").map(card => get.type2(card, player)).unique();
+			if (types.length) await player.chooseToGuanxing(types.length).set("prompt", "羽化：点击或拖动将牌移动到牌堆顶或牌堆底");
 		},
 		mod: {
 			ignoredHandcard(card, player) {

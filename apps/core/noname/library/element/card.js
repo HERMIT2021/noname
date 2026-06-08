@@ -825,7 +825,7 @@ export class Card extends HTMLDivElement {
 			var that = this;
 			setTimeout(function () {
 				that.delete();
-			}, get.effectDuration(200, that._effectType || "move", 40));
+			}, get.effectDuration(200, that.classList.contains("thrown") ? "cardBack" : that._effectType || "move", 40));
 		} else {
 			this._onEndMoveDelete = player;
 		}
@@ -853,7 +853,7 @@ export class Card extends HTMLDivElement {
 				dy -= 16;
 			}
 		}
-		this.style.transitionDuration = get.effectDuration(500, this._effectType || "move", 80) / 1000 + "s";
+		this.style.transitionDuration = get.effectDuration(500, this.classList.contains("thrown") ? "cardBack" : this._effectType || "move", 80) / 1000 + "s";
 
 		if (this.style.transform && this.style.transform != "none" && this.style.transform.indexOf("translate") == -1) {
 			this.style.transform += " translate(" + dx + "px," + dy + "px)";

@@ -1,0 +1,2285 @@
+{
+	"input": "log/yidongban.txt",
+	"output": "log/yidongban.unique.txt",
+	"totalLines": 1148,
+	"uniqueCount": 569,
+	"duplicateLines": 579,
+	"duplicatedNames": [
+		{
+			"name": "刘备",
+			"count": 2
+		},
+		{
+			"name": "关羽",
+			"count": 2
+		},
+		{
+			"name": "张飞",
+			"count": 2
+		},
+		{
+			"name": "诸葛亮",
+			"count": 2
+		},
+		{
+			"name": "赵云",
+			"count": 2
+		},
+		{
+			"name": "马超",
+			"count": 2
+		},
+		{
+			"name": "黄月英",
+			"count": 2
+		},
+		{
+			"name": "孙权",
+			"count": 2
+		},
+		{
+			"name": "甘宁",
+			"count": 2
+		},
+		{
+			"name": "吕蒙",
+			"count": 2
+		},
+		{
+			"name": "黄盖",
+			"count": 2
+		},
+		{
+			"name": "周瑜",
+			"count": 2
+		},
+		{
+			"name": "大乔",
+			"count": 2
+		},
+		{
+			"name": "陆逊",
+			"count": 2
+		},
+		{
+			"name": "曹操",
+			"count": 2
+		},
+		{
+			"name": "司马懿",
+			"count": 2
+		},
+		{
+			"name": "夏侯惇",
+			"count": 2
+		},
+		{
+			"name": "张辽",
+			"count": 2
+		},
+		{
+			"name": "许褚",
+			"count": 2
+		},
+		{
+			"name": "郭嘉",
+			"count": 2
+		},
+		{
+			"name": "甄姬",
+			"count": 2
+		},
+		{
+			"name": "华佗",
+			"count": 2
+		},
+		{
+			"name": "吕布",
+			"count": 2
+		},
+		{
+			"name": "貂蝉",
+			"count": 2
+		},
+		{
+			"name": "孙尚香",
+			"count": 2
+		},
+		{
+			"name": "黄忠",
+			"count": 2
+		},
+		{
+			"name": "魏延",
+			"count": 2
+		},
+		{
+			"name": "夏侯渊",
+			"count": 2
+		},
+		{
+			"name": "曹仁",
+			"count": 2
+		},
+		{
+			"name": "小乔",
+			"count": 2
+		},
+		{
+			"name": "周泰",
+			"count": 2
+		},
+		{
+			"name": "张角",
+			"count": 2
+		},
+		{
+			"name": "于吉",
+			"count": 2
+		},
+		{
+			"name": "典韦",
+			"count": 2
+		},
+		{
+			"name": "荀彧",
+			"count": 2
+		},
+		{
+			"name": "庞统",
+			"count": 2
+		},
+		{
+			"name": "卧龙诸葛",
+			"count": 2
+		},
+		{
+			"name": "太史慈",
+			"count": 2
+		},
+		{
+			"name": "庞德",
+			"count": 2
+		},
+		{
+			"name": "颜良文丑",
+			"count": 2
+		},
+		{
+			"name": "袁绍",
+			"count": 2
+		},
+		{
+			"name": "徐晃",
+			"count": 2
+		},
+		{
+			"name": "曹丕",
+			"count": 2
+		},
+		{
+			"name": "孙坚",
+			"count": 2
+		},
+		{
+			"name": "董卓",
+			"count": 2
+		},
+		{
+			"name": "祝融",
+			"count": 2
+		},
+		{
+			"name": "孟获",
+			"count": 2
+		},
+		{
+			"name": "贾诩",
+			"count": 2
+		},
+		{
+			"name": "鲁肃",
+			"count": 2
+		},
+		{
+			"name": "张郃",
+			"count": 2
+		},
+		{
+			"name": "邓艾",
+			"count": 2
+		},
+		{
+			"name": "姜维",
+			"count": 2
+		},
+		{
+			"name": "刘禅",
+			"count": 2
+		},
+		{
+			"name": "孙策",
+			"count": 2
+		},
+		{
+			"name": "张昭张纮",
+			"count": 2
+		},
+		{
+			"name": "左慈",
+			"count": 2
+		},
+		{
+			"name": "蔡文姬",
+			"count": 2
+		},
+		{
+			"name": "孙茹",
+			"count": 2
+		},
+		{
+			"name": "凌操",
+			"count": 2
+		},
+		{
+			"name": "伏完",
+			"count": 2
+		},
+		{
+			"name": "刘协",
+			"count": 2
+		},
+		{
+			"name": "灵雎",
+			"count": 2
+		},
+		{
+			"name": "界·袁术",
+			"count": 2
+		},
+		{
+			"name": "SP公孙瓒",
+			"count": 2
+		},
+		{
+			"name": "SP孙尚香",
+			"count": 2
+		},
+		{
+			"name": "杨修",
+			"count": 2
+		},
+		{
+			"name": "SP庞德",
+			"count": 2
+		},
+		{
+			"name": "SP关羽",
+			"count": 2
+		},
+		{
+			"name": "SP马超",
+			"count": 2
+		},
+		{
+			"name": "SP赵云",
+			"count": 2
+		},
+		{
+			"name": "SP貂蝉",
+			"count": 2
+		},
+		{
+			"name": "SP贾诩",
+			"count": 2
+		},
+		{
+			"name": "SP曹仁",
+			"count": 2
+		},
+		{
+			"name": "SP蔡文姬",
+			"count": 2
+		},
+		{
+			"name": "陈琳",
+			"count": 2
+		},
+		{
+			"name": "曹洪",
+			"count": 2
+		},
+		{
+			"name": "关银屏",
+			"count": 2
+		},
+		{
+			"name": "夏侯霸",
+			"count": 2
+		},
+		{
+			"name": "大乔小乔",
+			"count": 2
+		},
+		{
+			"name": "诸葛恪",
+			"count": 2
+		},
+		{
+			"name": "张宝",
+			"count": 2
+		},
+		{
+			"name": "乐进",
+			"count": 2
+		},
+		{
+			"name": "曹昂",
+			"count": 2
+		},
+		{
+			"name": "诸葛瑾",
+			"count": 2
+		},
+		{
+			"name": "张星彩",
+			"count": 2
+		},
+		{
+			"name": "祖茂",
+			"count": 2
+		},
+		{
+			"name": "丁奉",
+			"count": 2
+		},
+		{
+			"name": "潘凤",
+			"count": 2
+		},
+		{
+			"name": "马良",
+			"count": 2
+		},
+		{
+			"name": "诸葛诞",
+			"count": 2
+		},
+		{
+			"name": "程昱",
+			"count": 2
+		},
+		{
+			"name": "何太后",
+			"count": 2
+		},
+		{
+			"name": "留赞",
+			"count": 2
+		},
+		{
+			"name": "李丰",
+			"count": 2
+		},
+		{
+			"name": "朱灵",
+			"count": 2
+		},
+		{
+			"name": "孙鲁育",
+			"count": 2
+		},
+		{
+			"name": "文聘",
+			"count": 2
+		},
+		{
+			"name": "孙皓",
+			"count": 2
+		},
+		{
+			"name": "SP姜维",
+			"count": 2
+		},
+		{
+			"name": "兀突骨",
+			"count": 2
+		},
+		{
+			"name": "曹植",
+			"count": 2
+		},
+		{
+			"name": "高顺",
+			"count": 2
+		},
+		{
+			"name": "陈宫",
+			"count": 2
+		},
+		{
+			"name": "法正",
+			"count": 2
+		},
+		{
+			"name": "凌统",
+			"count": 2
+		},
+		{
+			"name": "马谡",
+			"count": 2
+		},
+		{
+			"name": "吴国太",
+			"count": 2
+		},
+		{
+			"name": "徐盛",
+			"count": 2
+		},
+		{
+			"name": "于禁",
+			"count": 2
+		},
+		{
+			"name": "张春华",
+			"count": 2
+		},
+		{
+			"name": "曹彰",
+			"count": 2
+		},
+		{
+			"name": "王异",
+			"count": 2
+		},
+		{
+			"name": "荀攸",
+			"count": 2
+		},
+		{
+			"name": "关兴张苞",
+			"count": 2
+		},
+		{
+			"name": "廖化",
+			"count": 2
+		},
+		{
+			"name": "界·马岱",
+			"count": 2
+		},
+		{
+			"name": "步练师",
+			"count": 2
+		},
+		{
+			"name": "程普",
+			"count": 2
+		},
+		{
+			"name": "韩当",
+			"count": 2
+		},
+		{
+			"name": "界·华雄",
+			"count": 2
+		},
+		{
+			"name": "刘表",
+			"count": 2
+		},
+		{
+			"name": "钟会",
+			"count": 2
+		},
+		{
+			"name": "曹冲",
+			"count": 2
+		},
+		{
+			"name": "郭淮",
+			"count": 2
+		},
+		{
+			"name": "满宠",
+			"count": 2
+		},
+		{
+			"name": "关平",
+			"count": 2
+		},
+		{
+			"name": "简雍",
+			"count": 2
+		},
+		{
+			"name": "刘封",
+			"count": 2
+		},
+		{
+			"name": "潘璋马忠",
+			"count": 2
+		},
+		{
+			"name": "虞翻",
+			"count": 2
+		},
+		{
+			"name": "朱然",
+			"count": 2
+		},
+		{
+			"name": "伏皇后",
+			"count": 2
+		},
+		{
+			"name": "李儒",
+			"count": 2
+		},
+		{
+			"name": "界·法正",
+			"count": 2
+		},
+		{
+			"name": "徐庶",
+			"count": 2
+		},
+		{
+			"name": "界·王异",
+			"count": 2
+		},
+		{
+			"name": "界·关兴张苞",
+			"count": 2
+		},
+		{
+			"name": "马岱",
+			"count": 2
+		},
+		{
+			"name": "神关羽",
+			"count": 2
+		},
+		{
+			"name": "神吕蒙",
+			"count": 2
+		},
+		{
+			"name": "神周瑜",
+			"count": 2
+		},
+		{
+			"name": "神诸葛亮",
+			"count": 2
+		},
+		{
+			"name": "神曹操",
+			"count": 2
+		},
+		{
+			"name": "神吕布",
+			"count": 2
+		},
+		{
+			"name": "神赵云",
+			"count": 2
+		},
+		{
+			"name": "神司马懿",
+			"count": 2
+		},
+		{
+			"name": "界·周泰",
+			"count": 2
+		},
+		{
+			"name": "界·于吉",
+			"count": 2
+		},
+		{
+			"name": "界·张角",
+			"count": 2
+		},
+		{
+			"name": "华雄",
+			"count": 2
+		},
+		{
+			"name": "袁术",
+			"count": 2
+		},
+		{
+			"name": "界·刘备",
+			"count": 2
+		},
+		{
+			"name": "界·关羽",
+			"count": 2
+		},
+		{
+			"name": "界·张飞",
+			"count": 2
+		},
+		{
+			"name": "界·赵云",
+			"count": 2
+		},
+		{
+			"name": "界·马超",
+			"count": 2
+		},
+		{
+			"name": "SP徐庶",
+			"count": 2
+		},
+		{
+			"name": "界·甘宁",
+			"count": 2
+		},
+		{
+			"name": "界·吕蒙",
+			"count": 2
+		},
+		{
+			"name": "界·黄盖",
+			"count": 2
+		},
+		{
+			"name": "界·周瑜",
+			"count": 2
+		},
+		{
+			"name": "界·大乔",
+			"count": 2
+		},
+		{
+			"name": "界·陆逊",
+			"count": 2
+		},
+		{
+			"name": "界·曹操",
+			"count": 2
+		},
+		{
+			"name": "界·司马懿",
+			"count": 2
+		},
+		{
+			"name": "界·夏侯惇",
+			"count": 2
+		},
+		{
+			"name": "界·张辽",
+			"count": 2
+		},
+		{
+			"name": "界·许褚",
+			"count": 2
+		},
+		{
+			"name": "界·郭嘉",
+			"count": 2
+		},
+		{
+			"name": "李典",
+			"count": 2
+		},
+		{
+			"name": "界·华佗",
+			"count": 2
+		},
+		{
+			"name": "界·吕布",
+			"count": 2
+		},
+		{
+			"name": "公孙瓒",
+			"count": 2
+		},
+		{
+			"name": "曹真",
+			"count": 2
+		},
+		{
+			"name": "韩浩史涣",
+			"count": 2
+		},
+		{
+			"name": "陈群",
+			"count": 2
+		},
+		{
+			"name": "吴懿",
+			"count": 2
+		},
+		{
+			"name": "周仓",
+			"count": 2
+		},
+		{
+			"name": "张松",
+			"count": 2
+		},
+		{
+			"name": "孙鲁班",
+			"count": 2
+		},
+		{
+			"name": "朱桓",
+			"count": 2
+		},
+		{
+			"name": "顾雍",
+			"count": 2
+		},
+		{
+			"name": "沮授",
+			"count": 2
+		},
+		{
+			"name": "蔡夫人",
+			"count": 2
+		},
+		{
+			"name": "曹叡",
+			"count": 2
+		},
+		{
+			"name": "曹休",
+			"count": 2
+		},
+		{
+			"name": "钟繇",
+			"count": 2
+		},
+		{
+			"name": "刘谌",
+			"count": 2
+		},
+		{
+			"name": "夏侯氏",
+			"count": 2
+		},
+		{
+			"name": "张嶷",
+			"count": 2
+		},
+		{
+			"name": "孙休",
+			"count": 2
+		},
+		{
+			"name": "朱治",
+			"count": 2
+		},
+		{
+			"name": "全琮",
+			"count": 2
+		},
+		{
+			"name": "公孙渊",
+			"count": 2
+		},
+		{
+			"name": "郭图逢纪",
+			"count": 2
+		},
+		{
+			"name": "张鲁",
+			"count": 2
+		},
+		{
+			"name": "士燮",
+			"count": 2
+		},
+		{
+			"name": "蹋顿",
+			"count": 2
+		},
+		{
+			"name": "严白虎",
+			"count": 2
+		},
+		{
+			"name": "关索",
+			"count": 2
+		},
+		{
+			"name": "王朗",
+			"count": 2
+		},
+		{
+			"name": "司马朗",
+			"count": 2
+		},
+		{
+			"name": "SP黄月英",
+			"count": 2
+		},
+		{
+			"name": "王基",
+			"count": 2
+		},
+		{
+			"name": "步骘",
+			"count": 2
+		},
+		{
+			"name": "李通",
+			"count": 2
+		},
+		{
+			"name": "糜竺",
+			"count": 2
+		},
+		{
+			"name": "董白",
+			"count": 2
+		},
+		{
+			"name": "赵襄",
+			"count": 2
+		},
+		{
+			"name": "贺齐",
+			"count": 2
+		},
+		{
+			"name": "马忠",
+			"count": 2
+		},
+		{
+			"name": "阚泽",
+			"count": 2
+		},
+		{
+			"name": "王允",
+			"count": 2
+		},
+		{
+			"name": "麹义",
+			"count": 2
+		},
+		{
+			"name": "戏志才",
+			"count": 2
+		},
+		{
+			"name": "孙乾",
+			"count": 2
+		},
+		{
+			"name": "郭皇后",
+			"count": 2
+		},
+		{
+			"name": "李严",
+			"count": 2
+		},
+		{
+			"name": "孙登",
+			"count": 2
+		},
+		{
+			"name": "刘虞",
+			"count": 2
+		},
+		{
+			"name": "岑昏",
+			"count": 2
+		},
+		{
+			"name": "孙资刘放",
+			"count": 2
+		},
+		{
+			"name": "黄皓",
+			"count": 2
+		},
+		{
+			"name": "张让",
+			"count": 2
+		},
+		{
+			"name": "辛宪英",
+			"count": 2
+		},
+		{
+			"name": "吴苋",
+			"count": 2
+		},
+		{
+			"name": "徐氏",
+			"count": 2
+		},
+		{
+			"name": "曹节",
+			"count": 2
+		},
+		{
+			"name": "嵇康",
+			"count": 2
+		},
+		{
+			"name": "秦宓",
+			"count": 2
+		},
+		{
+			"name": "薛综",
+			"count": 2
+		},
+		{
+			"name": "蔡邕",
+			"count": 2
+		},
+		{
+			"name": "界·黄月英",
+			"count": 2
+		},
+		{
+			"name": "界·诸葛亮",
+			"count": 2
+		},
+		{
+			"name": "界·孙权",
+			"count": 2
+		},
+		{
+			"name": "界·孙尚香",
+			"count": 2
+		},
+		{
+			"name": "界·甄姬",
+			"count": 2
+		},
+		{
+			"name": "界·貂蝉",
+			"count": 2
+		},
+		{
+			"name": "刘焉",
+			"count": 2
+		},
+		{
+			"name": "潘濬",
+			"count": 2
+		},
+		{
+			"name": "赵统赵广",
+			"count": 2
+		},
+		{
+			"name": "董允",
+			"count": 2
+		},
+		{
+			"name": "吕虔",
+			"count": 2
+		},
+		{
+			"name": "sp庞统",
+			"count": 2
+		},
+		{
+			"name": "sp太史慈",
+			"count": 2
+		},
+		{
+			"name": "鲁芝",
+			"count": 2
+		},
+		{
+			"name": "马云騄",
+			"count": 2
+		},
+		{
+			"name": "张梁",
+			"count": 2
+		},
+		{
+			"name": "严颜",
+			"count": 2
+		},
+		{
+			"name": "王平",
+			"count": 2
+		},
+		{
+			"name": "陆绩",
+			"count": 2
+		},
+		{
+			"name": "孙亮",
+			"count": 2
+		},
+		{
+			"name": "蒯越蒯良",
+			"count": 2
+		},
+		{
+			"name": "许攸",
+			"count": 2
+		},
+		{
+			"name": "卢植",
+			"count": 2
+		},
+		{
+			"name": "刘琦",
+			"count": 2
+		},
+		{
+			"name": "界·伊籍",
+			"count": 2
+		},
+		{
+			"name": "马钧",
+			"count": 2
+		},
+		{
+			"name": "李傕",
+			"count": 2
+		},
+		{
+			"name": "郭汜",
+			"count": 2
+		},
+		{
+			"name": "徐荣",
+			"count": 2
+		},
+		{
+			"name": "界·卧龙诸葛",
+			"count": 2
+		},
+		{
+			"name": "界·典韦",
+			"count": 2
+		},
+		{
+			"name": "界·荀彧",
+			"count": 2
+		},
+		{
+			"name": "SP司马昭",
+			"count": 2
+		},
+		{
+			"name": "王元姬",
+			"count": 2
+		},
+		{
+			"name": "界·庞德",
+			"count": 2
+		},
+		{
+			"name": "界·庞统",
+			"count": 2
+		},
+		{
+			"name": "界·颜良文丑",
+			"count": 2
+		},
+		{
+			"name": "界·袁绍",
+			"count": 2
+		},
+		{
+			"name": "神刘备",
+			"count": 2
+		},
+		{
+			"name": "神陆逊",
+			"count": 2
+		},
+		{
+			"name": "张济",
+			"count": 2
+		},
+		{
+			"name": "樊稠",
+			"count": 2
+		},
+		{
+			"name": "界·徐晃",
+			"count": 2
+		},
+		{
+			"name": "界·孟获",
+			"count": 2
+		},
+		{
+			"name": "界·祝融",
+			"count": 2
+		},
+		{
+			"name": "严畯",
+			"count": 2
+		},
+		{
+			"name": "杜畿",
+			"count": 2
+		},
+		{
+			"name": "鲍三娘",
+			"count": 2
+		},
+		{
+			"name": "卑弥呼",
+			"count": 2
+		},
+		{
+			"name": "界·曹丕",
+			"count": 2
+		},
+		{
+			"name": "界·孙坚",
+			"count": 2
+		},
+		{
+			"name": "界·董卓",
+			"count": 2
+		},
+		{
+			"name": "吕岱",
+			"count": 2
+		},
+		{
+			"name": "周鲂",
+			"count": 2
+		},
+		{
+			"name": "刘繇",
+			"count": 2
+		},
+		{
+			"name": "曹婴",
+			"count": 2
+		},
+		{
+			"name": "审配",
+			"count": 2
+		},
+		{
+			"name": "界·邓艾",
+			"count": 2
+		},
+		{
+			"name": "界·姜维",
+			"count": 2
+		},
+		{
+			"name": "界·蔡文姬",
+			"count": 2
+		},
+		{
+			"name": "沙摩柯",
+			"count": 2
+		},
+		{
+			"name": "界·左慈",
+			"count": 2
+		},
+		{
+			"name": "界·孙策",
+			"count": 2
+		},
+		{
+			"name": "界·张昭张纮",
+			"count": 2
+		},
+		{
+			"name": "界·刘禅",
+			"count": 2
+		},
+		{
+			"name": "胡金定",
+			"count": 2
+		},
+		{
+			"name": "何进",
+			"count": 2
+		},
+		{
+			"name": "牛金",
+			"count": 2
+		},
+		{
+			"name": "韩遂",
+			"count": 2
+		},
+		{
+			"name": "诸葛果",
+			"count": 2
+		},
+		{
+			"name": "曹纯",
+			"count": 2
+		},
+		{
+			"name": "祢衡",
+			"count": 2
+		},
+		{
+			"name": "陶谦",
+			"count": 2
+		},
+		{
+			"name": "刘晔",
+			"count": 2
+		},
+		{
+			"name": "界·黄忠",
+			"count": 2
+		},
+		{
+			"name": "界·魏延",
+			"count": 2
+		},
+		{
+			"name": "界·夏侯渊",
+			"count": 2
+		},
+		{
+			"name": "界·曹仁",
+			"count": 2
+		},
+		{
+			"name": "界·小乔",
+			"count": 2
+		},
+		{
+			"name": "庞德公",
+			"count": 2
+		},
+		{
+			"name": "司马徽",
+			"count": 2
+		},
+		{
+			"name": "甘夫人",
+			"count": 2
+		},
+		{
+			"name": "孔融",
+			"count": 4
+		},
+		{
+			"name": "纪灵",
+			"count": 2
+		},
+		{
+			"name": "田丰",
+			"count": 2
+		},
+		{
+			"name": "邹氏",
+			"count": 2
+		},
+		{
+			"name": "蒋琬费祎",
+			"count": 2
+		},
+		{
+			"name": "臧霸",
+			"count": 2
+		},
+		{
+			"name": "糜夫人",
+			"count": 4
+		},
+		{
+			"name": "陈武董袭",
+			"count": 4
+		},
+		{
+			"name": "张任",
+			"count": 2
+		},
+		{
+			"name": "蒋钦",
+			"count": 4
+		},
+		{
+			"name": "李傕郭汜",
+			"count": 2
+		},
+		{
+			"name": "吕范",
+			"count": 4
+		},
+		{
+			"name": "神太史慈",
+			"count": 2
+		},
+		{
+			"name": "王凌",
+			"count": 2
+		},
+		{
+			"name": "卞夫人",
+			"count": 2
+		},
+		{
+			"name": "神郭嘉",
+			"count": 2
+		},
+		{
+			"name": "神荀彧",
+			"count": 2
+		},
+		{
+			"name": "神孙策",
+			"count": 2
+		},
+		{
+			"name": "毌丘俭",
+			"count": 2
+		},
+		{
+			"name": "陈到",
+			"count": 2
+		},
+		{
+			"name": "诸葛瞻",
+			"count": 2
+		},
+		{
+			"name": "周妃",
+			"count": 2
+		},
+		{
+			"name": "陆抗",
+			"count": 2
+		},
+		{
+			"name": "张绣",
+			"count": 2
+		},
+		{
+			"name": "郝昭",
+			"count": 2
+		},
+		{
+			"name": "仲帝袁术",
+			"count": 2
+		},
+		{
+			"name": "神张辽",
+			"count": 2
+		},
+		{
+			"name": "神甘宁",
+			"count": 2
+		},
+		{
+			"name": "张琪瑛",
+			"count": 2
+		},
+		{
+			"name": "许贡",
+			"count": 2
+		},
+		{
+			"name": "张恭",
+			"count": 2
+		},
+		{
+			"name": "吕凯",
+			"count": 2
+		},
+		{
+			"name": "卫温诸葛直",
+			"count": 2
+		},
+		{
+			"name": "张翼",
+			"count": 2
+		},
+		{
+			"name": "贾逵",
+			"count": 2
+		},
+		{
+			"name": "界·徐盛",
+			"count": 2
+		},
+		{
+			"name": "界·吴国太",
+			"count": 2
+		},
+		{
+			"name": "界·高顺",
+			"count": 2
+		},
+		{
+			"name": "杨彪",
+			"count": 2
+		},
+		{
+			"name": "陈登",
+			"count": 2
+		},
+		{
+			"name": "董承",
+			"count": 2
+		},
+		{
+			"name": "杨仪",
+			"count": 2
+		},
+		{
+			"name": "界·于禁",
+			"count": 2
+		},
+		{
+			"name": "界·曹植",
+			"count": 2
+		},
+		{
+			"name": "界·凌统",
+			"count": 2
+		},
+		{
+			"name": "界·韩当",
+			"count": 2
+		},
+		{
+			"name": "界·程普",
+			"count": 2
+		},
+		{
+			"name": "界·钟会",
+			"count": 2
+		},
+		{
+			"name": "界·曹彰",
+			"count": 2
+		},
+		{
+			"name": "界·廖化",
+			"count": 2
+		},
+		{
+			"name": "界·步练师",
+			"count": 2
+		},
+		{
+			"name": "界·刘表",
+			"count": 2
+		},
+		{
+			"name": "邓芝",
+			"count": 2
+		},
+		{
+			"name": "郑玄",
+			"count": 2
+		},
+		{
+			"name": "星·张辽",
+			"count": 2
+		},
+		{
+			"name": "星·甘宁",
+			"count": 2
+		},
+		{
+			"name": "星·徐晃",
+			"count": 2
+		},
+		{
+			"name": "星·张郃",
+			"count": 2
+		},
+		{
+			"name": "苏飞",
+			"count": 2
+		},
+		{
+			"name": "傅肜",
+			"count": 2
+		},
+		{
+			"name": "界·公孙瓒",
+			"count": 2
+		},
+		{
+			"name": "丁原",
+			"count": 2
+		},
+		{
+			"name": "界·李儒",
+			"count": 2
+		},
+		{
+			"name": "界·满宠",
+			"count": 2
+		},
+		{
+			"name": "界·简雍",
+			"count": 2
+		},
+		{
+			"name": "界·虞翻",
+			"count": 2
+		},
+		{
+			"name": "司马师",
+			"count": 2
+		},
+		{
+			"name": "羊徽瑜",
+			"count": 2
+		},
+		{
+			"name": "界·朱然",
+			"count": 2
+		},
+		{
+			"name": "胡车儿",
+			"count": 2
+		},
+		{
+			"name": "公孙康",
+			"count": 2
+		},
+		{
+			"name": "界·郭淮",
+			"count": 2
+		},
+		{
+			"name": "界·潘璋马忠",
+			"count": 2
+		},
+		{
+			"name": "界·伏皇后",
+			"count": 2
+		},
+		{
+			"name": "王粲",
+			"count": 2
+		},
+		{
+			"name": "陈震",
+			"count": 2
+		},
+		{
+			"name": "孙邵",
+			"count": 2
+		},
+		{
+			"name": "荀谌",
+			"count": 2
+		},
+		{
+			"name": "南华老仙",
+			"count": 2
+		},
+		{
+			"name": "费祎",
+			"count": 2
+		},
+		{
+			"name": "骆统",
+			"count": 2
+		},
+		{
+			"name": "杜预",
+			"count": 2
+		},
+		{
+			"name": "辛毗",
+			"count": 2
+		},
+		{
+			"name": "吴景",
+			"count": 2
+		},
+		{
+			"name": "界·陈群",
+			"count": 2
+		},
+		{
+			"name": "王甫赵累",
+			"count": 2
+		},
+		{
+			"name": "周处",
+			"count": 2
+		},
+		{
+			"name": "周群",
+			"count": 2
+		},
+		{
+			"name": "界·周仓",
+			"count": 2
+		},
+		{
+			"name": "羊祜",
+			"count": 2
+		},
+		{
+			"name": "华歆",
+			"count": 2
+		},
+		{
+			"name": "许靖",
+			"count": 2
+		},
+		{
+			"name": "蔡贞姬",
+			"count": 2
+		},
+		{
+			"name": "向宠",
+			"count": 2
+		},
+		{
+			"name": "刘璋",
+			"count": 2
+		},
+		{
+			"name": "张仲景",
+			"count": 2
+		},
+		{
+			"name": "张温",
+			"count": 2
+		},
+		{
+			"name": "谯周",
+			"count": 2
+		},
+		{
+			"name": "文鸯",
+			"count": 2
+		},
+		{
+			"name": "袁涣",
+			"count": 2
+		},
+		{
+			"name": "宗预",
+			"count": 2
+		},
+		{
+			"name": "花鬘",
+			"count": 2
+		},
+		{
+			"name": "孙翊",
+			"count": 2
+		},
+		{
+			"name": "高览",
+			"count": 2
+		},
+		{
+			"name": "马元义",
+			"count": 2
+		},
+		{
+			"name": "崔琰",
+			"count": 2
+		},
+		{
+			"name": "蒋琬·改",
+			"count": 2
+		},
+		{
+			"name": "阎圃",
+			"count": 2
+		},
+		{
+			"name": "界·顾雍",
+			"count": 2
+		},
+		{
+			"name": "界·蔡夫人",
+			"count": 2
+		},
+		{
+			"name": "界·孙鲁班",
+			"count": 2
+		},
+		{
+			"name": "界·曹真",
+			"count": 2
+		},
+		{
+			"name": "星·黄忠",
+			"count": 2
+		},
+		{
+			"name": "毛玠",
+			"count": 2
+		},
+		{
+			"name": "王双",
+			"count": 2
+		},
+		{
+			"name": "孙寒华",
+			"count": 2
+		},
+		{
+			"name": "谋·刘赪",
+			"count": 2
+		},
+		{
+			"name": "谋·徐晃",
+			"count": 2
+		},
+		{
+			"name": "谋·吕蒙",
+			"count": 2
+		},
+		{
+			"name": "谋·于禁",
+			"count": 2
+		},
+		{
+			"name": "谋·黄忠",
+			"count": 2
+		},
+		{
+			"name": "界·孙休",
+			"count": 2
+		},
+		{
+			"name": "谋·华雄",
+			"count": 2
+		},
+		{
+			"name": "桥公",
+			"count": 2
+		},
+		{
+			"name": "张昌蒲",
+			"count": 2
+		},
+		{
+			"name": "皇甫嵩",
+			"count": 2
+		},
+		{
+			"name": "朱儁",
+			"count": 2
+		},
+		{
+			"name": "谋·杨婉",
+			"count": 2
+		},
+		{
+			"name": "谋·马超",
+			"count": 2
+		},
+		{
+			"name": "谋·张飞",
+			"count": 2
+		},
+		{
+			"name": "谋·赵云",
+			"count": 2
+		},
+		{
+			"name": "傅佥",
+			"count": 2
+		},
+		{
+			"name": "阮慧",
+			"count": 2
+		},
+		{
+			"name": "界·沮授",
+			"count": 2
+		},
+		{
+			"name": "谋·孙尚香",
+			"count": 2
+		},
+		{
+			"name": "马日磾",
+			"count": 2
+		},
+		{
+			"name": "王濬",
+			"count": 2
+		},
+		{
+			"name": "界·全琮",
+			"count": 2
+		},
+		{
+			"name": "谋·夏侯氏",
+			"count": 2
+		},
+		{
+			"name": "谋·曹操",
+			"count": 2
+		},
+		{
+			"name": "谋·曹仁",
+			"count": 2
+		},
+		{
+			"name": "谋·周瑜",
+			"count": 2
+		},
+		{
+			"name": "谋·甄姬",
+			"count": 2
+		},
+		{
+			"name": "曹嵩",
+			"count": 2
+		},
+		{
+			"name": "界·吴懿",
+			"count": 2
+		},
+		{
+			"name": "裴秀",
+			"count": 2
+		},
+		{
+			"name": "界·朱治",
+			"count": 2
+		},
+		{
+			"name": "谋·貂蝉",
+			"count": 2
+		},
+		{
+			"name": "谋·袁绍",
+			"count": 2
+		},
+		{
+			"name": "谋·庞统",
+			"count": 2
+		},
+		{
+			"name": "谋·刘备",
+			"count": 2
+		},
+		{
+			"name": "谋·姜维",
+			"count": 2
+		},
+		{
+			"name": "谋·法正",
+			"count": 2
+		},
+		{
+			"name": "谋·陈宫",
+			"count": 2
+		},
+		{
+			"name": "谋·甘宁",
+			"count": 2
+		},
+		{
+			"name": "谋·黄盖",
+			"count": 2
+		},
+		{
+			"name": "谋·孙权",
+			"count": 2
+		},
+		{
+			"name": "界·张嶷",
+			"count": 2
+		},
+		{
+			"name": "十常侍",
+			"count": 2
+		},
+		{
+			"name": "杨阜",
+			"count": 2
+		},
+		{
+			"name": "谋·大乔",
+			"count": 2
+		},
+		{
+			"name": "谋·孟获",
+			"count": 2
+		},
+		{
+			"name": "牵招",
+			"count": 2
+		},
+		{
+			"name": "濮阳兴",
+			"count": 2
+		},
+		{
+			"name": "界·曹休",
+			"count": 2
+		},
+		{
+			"name": "谋·孙策",
+			"count": 2
+		},
+		{
+			"name": "郭女王",
+			"count": 2
+		},
+		{
+			"name": "星·魏延",
+			"count": 2
+		},
+		{
+			"name": "界·朱桓",
+			"count": 2
+		},
+		{
+			"name": "谋·祝融",
+			"count": 2
+		},
+		{
+			"name": "阎象",
+			"count": 2
+		},
+		{
+			"name": "星·周不疑",
+			"count": 2
+		},
+		{
+			"name": "神华佗",
+			"count": 2
+		},
+		{
+			"name": "谋·卢植",
+			"count": 2
+		},
+		{
+			"name": "鲍信",
+			"count": 2
+		},
+		{
+			"name": "谋·诸葛亮",
+			"count": 2
+		},
+		{
+			"name": "谋·关羽",
+			"count": 2
+		},
+		{
+			"name": "胡班",
+			"count": 2
+		},
+		{
+			"name": "陈珪",
+			"count": 2
+		},
+		{
+			"name": "谋·曹丕",
+			"count": 2
+		},
+		{
+			"name": "谋·黄月英",
+			"count": 2
+		},
+		{
+			"name": "谋·小乔",
+			"count": 2
+		},
+		{
+			"name": "木鹿大王",
+			"count": 2
+		},
+		{
+			"name": "霍峻",
+			"count": 2
+		},
+		{
+			"name": "神鲁肃",
+			"count": 2
+		},
+		{
+			"name": "谋·夏侯惇",
+			"count": 2
+		},
+		{
+			"name": "曹髦",
+			"count": 2
+		},
+		{
+			"name": "谋·公孙瓒",
+			"count": 2
+		},
+		{
+			"name": "司马孚",
+			"count": 2
+		},
+		{
+			"name": "谋·韩当",
+			"count": 2
+		},
+		{
+			"name": "谋·陆逊",
+			"count": 2
+		},
+		{
+			"name": "来敏",
+			"count": 2
+		},
+		{
+			"name": "张奋",
+			"count": 2
+		},
+		{
+			"name": "文钦",
+			"count": 2
+		},
+		{
+			"name": "SP甄姬",
+			"count": 2
+		},
+		{
+			"name": "贾充",
+			"count": 2
+		},
+		{
+			"name": "谋·贾诩",
+			"count": 2
+		},
+		{
+			"name": "谋·诸葛瑾",
+			"count": 2
+		},
+		{
+			"name": "司马昭",
+			"count": 2
+		},
+		{
+			"name": "势·太史慈",
+			"count": 2
+		},
+		{
+			"name": "星·董卓",
+			"count": 2
+		},
+		{
+			"name": "势·董昭",
+			"count": 2
+		},
+		{
+			"name": "王经",
+			"count": 2
+		},
+		{
+			"name": "友·诸葛亮",
+			"count": 2
+		},
+		{
+			"name": "友·庞统",
+			"count": 2
+		},
+		{
+			"name": "友·徐庶",
+			"count": 2
+		},
+		{
+			"name": "谋·郭淮",
+			"count": 2
+		},
+		{
+			"name": "清河公主",
+			"count": 2
+		},
+		{
+			"name": "娄圭",
+			"count": 2
+		},
+		{
+			"name": "势·于吉",
+			"count": 2
+		},
+		{
+			"name": "杨弘",
+			"count": 2
+		},
+		{
+			"name": "张布",
+			"count": 2
+		},
+		{
+			"name": "谋·吕布",
+			"count": 2
+		},
+		{
+			"name": "吴珂",
+			"count": 2
+		},
+		{
+			"name": "势·魏延",
+			"count": 2
+		},
+		{
+			"name": "孙韶",
+			"count": 2
+		},
+		{
+			"name": "势·陈到",
+			"count": 2
+		},
+		{
+			"name": "庞羲",
+			"count": 2
+		},
+		{
+			"name": "势·陆郁生",
+			"count": 2
+		},
+		{
+			"name": "势·黄祖",
+			"count": 2
+		},
+		{
+			"name": "笮融",
+			"count": 2
+		},
+		{
+			"name": "势·张燕",
+			"count": 2
+		},
+		{
+			"name": "势·田丰",
+			"count": 2
+		},
+		{
+			"name": "乐就",
+			"count": 2
+		},
+		{
+			"name": "势·国渊",
+			"count": 2
+		},
+		{
+			"name": "SP曹操",
+			"count": 2
+		},
+		{
+			"name": "势·辛宪英",
+			"count": 2
+		},
+		{
+			"name": "孟达",
+			"count": 2
+		},
+		{
+			"name": "蒋济",
+			"count": 2
+		},
+		{
+			"name": "玄·毌丘俭",
+			"count": 2
+		},
+		{
+			"name": "崔芙",
+			"count": 2
+		},
+		{
+			"name": "势·鲁肃",
+			"count": 2
+		},
+		{
+			"name": "势·陈祗",
+			"count": 2
+		},
+		{
+			"name": "势·钟会",
+			"count": 2
+		},
+		{
+			"name": "势·王昶",
+			"count": 2
+		},
+		{
+			"name": "SP于禁",
+			"count": 2
+		},
+		{
+			"name": "势·邓艾",
+			"count": 2
+		},
+		{
+			"name": "势·桓阶",
+			"count": 2
+		},
+		{
+			"name": "神姜维",
+			"count": 2
+		},
+		{
+			"name": "张既",
+			"count": 2
+		},
+		{
+			"name": "骥·张辽",
+			"count": 2
+		},
+		{
+			"name": "骥·李典",
+			"count": 2
+		},
+		{
+			"name": "骥·乐进",
+			"count": 2
+		},
+		{
+			"name": "星·法正",
+			"count": 2
+		},
+		{
+			"name": "阳球",
+			"count": 2
+		},
+		{
+			"name": "谋·朱然",
+			"count": 2
+		},
+		{
+			"name": "朱绩",
+			"count": 2
+		},
+		{
+			"name": "谋·张郃",
+			"count": 2
+		},
+		{
+			"name": "国战于禁",
+			"count": 2
+		},
+		{
+			"name": "谋·田豫",
+			"count": 2
+		},
+		{
+			"name": "神马超",
+			"count": 2
+		},
+		{
+			"name": "彻里吉",
+			"count": 2
+		},
+		{
+			"name": "马腾",
+			"count": 2
+		},
+		{
+			"name": "势·孙綝",
+			"count": 2
+		},
+		{
+			"name": "势·孙峻",
+			"count": 2
+		}
+	]
+}
