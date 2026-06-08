@@ -1,4 +1,5 @@
 import { modifyDecadeUIContent } from '../weiweixiaoxi.js';
+import { resolveDecadeDynamicSkins } from './dynamic-skin-resolver.js';
 export function dynamicInit(lib, skinSwitch) {
     if (!lib.config[skinSwitch.configKey.useDynamic]) {
         return
@@ -111,10 +112,27 @@ export function dynamicInit(lib, skinSwitch) {
     
     skinSwitch.updateDecadeDynamicSkin = updateDecadeDynamicSkin;
 
+	async function refreshDecadeDynamicSkins(showMessage) {
+		if (!window.decadeUI?.dynamicSkin) return { added: 0, removed: 0 };
+		updateDecadeDynamicSkin();
+		const result = await resolveDecadeDynamicSkins(lib, game, skinSwitch);
+		if (showMessage && window.skinSwitchMessage) {
+			skinSwitchMessage.show({
+				type: 'success',
+				text: `皮肤扫描完成：新增${result.added || 0}个，隐藏未安装${result.removed || 0}个`,
+				duration: 1800,
+				closeable: false,
+			});
+		}
+		return result;
+	}
+
+	skinSwitch.refreshDecadeDynamicSkins = refreshDecadeDynamicSkins;
+
     skinSwitch.waitUntil(() => {
         return window.decadeUI && window.decadeModule && decadeUI.dynamicSkin
     }, () => {
-        updateDecadeDynamicSkin()
+        refreshDecadeDynamicSkins(false)
     })
 
     skinSwitch.waitUntil(() => {

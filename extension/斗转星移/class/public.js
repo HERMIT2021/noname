@@ -264,6 +264,81 @@ var Props = {
 			propToast.addToast("shishibaozhu", n);
 		},
 	},
+	yuanbao: {
+		name: "元宝",
+		intro: "全局通用货币，可用于购买珍宝阁宝箱等道具。",
+		type: "cailiao",
+		imgPath: "extension/如真重置版/resource/cangZhenGe/items/620044.png",
+	},
+	czg_box: {
+		name: "珍宝阁宝箱",
+		intro: "可在如真重置版珍宝阁中开启一次奖励。",
+		type: "daoju",
+		imgPath: `${dzxy.path}image/icon/shenmibaoxiang.png`,
+	},
+	dianjiangka: {
+		name: "点将卡",
+		intro: "用于军争和斗地主休闲模式的自由选将。",
+		type: "daoju",
+		display: true,
+		imgPath: "extension/如真重置版/resource/cangZhenGe/items/600006.png",
+	},
+	shop_czg_box_5: {
+		name: "珍宝阁宝箱*5",
+		intro: "使用1000元宝购买5个珍宝阁宝箱。",
+		dyintro() {
+			return `使用1000元宝购买5个珍宝阁宝箱<br>(当前元宝：${Props.getCount("yuanbao")})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shenmibaoxiang.png`,
+		use() {
+			return Props.buyCzgBox(5, 1000);
+		},
+	},
+	shop_czg_box_10: {
+		name: "珍宝阁宝箱*10",
+		intro: "使用2000元宝购买10个珍宝阁宝箱。",
+		dyintro() {
+			return `使用2000元宝购买10个珍宝阁宝箱<br>(当前元宝：${Props.getCount("yuanbao")})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shenmibaoxiang.png`,
+		use() {
+			return Props.buyCzgBox(10, 2000);
+		},
+	},
+	shop_czg_box_20: {
+		name: "珍宝阁宝箱*20",
+		intro: "使用4000元宝购买20个珍宝阁宝箱。",
+		dyintro() {
+			return `使用4000元宝购买20个珍宝阁宝箱<br>(当前元宝：${Props.getCount("yuanbao")})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shenmibaoxiang.png`,
+		use() {
+			return Props.buyCzgBox(20, 4000);
+		},
+	},
+	shop_czg_box_50: {
+		name: "珍宝阁宝箱*50",
+		intro: "使用10000元宝购买50个珍宝阁宝箱。",
+		dyintro() {
+			return `使用10000元宝购买50个珍宝阁宝箱<br>(当前元宝：${Props.getCount("yuanbao")})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shenmibaoxiang.png`,
+		use() {
+			return Props.buyCzgBox(50, 10000);
+		},
+	},
 	//暂时放包裹里 后面在移出去
 	shop_huanjiangka: {
 		name: "换将卡*50",
@@ -426,6 +501,10 @@ var Props = {
 	changeCount(propID, changeCount) {
 		if (typeof this[propID] != "object") return;
 		if (!Number.isInteger(changeCount)) return;
+		if (game.changeGlobalItemCount) {
+			game.changeGlobalItemCount(propID, changeCount);
+			return;
+		}
 
 		let packageInfo = dzxy.getCF("package");
 		if (packageInfo[propID] == undefined) packageInfo[propID] = {};
@@ -438,6 +517,7 @@ var Props = {
 		if (typeof minCount == "number" && minCount > packageInfo[propID]["count"]) packageInfo[propID]["count"] = minCount;
 
 		dzxy.saveCF("package");
+		if (propID == "yuanbao") window.rzshRefreshYuanbao?.();
 	},
 	/**
 	 * 获取道具的数量
@@ -445,6 +525,7 @@ var Props = {
 	 * @returns 数量
 	 */
 	getCount(propID) {
+		if (game.getGlobalItemCount) return game.getGlobalItemCount(propID);
 		let packageInfo = dzxy.getCF("package");
 		if (packageInfo[propID] == undefined) return 0;
 		if (!packageInfo[propID]["count"]) return 0;
@@ -454,6 +535,16 @@ var Props = {
 		let prop = this[propID];
 		if (prop == undefined) return {};
 		return prop;
+	},
+	buyCzgBox(count, price) {
+		let yuanbao = this.getCount("yuanbao");
+		if (yuanbao < price) {
+			dzxy.create.bottomBarTip("元宝不足", document.body);
+			return false;
+		}
+		this.changeCount("yuanbao", -price);
+		propToast.addToast("czg_box", count);
+		return true;
 	},
 };
 //加默认值
@@ -466,6 +557,21 @@ for (let i in Props) {
 }
 dzxy.Props = Props;
 export { Props };
+
+game.tryUseDianjiangCard = function (reason = "自由选将") {
+	return game.tryUseDzxyProp("dianjiangka", "点将卡", reason);
+};
+
+game.tryUseDzxyProp = function (propId, propName, reason = "使用道具") {
+	if (game.useGlobalItem) return game.useGlobalItem(propId, propName, reason);
+	if (!window.dzxy?.Props) return true;
+	if (dzxy.Props.getCount(propId) <= 0) {
+		dzxy.create.bottomBarTip(`${reason}需要消耗1张${propName}，当前${propName}不足`, document.body);
+		return false;
+	}
+	dzxy.propToast.addToast(propId, -1);
+	return true;
+};
 
 class PropToast {
 	toastList = [];
@@ -580,6 +686,26 @@ addSkill_shouqika();
 lib.onover.push(result => {
 	let mode = get.mode();
 	let submode = get.config(mode + "_mode", mode);
+	if (result && ["identity", "doudizhu"].includes(mode) && Math.random() < 0.75) {
+		const randomRange = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+		const getYuanbaoRange = () => {
+			if (mode == "identity") {
+				const playerCount = Math.max(game.players?.length || 0, (game.players?.length || 0) + (game.dead?.length || 0), get.playerNumber?.() || 0);
+				if (playerCount >= 8) return [500, 3800];
+				if (playerCount >= 5) return [200, 1600];
+				return [200, 1600];
+			}
+			if (mode == "doudizhu") {
+				const doudizhuMode = _status.mode || submode;
+				if (doudizhuMode == "huanle") return [300, 1500];
+				if (doudizhuMode == "zhizun") return [400, 1800];
+				return [100, 888];
+			}
+			return [100, 888];
+		};
+		const [min, max] = getYuanbaoRange();
+		propToast.addToast("yuanbao", randomRange(min, max));
+	}
 	//欢乐斗地主
 	if (mode == "doudizhu" && submode == "huanle") {
 		if (!dzxy.ddzBeilv) return;

@@ -42,6 +42,27 @@ const effectSpeedItems = {
 	"20": "20x(超瞬发)",
 };
 
+const effectAnimationProfileItems = {
+	classic: "经典",
+	smooth: "顺滑",
+	snappy: "紧凑",
+	light: "轻量",
+};
+
+const effectCardHoldItems = {
+	short: "较短",
+	normal: "默认",
+	long: "较长",
+	instant: "极短",
+};
+
+const effectParticleQualityItems = {
+	off: "关闭",
+	low: "低",
+	normal: "默认",
+	high: "高",
+};
+
 export class Library {
 	configprefix = "noname_0.9_";
 	versionOL = 27;
@@ -1183,6 +1204,20 @@ export class Library {
 					unfrequent: true,
 					intro: "拖拽时显示虚线，可能降低游戏速度",
 				},
+				dragline_style: {
+					name: "拖拽指示线样式",
+					init: "gold",
+					unfrequent: true,
+					item: {
+						classic: "经典虚线",
+						gold: "金色箭头",
+						blue: "青锋双线",
+						red: "赤焰脉冲",
+						purple: "紫电星点",
+						minimal: "极简实线",
+					},
+					intro: "调整拖拽选牌/选目标时的指示线样式，包括箭头、双线、脉冲点、星点和极简实线",
+				},
 				// enable_pressure:{
 				// 	name:'启用压感',
 				// 	init:false,
@@ -1810,6 +1845,18 @@ export class Library {
 					item: effectSpeedItems,
 					intro: "单独调整使用牌后，卡牌从屏幕中间飞向角色/牌区并消失的后段动画速度",
 				},
+				effect_animation_profile: {
+					name: "对局动画质感",
+					init: "smooth",
+					item: effectAnimationProfileItems,
+					intro: "调整用牌、出牌和指示线的过渡曲线与移动幅度；轻量档会减少动画位移以提升连续出牌流畅度",
+				},
+				effect_card_hold: {
+					name: "出牌展示停留",
+					init: "normal",
+					item: effectCardHoldItems,
+					intro: "调整牌飞到屏幕中间后的展示停留时间；极短适合高倍速连续结算",
+				},
 				effect_speed_basic: {
 					name: "基本牌特效速度",
 					init: "1",
@@ -1874,6 +1921,12 @@ export class Library {
 					init: "1",
 					item: effectSpeedItems,
 					intro: "调整限定技、觉醒技、属性伤害、回复体力等粒子和全屏文字特效速度",
+				},
+				effect_particle_quality: {
+					name: "粒子特效质量",
+					init: "normal",
+					item: effectParticleQualityItems,
+					intro: "调整火焰、雷电、回复、品质光效等粒子数量；低配设备可改为低或关闭",
 				},
 			},
 		},
@@ -6406,6 +6459,12 @@ export class Library {
 					restart: true,
 					intro: "关闭后，选将时不同玩家不能获得同一源武将（含同名替换武将）。",
 				},
+				only_choose_unlocked_character: {
+					name: "仅可点将已拥有武将",
+					init: false,
+					restart: true,
+					intro: "开启后，自由选将/点将池只显示已通过珍宝阁解锁的武将。",
+				},
 				special_identity: {
 					name: "特殊身份",
 					init: false,
@@ -8075,6 +8134,12 @@ export class Library {
 					init: false,
 					restart: true,
 					intro: "关闭后，选将时不同玩家不能获得同一源武将（含同名替换武将）。",
+				},
+				only_choose_unlocked_character: {
+					name: "仅可点将已拥有武将",
+					init: false,
+					restart: true,
+					intro: "开启后，自由选将/点将池只显示已通过珍宝阁解锁的武将。",
 				},
 				double_hp: {
 					name: "双将体力上限",

@@ -588,8 +588,11 @@ export function choosechar() {
 								return list2x;
 							};
 							event.list.randomSort();
+							event.list = game.filterUnlockedCharacters?.(event.list) || event.list;
 							_status.characterlist = list4.slice(0).randomSort();
+							_status.characterlist = game.filterUnlockedCharacters?.(_status.characterlist) || _status.characterlist;
 							list3.randomSort();
+							list3 = game.filterUnlockedCharacters?.(list3) || list3;
 							if (_status.brawl && _status.brawl.chooseCharacterFilter) _status.brawl.chooseCharacterFilter(event.list, getZhuList(), list3);
 							var num = get.config("choice_" + game.me.identity);
 							if (event.zhongmode) {
@@ -611,12 +614,13 @@ export function choosechar() {
 										if (event.zhongmode) list = list3.slice(0, 6);
 										else list = getZhuList().concat(list3.slice(0, num));
 									} else if (list === "nozhu") list = event.list.slice(0, num);
-								} else {
-									if (event.zhongmode) list = list3.slice(0, 8);
-									else list = getZhuList().concat(list3.slice(0, num));
-								}
+							} else {
+								if (event.zhongmode) list = list3.slice(0, 8);
+								else list = getZhuList().concat(list3.slice(0, num));
 							}
-							delete event.swapnochoose;
+						}
+						list = game.filterUnlockedCharacters?.(list) || list;
+						delete event.swapnochoose;
 							var dialog;
 							if (event.swapnodialog) {
 								dialog = ui.dialog;
@@ -812,6 +816,7 @@ export function choosechar() {
 									if (ui.cheat2 && ui.cheat2.dialog == _status.event.dialog) {
 										return;
 									}
+									if (game.useGlobalItem?.("huanjiangka", "换将卡", "一将成名更换武将") === false) return;
 									if (game.changeCoin) {
 										game.changeCoin(-3);
 									}
@@ -888,6 +893,7 @@ export function choosechar() {
 											ui.cheat.classList.remove("disabled");
 										}
 									} else {
+										if (game.useGlobalItem?.("dianjiangka", "点将卡", "一将成名自由选将") === false) return;
 										if (game.changeCoin) {
 											game.changeCoin(-10);
 										}
@@ -1180,6 +1186,7 @@ export function choosechar() {
 								}
 							}
 							var choose = [];
+							list = game.filterUnlockedCharacters?.(list) || list;
 							_status.characterlist = list;
 							event.filterChoice = function (name1, name2) {
 								var info1 = lib.character[name1];
@@ -1575,6 +1582,7 @@ export function choosechar() {
 									ui.xjjindutiao.remove();
 									xjFinsh(targetele.parentNode);
 								} else if (targetele.classList.contains("xjhuan")) {
+									if (game.useGlobalItem?.("huanjiangka", "换将卡", "一将成名更换武将") === false) return;
 									var huanchar = event.list.filter(i => !event.characterChoice.includes(i) && !event.friendcharacterChoice.includes(i) && !event.othercharacterChoice.includes(i) && !event.otherscharacterChoice.includes(i)).randomGet();
 									if (!huanchar) {
 										document.querySelectorAll(".xjhuan").forEach(d => {
@@ -2003,6 +2011,7 @@ export function choosechar() {
 									maxHp = lib.character[i].maxHp;
 								if (hp === maxHp && hp >= 3 && hp <= 5) event.list.push(i);
 							}
+							event.list = game.filterUnlockedCharacters?.(event.list) || event.list;
 							_status.characterlist = event.list.slice(0);
 							_status.yeidentity = [];
 							if (_status.brawl && _status.brawl.chooseCharacterFilter) {
@@ -2296,6 +2305,7 @@ export function choosechar() {
 										ui.xjbackground.remove();
 										game.resume();
 									} else if (targetele.classList.contains("xjhuan")) {
+										if (game.useGlobalItem?.("huanjiangka", "换将卡", "一将成名更换武将") === false) return;
 										var huanbutton = ui.myxj.querySelectorAll(".xjhuan");
 										if (huanfreecount == 0) {
 											huanbutton.forEach(d => {
@@ -2670,6 +2680,8 @@ export function choosechar() {
 								if (game.recommendDizhu.includes(i)) event.list2.push(i);
 							}
 							event.list.randomSort();
+							event.list = game.filterUnlockedCharacters?.(event.list) || event.list;
+							event.list2 = game.filterUnlockedCharacters?.(event.list2) || event.list2;
 							_status.characterlist = event.list.slice(0);
 
 							for (var player of game.players) {
@@ -3178,6 +3190,7 @@ export function choosechar() {
 
 								// 换将事件
 								if (targetele.classList.contains("xjhuan")) {
+									if (game.useGlobalItem?.("huanjiangka", "换将卡", "一将成名更换武将") === false) return;
 									var huanbutton = document.querySelectorAll(".xjhuan");
 									var huanchar = event.list.filter(item => !event.map[game.me.playerid].includes(item)).randomGet();
 									!event.map[game.me.playerid].push(huanchar);

@@ -2911,12 +2911,21 @@ class Create {
     ui.timer.listen(setTimerPosition);
     ui.shortcut = ui.create.div("#shortcut.hidden", ui.window);
     ui.shortcut.listen(ui.click.shortcut);
+    ui.shortcut.syncLayoutClass = function() {
+      const shown = !ui.shortcut.classList.contains("hidden");
+      ui.shortcut.classList.toggle("shortcut-layout", shown);
+      ui.system?.classList.toggle("shortcut-layout", shown);
+      ui.window?.classList.toggle("shortcut-layout", shown);
+    };
+    ui.shortcut._layoutObserver = new MutationObserver(ui.shortcut.syncLayoutClass);
+    ui.shortcut._layoutObserver.observe(ui.shortcut, { attributes: true, attributeFilter: ["class"] });
     ui.create.div(ui.shortcut, function(e) {
       e.stopPropagation();
     });
     ui.create.div(".menubutton.round", "<span>重来</span>", ui.shortcut, game.reload).dataset.position = 1;
     ui.create.div(".menubutton.round", "<span>退出</span>", ui.shortcut, game.exit).dataset.position = 3;
     ui.create.div(".menubutton.round", "<span>记录</span>", ui.shortcut, ui.click.pause).dataset.position = 4;
+    ui.create.div(".menubutton.round", "<span>主页</span>", ui.shortcut, game.returnToRzshHome).dataset.position = 5;
     ui.shortcut.autobutton = ui.create.div(".menubutton.round", "<span>托管</span>", ui.shortcut, ui.click.auto);
     ui.shortcut.autobutton.dataset.position = 2;
     ui.favmodelist = ui.create.div(".favmodelist", ui.shortcut);

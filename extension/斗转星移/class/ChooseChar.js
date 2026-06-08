@@ -2,7 +2,7 @@ import { lib, game, ui, get, ai, _status } from "../../../noname.js";
 import { MainFrame, MainFrameTopBtn, Character } from "./Banchar.js";
 import { DBtn, DEle } from "./baseEle.js";
 import dzxy from "./Dzxy.js";
-import { Props } from "./public.js";
+import { Props, propToast } from "./public.js";
 import { ScreenAdapter } from "./ScreenAdapter.js";
 /**武将2 */
 export class Character2 extends DBtn {
@@ -633,6 +633,7 @@ export class ChooseChar {
     let free = new DBtn(ui.create.div('.wujiang-char-base-back'));
     free.frame = ui.create.div('.dz_game_chr_bg_sg', free.ele);
     free.setClick(() => {
+      if (!this.isfree && !this.tryUseDianjiangCard()) return;
       this.isfree = true;
       this.handleSelected1();
       this.checkOK();
@@ -746,6 +747,7 @@ export class ChooseChar {
           // if (dzxy.character[i] && dzxy.character[i][4] && dzxy.character[i][4].includes('unseen')) return false;
           // return !lib.config.banned.includes(i);
           if (!lib.character[i] || lib.filter.characterDisabled2(i) || lib.config.banned.includes(i)) return false;
+          if (!game.isCharacterUnlocked?.(i)) return false;
           if (namecapt.indexOf(getCapt(i)) == -1) {
             namecapt.push(getCapt(i));
           }
@@ -773,7 +775,7 @@ export class ChooseChar {
       (function () {
         let packBtn = new MainFrameTopBtn('recent', '最近');
         frame.topAddBtn(packBtn, 0);
-        packBtn.charList = lib.config[`${dzxy.dz}RecentChseChar`]['charList'];
+        packBtn.charList = game.filterUnlockedCharacters?.(lib.config[`${dzxy.dz}RecentChseChar`]['charList']) || lib.config[`${dzxy.dz}RecentChseChar`]['charList'];
         packBtn.setText();
         packBtn.setClick(() => {
           packClick(packBtn);
@@ -819,6 +821,17 @@ export class ChooseChar {
       });
     });
     return free;
+  }
+  tryUseDianjiangCard() {
+    let reason = `${get.translation(lib.config.mode)}自由选将`;
+    if (game.tryUseDianjiangCard) return game.tryUseDianjiangCard(reason);
+    let count = Props.getCount('dianjiangka');
+    if (count <= 0) {
+      dzxy.create.bottomBarTip(`${reason}需要消耗1张点将卡，当前点将卡不足`, document.body);
+      return false;
+    }
+    propToast.addToast('dianjiangka', -1);
+    return true;
   }
   /**
    * 增加到最近

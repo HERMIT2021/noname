@@ -3174,6 +3174,11 @@ const Content = {
     if (_status.connectMode || lib.config.mode == "single" && _status.mode != "wuxianhuoli" || lib.config.mode == "doudizhu" && _status.mode == "online" || lib.config.mode != "identity" && lib.config.mode != "guozhan" && lib.config.mode != "doudizhu" && lib.config.mode != "single") {
       event.changeCard = "disabled";
     }
+    const useGlobalPropsForChangeCard = ["identity", "doudizhu"].includes(lib.config.mode) && event.changeCard != "disabled";
+    if (useGlobalPropsForChangeCard) {
+      const shouqikaCount = game.getGlobalItemCount?.("shouqika") || 0;
+      event.changeCard = shouqikaCount > 0 ? shouqikaCount : "disabled";
+    }
     await Promise.all(waitings);
     if (!targets.includes(game.me) || event.changeCard == "disabled" || _status.auto || !game.me.countCards("h")) {
       return;
@@ -3185,7 +3190,15 @@ const Content = {
       game.resume();
     };
     while (true) {
-      if (event.changeCard == "once") {
+      if (typeof event.changeCard == "number") {
+        if (event.changeCard > 1) event.changeCard--;
+        else if (event.changeCard == 1) event.changeCard = "disabled";
+        else {
+          event.bool = false;
+          _status.imchoosing = false;
+          break;
+        }
+      } else if (event.changeCard == "once") {
         event.changeCard = "disabled";
       } else if (event.changeCard == "twice") {
         event.changeCard = "once";
@@ -3204,6 +3217,7 @@ const Content = {
       if (!event.bool) {
         break;
       }
+      if (["identity", "doudizhu"].includes(lib.config.mode) && game.useGlobalItem?.("shouqika", "手气卡", `${get.translation(lib.config.mode)}置换手牌`) === false) break;
       if (game.changeCoin) {
         game.changeCoin(-3);
       }
@@ -9496,7 +9510,7 @@ card.${cardPackName}.${itemName}.${termName}`, term);
             _status.waitingForTransition = event.waitingForTransition;
             game.pause();
           } else {
-            game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration, 0, false);
+            game.delayx(get.effectDuration(get.effectCardHold(lib.config.duration), get.effectType(event.card), 80) / lib.config.duration, 0, false);
           }
         }
       }
@@ -9753,9 +9767,9 @@ card.${cardPackName}.${itemName}.${termName}`, term);
         return;
       }
       if (event.effectedCount < event.effectCount) {
-        if (document.getElementsByClassName("thrown").length) {
+        if (get.hasThrownCards()) {
           if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-            game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration, 0, false);
+            game.delayx(get.effectDuration(get.effectCardHold(lib.config.duration), get.effectType(event.card), 80) / lib.config.duration, 0, false);
           }
         }
         event.goto(11);
@@ -9769,9 +9783,9 @@ card.${cardPackName}.${itemName}.${termName}`, term);
       if (event._result) {
         event.result = event._result;
       }
-      if (document.getElementsByClassName("thrown").length) {
+      if (get.hasThrownCards()) {
         if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-          game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration, 0, false);
+          game.delayx(get.effectDuration(get.effectCardHold(lib.config.duration), get.effectType(event.card), 80) / lib.config.duration, 0, false);
         }
       } else {
         event.finish();
@@ -10101,7 +10115,7 @@ card.${cardPackName}.${itemName}.${termName}`, term);
         player._noSkill = true;
         console.log(player.name, event.skill);
       }
-      if (document.getElementsByClassName("thrown").length) {
+      if (get.hasThrownCards()) {
         if (event.skill && get.info(event.skill).delay !== false && get.info(event.skill).delay !== 0) {
           await game.delayx();
         }

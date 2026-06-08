@@ -338,6 +338,21 @@ export function cangZhenGe() {
 
 	const openAllTip = ui.create.div(".open-all-tip", bg);
 	openAllTip.innerHTML = "<span style='color:#DEB887; text-shadow:0 0 1px black;font-weight:600;font-family:shousha'>每次最多开50个</span>";
+	const getPropCount = id => game.getGlobalItemCount?.(id) ?? window.dzxy?.Props?.getCount?.(id) ?? 0;
+	const changePropCount = (id, count) => game.changeGlobalItemCount?.(id, count) ?? window.dzxy?.Props?.changeCount?.(id, count);
+	const addPropToast = (id, count) => {
+		if (window.dzxy?.propToast?.addToast) {
+			window.dzxy.propToast.addToast(id, count);
+		} else {
+			changePropCount(id, count);
+		}
+	};
+	const showTip = text => window.dzxy?.create?.bottomBarTip?.(text, document.body) || alert(text);
+	let yuanbaoText = null;
+	function refreshCzgShopUi() {
+		refreshBoxCountUi();
+		if (yuanbaoText) yuanbaoText.innerHTML = `元宝：${getPropCount("yuanbao")}`;
+	}
 
 	// 盒子配置
 	const boxSettings = rzczb.czgSettings.boxes.map(item => {
@@ -345,7 +360,7 @@ export function cangZhenGe() {
 			name: item.name,
 			isHot: item.isHot,
 			tip: item.tip,
-			count: 5000,
+			count: getPropCount("czg_box"),
 		};
 	});
 	const boxBugTip = ui.create.div(".box-buy-tip", bg);
@@ -353,6 +368,13 @@ export function cangZhenGe() {
 	// 各个盒子部分
 	const boxBg = ui.create.div(".box-bg", bg);
 	const boxItems = [];
+	const boxCountDivs = [];
+	function refreshBoxCountUi() {
+		let count = getPropCount("czg_box");
+		for (let boxCountDiv of boxCountDivs) {
+			boxCountDiv.innerHTML = `拥有：${count}`;
+		}
+	}
 	for (let i = 0; i < boxSettings.length; i++) {
 		let boxInfo = boxSettings[i];
 		const boxDiv = ui.create.div(".box-item", boxBg);
@@ -361,6 +383,7 @@ export function cangZhenGe() {
 		const boxCountDiv = ui.create.div(".box-item-count", nameParent);
 		boxNameDiv.innerHTML = boxInfo.name;
 		boxCountDiv.innerHTML = `拥有：${boxInfo.count}`;
+		boxCountDivs.push(boxCountDiv);
 
 		if (boxInfo.isHot) {
 			const boxHotTag = ui.create.div(".box-item-hot-tag", boxDiv);
@@ -394,6 +417,46 @@ export function cangZhenGe() {
 		xishi.style.backgroundImage = 'url("' + lib.assetURL + `extension/如真重置版/resource/cangZhenGe/bskin/${box.xishizhenbao.id}.jpg")`;
 		xishiText.innerText = box.xishizhenbao.name;
 	}
+	function consumeBoxes(count) {
+		let available = getPropCount("czg_box");
+		let realCount = Math.min(count, available, 50);
+		if (realCount <= 0) {
+			showTip("珍宝阁宝箱不足，请先前往商城购买");
+			return 0;
+		}
+		changePropCount("czg_box", -realCount);
+		refreshCzgShopUi();
+		return realCount;
+	}
+	function createCzgShop() {
+		const shop = ui.create.div(".czg-box-shop", bg);
+		shop.style.cssText = "position:absolute;right:4.5%;bottom:13%;width:260px;padding:8px 10px;border:1px solid rgba(222,184,135,.65);border-radius:8px;background:rgba(20,10,4,.55);color:#DEB887;font-family:shousha;text-shadow:0 0 2px black;z-index:4;";
+		const title = ui.create.div(shop);
+		title.innerHTML = "购买珍宝阁宝箱";
+		title.style.cssText = "font-size:18px;text-align:center;margin-bottom:6px;color:#f6d38b;";
+		yuanbaoText = ui.create.div(shop);
+		yuanbaoText.style.cssText = "font-size:15px;text-align:center;margin-bottom:7px;";
+		const list = ui.create.div(shop);
+		list.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:6px;";
+		[[5, 1000], [10, 2000], [20, 4000], [50, 10000]].forEach(([count, price]) => {
+			const btn = ui.create.div(list);
+			btn.innerHTML = `${count}个/${price}`;
+			btn.style.cssText = "cursor:pointer;text-align:center;padding:5px 0;border-radius:5px;background:linear-gradient(#7b4424,#3c1d10);border:1px solid rgba(255,220,150,.55);font-size:14px;";
+			btn.listen(e => {
+				e.stopPropagation();
+				if (getPropCount("yuanbao") < price) {
+					showTip("元宝不足");
+					return;
+				}
+				changePropCount("yuanbao", -price);
+				changePropCount("czg_box", count);
+				showTip(`购买${count}个珍宝阁宝箱成功`);
+				refreshCzgShopUi();
+			});
+		});
+		refreshCzgShopUi();
+	}
+	createCzgShop();
 
 	setCurrentBoxUi(currenBox);
 
@@ -611,21 +674,33 @@ export function cangZhenGe() {
 					}
 				}
 			}
-			// mark:做一个判断检验,避免报错
-			if (window.dzxy && window.dzxy.propToast && typeof window.dzxy.propToast.addToast === 'function') {
-				// 根据结果添加道具
-				result.forEach(i => {
-					if (i.name === "将魂") {
-						window.dzxy.propToast.addToast('jianghun', i.count);
-					} else if (i.name === "换将卡") {
-						window.dzxy.propToast.addToast('huanjiangka', i.count);
-					} else if (i.name === "手气卡") {
-						window.dzxy.propToast.addToast('shouqika', i.count);
-					} else if (i.name === "欢乐豆") {
-						window.dzxy.propToast.addToast('huanledou', i.count);
-					}
-				});
-			}
+			const rewardMap = {
+				将魂: "jianghun",
+				换将卡: "huanjiangka",
+				手气卡: "shouqika",
+				欢乐豆: "huanledou",
+				元宝: "yuanbao",
+				点将卡: "dianjiangka",
+				珍宝阁宝箱: "czg_box",
+				史诗宝珠: "shishibaozhu",
+				史诗宝珠碎片: "shishibaozhusuipian",
+				招募令: "zhaomuling",
+				雁翎甲: "yanlingjia",
+			};
+			const rewardIdMap = {
+				600006: "dianjiangka",
+				600008: "zhaomuling",
+				600020: "yanlingjia",
+				620044: "yuanbao",
+				620149: "shishibaozhusuipian",
+				620150: "shishibaozhu",
+			};
+			result.forEach(i => {
+				let propId = rewardMap[i.name] || rewardIdMap[i.id];
+				if (propId) addPropToast(propId, i.count || 1);
+				else if (i.type == "wujiang" && game.unlockCharacter?.(i.id)) showTip(`已解锁武将：${i.name || get.translation(i.id) || i.id}`);
+			});
+			refreshCzgShopUi();
 			return result;
 		}
 
@@ -770,15 +845,19 @@ export function cangZhenGe() {
 	}
 
 	openAll.listen(function () {
+		let count = consumeBoxes(rzczb.czgSettings.drawCount || 50);
+		if (!count) return;
 		// game.playAudio("../../extension/如真重置版/resource/cangZhenGe/mp3/knock.mp3");
 		PIXI.sound.play("czgknock");
 		PIXI.sound.play("czgguo");
-		playBoxAnimation(rzczb.czgSettings.drawCount || 50);
+		playBoxAnimation(count);
 	});
 	//
 	openOne.listen(function () {
+		let count = consumeBoxes(1);
+		if (!count) return;
 		PIXI.sound.play("czgknock");
-		playBoxAnimation(1);
+		playBoxAnimation(count);
 	});
 
 	// 画预览的道具

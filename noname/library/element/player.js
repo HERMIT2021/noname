@@ -14050,7 +14050,8 @@ hasSkillTag：`, arg);
               delete card2.node.range;
               Reflect.setPrototypeOf(card2, oldPrototype);
             }
-            await waitForTransition(lastCard, get.effectDuration(500, "card", 80));
+            const profile = get.effectProfile();
+            await waitForTransition(lastCard, get.effectDuration(profile.throwDuration, "card", profile.throwMin));
             const number = get.number(vcard, false);
             let vcardStr = "转化", vcardSkill;
             if (event.skill) {
@@ -14205,10 +14206,12 @@ hasSkillTag：`, arg);
     return $throwordered2;
   }
   $throwordered1(node, nosource) {
+    const profile = get.effectProfile();
     node.classList.add("thrown");
     node.hide();
-    node.style.transitionProperty = "left,top,opacity,transform";
-    node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1e3 + "s";
+    node.style.transitionProperty = profile.transition;
+    node.style.transitionTimingFunction = profile.timing;
+    node.style.transitionDuration = get.effectDuration(profile.throwDuration, node._effectType || "card", profile.throwMin) / 1e3 + "s";
     for (var i = 0; i < ui.thrown.length; i++) {
       if (ui.thrown[i].parentNode != ui.arena || ui.thrown[i].classList.contains("removing")) {
         ui.thrown.splice(i--, 1);
@@ -14324,11 +14327,13 @@ hasSkillTag：`, arg);
     return node;
   }
   $throwordered2(node, nosource) {
+    const profile = get.effectProfile();
     node.classList.add("thrown");
     node.classList.add("center");
     node.hide();
-    node.style.transitionProperty = "left,top,opacity,transform";
-    node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1e3 + "s";
+    node.style.transitionProperty = profile.transition;
+    node.style.transitionTimingFunction = profile.timing;
+    node.style.transitionDuration = get.effectDuration(profile.throwDuration, node._effectType || "card", profile.throwMin) / 1e3 + "s";
     if (!nosource) {
       var nx = [50, -52];
       var ny = [50, -52];
@@ -14398,7 +14403,7 @@ hasSkillTag：`, arg);
         dlcX += xx;
         x -= xx;
       }
-      cards[j].style.transform = "translate(" + x + "px, -30px)";
+      cards[j].style.transform = "translate(" + x + "px, " + profile.centerY + "px)";
       if (cards[j].node && j < cards.length - 1 && infoOffset > 0) {
         var actualInfoOffset = infoOffset;
         if (infoOffset > 40) {
@@ -14444,12 +14449,14 @@ hasSkillTag：`, arg);
     return node;
   }
   $throwxy(card, left, top) {
+    const profile = get.effectProfile();
     var node = card.copy("thrown", "thrownhighlight");
     node._effectType = get.effectTypeFromEvent(card);
     node.dataset.position = this.dataset.position;
     node.hide();
     node.style.transitionProperty = "left,top,opacity";
-    node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1e3 + "s";
+    node.style.transitionTimingFunction = profile.timing;
+    node.style.transitionDuration = get.effectDuration(profile.throwDuration, node._effectType || "card", profile.throwMin) / 1e3 + "s";
     ui.arena.appendChild(node);
     ui.refresh(node);
     node.show();
@@ -14462,12 +14469,14 @@ hasSkillTag：`, arg);
     if (game.chess) {
       return this.$throwxy.apply(this, arguments);
     }
+    const profile = get.effectProfile();
     var node = card.copy("thrown", "thrownhighlight");
     node._effectType = get.effectTypeFromEvent(card);
     node.style.left = left;
     node.style.top = top;
     node.hide();
-    node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1e3 + "s";
+    node.style.transitionTimingFunction = profile.timing;
+    node.style.transitionDuration = get.effectDuration(profile.throwDuration, node._effectType || "card", profile.throwMin) / 1e3 + "s";
     var parseCalc = function(str) {
       var per = str.slice(str.indexOf("calc(") + 5, str.indexOf("%"));
       var add = str.slice(str.indexOf("%") + 1, str.indexOf("px")).replace(/\s/g, "");

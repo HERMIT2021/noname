@@ -48,6 +48,30 @@ export function createExtensionConfig(lib, game, skinSwitch) {
             "init": true,
             "intro": "如果设备不支持离屏渲染或者使用EngEx或D扩展出框, 请关闭此出框功能",
         },
+        'dynamicRenderFps': {
+            name: "动皮渲染帧率",
+            init: "30",
+            item: {
+                "0": "不限",
+                "60": "60帧",
+                "45": "45帧",
+                "30": "30帧(推荐)",
+                "24": "24帧(低配)",
+            },
+            intro: "限制动态皮肤的渲染帧率，降低多个动皮同时播放时的主线程和显卡压力；改动后重进对局效果最稳定",
+        },
+        'dynamicRenderDpr': {
+            name: "动皮渲染清晰度",
+            init: "1.5",
+            item: {
+                "0": "自动",
+                "1": "1x(流畅)",
+                "1.25": "1.25x",
+                "1.5": "1.5x(推荐)",
+                "2": "2x(清晰)",
+            },
+            intro: "限制动态皮肤 Canvas 的设备像素比上限；数值越低越流畅，越高越清晰，改动后重进对局效果最稳定",
+        },
         'isAttackFlipX': {
             name: "AI出框是否翻转X轴",
             "init": false,

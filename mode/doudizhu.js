@@ -1175,7 +1175,9 @@ export default () => {
 						list4.push(i);
 					}
 					event.list.randomSort();
+					event.list = game.filterUnlockedCharacters?.(event.list) || event.list;
 					_status.characterlist = list4.slice(0);
+					_status.characterlist = game.filterUnlockedCharacters?.(_status.characterlist) || _status.characterlist;
 					var num = get.config("choice_" + game.me.identity);
 					list = game.getDoudizhuSortedCandidates(event.list, game.me.identity, game.me.identity == "fan" ? game.getDoudizhuTargetScore() : null).slice(0, num);
 					delete event.swapnochoose;
@@ -1259,6 +1261,7 @@ export default () => {
 									ui.cheat.classList.remove("disabled");
 								}
 							} else {
+								if (game.tryUseDianjiangCard && !game.tryUseDianjiangCard("斗地主休闲自由选将")) return;
 								if (game.changeCoin) {
 									game.changeCoin(-10);
 								}

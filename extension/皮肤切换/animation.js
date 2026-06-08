@@ -560,6 +560,8 @@ var newDuilib;
 			this.BUILT_ID = 0;  // 管理当前的动画id.  每个动画id对应一个APNode对象, 存入nodes数组.
 			this._dprAdaptive = false;
 			this.unpackPremultipliedAlpha = false;
+			this._fps = newDuilib.getDynamicRenderFps?.() || null;
+			this._lastTime = 0;
 
 			Object.defineProperties(this, {
 				dprAdaptive: {
@@ -902,7 +904,7 @@ var newDuilib;
 			if (this.requestId == undefined) {
 				this.running = true;
 				if (!this.offscreen) this.canvas.style.visibility = 'visible';
-				this.requestId = requestAnimationFrame(this.render.bind(this));
+				this.requestId = requestAnimationFrame(this.newFpsRender.bind(this));
 			}
 			
 			sprite.referBounds = undefined;
@@ -995,6 +997,16 @@ var newDuilib;
 			return skeleton.bounds;
 		};
 		
+		AnimationPlayer.prototype.newFpsRender = function (time) {
+			this._fps = newDuilib.getDynamicRenderFps?.() || null;
+			if (this._fps && time - this._lastTime < 1000 / this._fps) {
+				this.requestId = requestAnimationFrame(this.newFpsRender.bind(this));
+				return;
+			}
+			this.render(time);
+			this._lastTime = time;
+		};
+
 		AnimationPlayer.prototype.render = function (timestamp) {
 			var canvas = this.canvas;
 			var offscreen = this.offscreen;
@@ -1123,7 +1135,7 @@ var newDuilib;
 			gl.disable(gl.SCISSOR_TEST);
 
 
-			this.requestId = requestAnimationFrame(this.render.bind(this));
+			this.requestId = requestAnimationFrame(this.newFpsRender.bind(this));
 		};
 		
 		
@@ -1190,9 +1202,22 @@ var newDuilib;
 		return AnimationPlayerPool;
 	})();
 	
-	newDuilib.BUILT_ID = 0;
-	newDuilib.DynamicWorkers = new Array(3);
-	newDuilib.DynamicPlayer = (function(){
+ newDuilib.BUILT_ID = 0;
+ newDuilib.DynamicWorkers = new Array(3);
+ newDuilib.getDynamicRenderFps = function () {
+ 	var value = parseInt(skinSwitch.lib?.config?.[skinSwitch.configKey.dynamicRenderFps]);
+ 	return isFinite(value) && value > 0 ? value : null;
+ };
+ newDuilib.getDynamicRenderDpr = function () {
+ 	var value = parseFloat(skinSwitch.lib?.config?.[skinSwitch.configKey.dynamicRenderDpr]);
+ 	return isFinite(value) && value > 0 ? value : null;
+ };
+ newDuilib.getDeviceDpr = function () {
+ 	var dpr = Math.max(window.devicePixelRatio * (window.documentZoom ? window.documentZoom : 1), 1);
+ 	var maxDpr = newDuilib.getDynamicRenderDpr();
+ 	return maxDpr ? Math.min(dpr, maxDpr) : dpr;
+ };
+ newDuilib.DynamicPlayer = (function(){
 
 		// 动态皮肤管理对象, 这个是绑定在角色player上的, 军八国战最多有8个角色, 所以定义的WebWorker有两个, 并且每个worker的capacity容量为4
 		// 每个DynamicPlayer对象拥有各自的属性.
@@ -1248,7 +1273,8 @@ var newDuilib;
 						id: this.id,  // 当前对象id
 						canvas: canvas,
 						pathPrefix: pathPrefix,
-						dpr: Math.max(window.devicePixelRatio * (window.documentZoom ? window.documentZoom : 1), 1),
+						dpr: newDuilib.getDeviceDpr(),
+						fps: newDuilib.getDynamicRenderFps(),
 						modifyQhlxPreview: skinSwitch.lib.config[skinSwitch.configKey.modifyQhlxPreview]
 					}, [canvas]);
 					
@@ -1303,7 +1329,7 @@ var newDuilib;
 			if (this.offscreen) {
 				if (!this.initialized) {
 					this.initialized = true;
-					this.dpr = Math.max(window.devicePixelRatio * (window.documentZoom ? window.documentZoom : 1), 1);
+				this.dpr = newDuilib.getDeviceDpr();
 					this.height = this.canvas.clientHeight;
 					this.width = this.canvas.clientWidth;
 				}
@@ -1316,6 +1342,7 @@ var newDuilib;
 					message: 'PLAY',
 					id: this.id,
 					dpr: this.dpr,
+					fps: newDuilib.getDynamicRenderFps(),
 					dprAdaptive: this.dprAdaptive,
 					outcropMask: this.outcropMask,
 					useMipMaps: this.useMipMaps,
@@ -1379,7 +1406,7 @@ var newDuilib;
 				return;
 			}
 			
-			this.dpr = Math.max(window.devicePixelRatio * (window.documentZoom ? window.documentZoom : 1), 1);
+				this.dpr = newDuilib.getDeviceDpr();
 			if (force === false)
 				return;
 			
@@ -1387,6 +1414,7 @@ var newDuilib;
 				message: 'UPDATE',
 				id: this.id,
 				dpr: this.dpr,
+				fps: newDuilib.getDynamicRenderFps(),
 				dprAdaptive: this.dprAdaptive,
 				outcropMask: this.outcropMask,
 				useMipMaps: this.useMipMaps,

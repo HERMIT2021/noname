@@ -375,6 +375,7 @@ function getLabelIgnoreCase(node, label) {
 
 function create(data) {
 	if (animationManagers.length >= 4) return;
+	self.skinSwitchDynamicRenderFps = Number.isFinite(Number(data.fps)) && Number(data.fps) > 0 ? Number(data.fps) : null;
 	let am = new AnimationManager(data.pathPrefix, data.canvas, data.id);
 	if (data.dpr) dpr = data.dpr
 	// 已删除modifyQhlxPreview参数
@@ -384,6 +385,9 @@ function create(data) {
 function play(data) {
 	let am = animationManagers.getById(data.id);
 	if (!am) return;
+	if (data.fps !== undefined) {
+		am.fps = Number.isFinite(Number(data.fps)) && Number(data.fps) > 0 ? Number(data.fps) : null;
+	}
 
 	playSkin(am, data)
 }
@@ -818,6 +822,11 @@ function stopAll(data) {
 function msgUpdate(data) {
 	let am = animationManagers.getById(data.id);
 	if (!am) return;
+	if (data.dpr) dpr = data.dpr;
+	if (data.fps !== undefined) {
+		self.skinSwitchDynamicRenderFps = Number.isFinite(Number(data.fps)) && Number(data.fps) > 0 ? Number(data.fps) : null;
+		am.fps = self.skinSwitchDynamicRenderFps;
+	}
 	if (data.outcropMask === undefined) {
 		data.outcropMask = false;
 	}

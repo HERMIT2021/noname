@@ -21,6 +21,8 @@ export function createSkinSwitchCore(lib, game, ui, get) {
             'attackEffect': 'extension_皮肤切换_attackEffect',
             'showTopArc': 'extension_皮肤切换_showTopArc',
             'allowNonCurrentPhaseAttack': 'extension_皮肤切换_allowNonCurrentPhaseAttack',
+            'dynamicRenderFps': 'extension_皮肤切换_dynamicRenderFps',
+            'dynamicRenderDpr': 'extension_皮肤切换_dynamicRenderDpr',
         },
         decadeKey: {
             'dynamicSkin': 'extension_十周年UI_dynamicSkin',

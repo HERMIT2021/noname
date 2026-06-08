@@ -2149,8 +2149,11 @@ export default () => {
 						return list2x;
 					};
 					event.list.randomSort();
+					event.list = game.filterUnlockedCharacters?.(event.list) || event.list;
 					_status.characterlist = list4.slice(0).randomSort();
+					_status.characterlist = game.filterUnlockedCharacters?.(_status.characterlist) || _status.characterlist;
 					list3.randomSort();
+					list3 = game.filterUnlockedCharacters?.(list3) || list3;
 					if (_status.brawl && _status.brawl.chooseCharacterFilter) {
 						_status.brawl.chooseCharacterFilter(event.list, getZhuList(), list3);
 					}
@@ -2194,6 +2197,7 @@ export default () => {
 							}
 						}
 					}
+					list = game.filterUnlockedCharacters?.(list) || list;
 					delete event.swapnochoose;
 					var dialog;
 					if (event.swapnodialog) {
@@ -2235,6 +2239,7 @@ export default () => {
 							if (ui.cheat2 && ui.cheat2.dialog == _status.event.dialog) {
 								return;
 							}
+							if (game.tryUseDzxyProp && !game.tryUseDzxyProp("huanjiangka", "换将卡", "军争更换武将")) return;
 							if (game.changeCoin) {
 								game.changeCoin(-3);
 							}
@@ -2311,6 +2316,7 @@ export default () => {
 									ui.cheat.classList.remove("disabled");
 								}
 							} else {
+								if (game.tryUseDianjiangCard && !game.tryUseDianjiangCard("军争自由选将")) return;
 								if (game.changeCoin) {
 									game.changeCoin(-10);
 								}

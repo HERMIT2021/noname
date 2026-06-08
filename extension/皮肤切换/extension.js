@@ -107,6 +107,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 skinSwitch.saveSkinParams = {}
             });
             lib.init.js(skinSwitch.url, 'animation')
+			window.skinSwitchDynamicRenderFps = Number(lib.config[skinSwitch.configKey.dynamicRenderFps]) > 0 ? Number(lib.config[skinSwitch.configKey.dynamicRenderFps]) : null;
             lib.init.js(skinSwitch.url + 'component', 'any-touch.umd.min')
             const loadSpineFiles = (files, index = 0) => {
                 if (index >= files.length) return;
@@ -137,10 +138,27 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             })
             lib.arenaReady.push(function () {
                 const showWarning = (text) => {
+                    if (!window.skinSwitchMessage) {
+                        alert(text);
+                        return;
+                    }
                     skinSwitchMessage.show({
                         type: 'warning',
                         text: text,
                         duration: 1500,
+                        closeable: false
+                    });
+                };
+
+                const showSuccess = (text) => {
+                    if (!window.skinSwitchMessage) {
+                        console.log(text);
+                        return;
+                    }
+                    skinSwitchMessage.show({
+                        type: 'success',
+                        text: text,
+                        duration: 1800,
                         closeable: false
                     });
                 };
@@ -167,8 +185,37 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }, 100);
                     }, true);
                 };
+                const initScanMenu = () => {
+                    ui.create.system('扫描更新皮肤', function () {
+                        setTimeout(async function () {
+                            if (!lib.config[skinSwitch.configKey.useDynamic]) {
+                                showWarning('请先打开动皮功能');
+                                return;
+                            }
+                            if (!window.decadeUI?.dynamicSkin) {
+                                showWarning('十周年UI动皮尚未初始化');
+                                return;
+                            }
+                            if (typeof skinSwitch.refreshDecadeDynamicSkins !== 'function') {
+                                showWarning('皮肤扫描模块尚未就绪');
+                                return;
+                            }
+                            showSuccess('正在扫描本地皮肤...');
+                            const result = await skinSwitch.refreshDecadeDynamicSkins(true);
+                            if (skinSwitch.dynamic?.skinDiv && typeof skinSwitch.dynamic.initSwitchV2 === 'function') {
+                                skinSwitch.dynamic.skinDiv.delete?.();
+                                skinSwitch.dynamic.skinDiv = null;
+                                skinSwitch.dynamic.dynamicSkinInfo = {};
+                                skinSwitch.dynamic.playerTempSkinInfo = { currentWatchId: null };
+                                skinSwitch.dynamic.initSwitchV2();
+                            }
+                            console.log('[皮肤切换] 手动扫描更新皮肤完成', result);
+                        }, 100);
+                    }, true);
+                };
                 lib.init.js(skinSwitch.url, 'pfqhUtils', function () {
                     initEditMenu();
+                    initScanMenu();
                     if (lib.config[skinSwitch.configKey.showPreviewDynamicMenu]) {
                         ui.create.system('预览spine', () => skinSwitch.previewDynamic(), true);
                     }

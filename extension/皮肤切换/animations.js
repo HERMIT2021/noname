@@ -1,6 +1,6 @@
 'use strict';
 
-const fps = null
+const fps = Number.isFinite(Number(self.skinSwitchDynamicRenderFps)) && Number(self.skinSwitchDynamicRenderFps) > 0 ? Number(self.skinSwitchDynamicRenderFps) : null
 
 const skinSwitchUnpackImageMap = new WeakMap()
 const skinSwitchDecodedPremultiplyBmps = new WeakSet()
@@ -4606,6 +4606,13 @@ class AnimationManager {
         this.aniVersionMap = {}
         this.skelAutoVersionCache = {}
         this.skelFileTypeCache = {}
+        this.fps = Number.isFinite(Number(self.skinSwitchDynamicRenderFps)) && Number(self.skinSwitchDynamicRenderFps) > 0 ? Number(self.skinSwitchDynamicRenderFps) : null
+    }
+
+    applyRenderOptions(dynamic) {
+        if (!dynamic) return dynamic
+        dynamic._fps = this.fps
+        return dynamic
     }
 
     static spineSkelResourceExistsSync(pathPrefix, filename, ext) {
@@ -4741,48 +4748,56 @@ class AnimationManager {
             case SupportSpineVersion.v3_6:
                 if (!this.animations[version]) {
                     this.animations[version] = new Animation3_6(this.pathPrefix, this.canvas, this.dpr, this.offscreen)
+                    this.applyRenderOptions(this.animations[version])
                     this.animations[version].update({width: this.width, height: this.height})
                 }
                 break
             case SupportSpineVersion.v4_0:
                 if (!this.animations[version]) {
                     this.animations[version] = new Animation4_0(this.pathPrefix, this.canvas, this.dpr, this.offscreen)
+                    this.applyRenderOptions(this.animations[version])
                     this.animations[version].update({width: this.width, height: this.height})
                 }
                 break
             case SupportSpineVersion.v3_8:
                 if (!this.animations[version]) {
                     this.animations[version] = new Animation3_8(this.pathPrefix, this.canvas, this.dpr, this.offscreen)
+                    this.applyRenderOptions(this.animations[version])
                     this.animations[version].update({width: this.width, height: this.height})
                 }
                 break
             case SupportSpineVersion.v3_5_35:
                 if (!this.animations[version]) {
                     this.animations[version] = new Animation3_5_35(this.pathPrefix, this.canvas, this.dpr, this.offscreen)
+                    this.applyRenderOptions(this.animations[version])
                     this.animations[version].update({width: this.width, height: this.height})
                 }
                 break
             case SupportSpineVersion.v3_7:
                 if (!this.animations[version]) {
                     this.animations[version] = new Animation3_7(this.pathPrefix, this.canvas, this.dpr, this.offscreen)
+                    this.applyRenderOptions(this.animations[version])
                     this.animations[version].update({width: this.width, height: this.height})
                 }
                 break
             case SupportSpineVersion.v4_1:
                 if (!this.animations[version]) {
                     this.animations[version] = new Animation4_1(this.pathPrefix, this.canvas, this.dpr, this.offscreen)
+                    this.applyRenderOptions(this.animations[version])
                     this.animations[version].update({width: this.width, height: this.height})
                 }
                 break
             case SupportSpineVersion.v4_2:
                 if (!this.animations[version]) {
                     this.animations[version] = new Animation4_2(this.pathPrefix, this.canvas, this.dpr, this.offscreen)
+                    this.applyRenderOptions(this.animations[version])
                     this.animations[version].update({width: this.width, height: this.height})
                 }
                 break
             default:
                 if (!this.animations[SupportSpineVersion.v3_6]) {
                     this.animations[SupportSpineVersion.v3_6] = new Animation3_6(this.pathPrefix, this.canvas, this.dpr, this.offscreen)
+                    this.applyRenderOptions(this.animations[SupportSpineVersion.v3_6])
                     this.animations[SupportSpineVersion.v3_6].update({width: this.width, height: this.height})
                 }
                 return this.animations[SupportSpineVersion.v3_6]
@@ -4859,9 +4874,13 @@ class AnimationManager {
         if (data.dpr) {
             this.dpr = data.dpr
         }
+        if (data.fps !== undefined) {
+            this.fps = Number.isFinite(Number(data.fps)) && Number(data.fps) > 0 ? Number(data.fps) : null
+        }
         for (let k in this.animations) {
             if (this.animations[k]) {
                 let dynamic = this.animations[k]
+                this.applyRenderOptions(dynamic)
                 dynamic.update(data)
             }
         }
@@ -5289,6 +5308,4 @@ if (self.window) {
     window.DecadeAnimationProxy = DecadeAnimationProxy
     window.AnimationManager = AnimationManager
 }
-
-
 

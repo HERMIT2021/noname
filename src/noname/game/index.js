@@ -1788,6 +1788,60 @@ export class Game {
 			next.setContent("replaceHandcards");
 		}
 	}
+	getGlobalItemCount(id) {
+		const packageInfo = lib.config.extension_斗转星移_package || {};
+		const count = Number(packageInfo[id]?.count);
+		return Number.isSafeInteger(count) && count > 0 ? count : 0;
+	}
+	setGlobalItemCount(id, count) {
+		const normalized = Number.isSafeInteger(Number(count)) && Number(count) > 0 ? Number(count) : 0;
+		const packageInfo = lib.config.extension_斗转星移_package || {};
+		if (!packageInfo[id]) packageInfo[id] = {};
+		packageInfo[id].count = normalized;
+		game.saveConfig("extension_斗转星移_package", packageInfo);
+		try {
+			const yjcm = JSON.parse(localStorage.getItem("yjcm_game_backpack_data") || "{}");
+			yjcm[id] = normalized;
+			localStorage.setItem("yjcm_game_backpack_data", JSON.stringify(yjcm));
+		} catch (e) {}
+		if (id == "yuanbao") window.rzshRefreshYuanbao?.();
+		return normalized;
+	}
+	changeGlobalItemCount(id, changeCount) {
+		if (!Number.isInteger(changeCount)) return this.getGlobalItemCount(id);
+		return this.setGlobalItemCount(id, Math.max(0, this.getGlobalItemCount(id) + changeCount));
+	}
+	useGlobalItem(id, propName, reason = "使用道具") {
+		if (this.getGlobalItemCount(id) <= 0) {
+			const text = `${reason}需要消耗1张${propName}，当前${propName}不足`;
+			window.dzxy?.create?.bottomBarTip?.(text, document.body) || alert(text);
+			return false;
+		}
+		this.changeGlobalItemCount(id, -1);
+		window.dzxy?.propToast?.addToast?.(id, 0, `${propName}-1`);
+		return true;
+	}
+	getUnlockedCharacters() {
+		return Array.isArray(lib.config.extension_斗转星移_unlocked_characters) ? lib.config.extension_斗转星移_unlocked_characters.slice() : [];
+	}
+	isCharacterUnlocked(name) {
+		if (!get.config("only_choose_unlocked_character")) return true;
+		if (!name || !lib.character[name]) return false;
+		return this.getUnlockedCharacters().includes(get.sourceCharacter(name));
+	}
+	unlockCharacter(name) {
+		if (!name || !lib.character[name]) return false;
+		const source = get.sourceCharacter(name);
+		const list = this.getUnlockedCharacters();
+		if (list.includes(source)) return true;
+		list.push(source);
+		game.saveConfig("extension_斗转星移_unlocked_characters", list);
+		return true;
+	}
+	filterUnlockedCharacters(list) {
+		if (!get.config("only_choose_unlocked_character") || !Array.isArray(list)) return list;
+		return list.filter(name => this.isCharacterUnlocked(name));
+	}
 	/**
 	 * @param { string } name
 	 */
@@ -4957,6 +5011,30 @@ ${e instanceof Error ? e.stack : String(e)}`);
 			window.location.reload();
 		}
 	}
+	returnToSplashHome(splashStyle = "style-rzsh") {
+		if (_status) {
+			if (_status.reloading) {
+				return;
+			}
+			_status.reloading = true;
+		}
+		localStorage.removeItem("show_splash_off");
+		localStorage.removeItem(lib.configprefix + "directstart");
+		localStorage.removeItem(lib.configprefix + "playback");
+		localStorage.removeItem(lib.configprefix + "playbackmode");
+		game.saveConfig("splash_style", splashStyle);
+		if (lib.config.show_splash == "off") {
+			game.saveConfig("show_splash", "init");
+		}
+		if (lib.status.reload) {
+			_status.waitingToReload = true;
+		} else {
+			window.location.reload();
+		}
+	}
+	returnToRzshHome() {
+		game.returnToSplashHome("style-rzsh");
+	}
 	reload2() {
 		lib.status.reload--;
 		if (lib.status.reload == 0 && lib.ondb2.length) {
@@ -5221,6 +5299,10 @@ ${e instanceof Error ? e.stack : String(e)}`);
 			}
 		},
 		flame: function (x, y, duration, type) {
+			const particleRate = get.effectParticleRate();
+			if (particleRate <= 0) {
+				return;
+			}
 			duration = get.effectDuration(duration, "skill", 120);
 			var particles = [];
 			var particle_count = 50;
@@ -5235,6 +5317,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 			} else if (type == "rare") {
 				particle_count = 50;
 			}
+			particle_count = Math.max(1, Math.round(particle_count * particleRate));
 			for (var i = 0; i < particle_count; i++) {
 				particles.push(new particle());
 			}
@@ -5464,12 +5547,19 @@ ${e instanceof Error ? e.stack : String(e)}`);
 		if (arguments[1] != "drag") {
 			total = get.effectDuration(total, "line", 80);
 		}
+		const profile = get.effectProfile();
+		if (arguments[1] != "drag") {
+			total = Math.max(32, Math.round(total * profile.lineHold));
+			opacity *= profile.lineOpacity;
+		}
 		if (typeof color == "string") {
 			color = lib.lineColor.get(color) || [255, 255, 255];
 		}
 		let node;
 		if (arguments[1] == "drag") {
-			color = [236, 201, 71];
+			const dragStyle = get.dragLineStyle();
+			color = dragStyle.color;
+			opacity = dragStyle.opacity;
 			drag = true;
 			if (arguments[2]) {
 				node = arguments[2];
@@ -5477,18 +5567,40 @@ ${e instanceof Error ? e.stack : String(e)}`);
 				node = ui.create.div(".linexy.drag");
 				node.style.left = `${from[0]}px`;
 				node.style.top = `${from[1]}px`;
-				node.style.background = `linear-gradient(transparent,rgba(${color.toString()},${opacity}),rgba(${color.toString()},${opacity}))`;
+				node.style.width = `${dragStyle.width}px`;
+				node.style.borderRadius = `${dragStyle.width + 2}px`;
+				node.style.boxShadow = `${dragStyle.shadow} 0 0 ${dragStyle.width + 4}px`;
+				node.style.background = `linear-gradient(transparent,rgba(${dragStyle.core.toString()},${opacity}),rgba(${color.toString()},${opacity}),transparent)`;
+				node.dataset.dragStyle = lib.config.dragline_style || "gold";
+				node._dragHead = ui.create.div(".dragline-head", node);
+				node._dragHead.style.borderLeftColor = `rgba(${dragStyle.core.toString()},${opacity})`;
+				node._dragHead.style.filter = `drop-shadow(0 0 ${dragStyle.width + 2}px ${dragStyle.shadow})`;
 				if (game.chess) {
 					ui.chess.appendChild(node);
 				} else {
 					ui.arena.appendChild(node);
 				}
 			}
+			if (node.dataset.dragStyle != (lib.config.dragline_style || "gold")) {
+				node.style.width = `${dragStyle.width}px`;
+				node.style.borderRadius = `${dragStyle.width + 2}px`;
+				node.style.boxShadow = `${dragStyle.shadow} 0 0 ${dragStyle.width + 4}px`;
+				node.style.background = `linear-gradient(transparent,rgba(${dragStyle.core.toString()},${opacity}),rgba(${color.toString()},${opacity}),transparent)`;
+				node.dataset.dragStyle = lib.config.dragline_style || "gold";
+				if (node._dragHead) {
+					node._dragHead.style.borderLeftColor = `rgba(${dragStyle.core.toString()},${opacity})`;
+					node._dragHead.style.filter = `drop-shadow(0 0 ${dragStyle.width + 2}px ${dragStyle.shadow})`;
+				}
+			}
+			if (node._dragHead) {
+				node._dragHead.style.display = dragStyle.type == "minimal" || dragStyle.type == "dash" ? "none" : "block";
+			}
 		} else {
 			node = ui.create.div(".linexy.hidden");
 			node.style.left = `${from[0]}px`;
 			node.style.top = `${from[1]}px`;
 			node.style.background = `linear-gradient(transparent,rgba(${color.toString()},${opacity}),rgba(${color.toString()},${opacity}))`;
+			node.style.transitionTimingFunction = profile.timing;
 			node.style.transitionDuration = `${total / 3000}s`;
 		}
 		const dy = to[1] - from[1],

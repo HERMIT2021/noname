@@ -91,6 +91,124 @@
 	left: 0 !important;
 }
 
+#window.shortcutpaused > #system,
+#window.shortcut-layout > #system.shortcut-layout {
+	position: absolute !important;
+	left: 50% !important;
+	top: auto !important;
+	right: auto !important;
+	bottom: 12px !important;
+	width: min(820px, calc(100% - 18px)) !important;
+	max-height: 160px !important;
+	padding: 4px !important;
+	transform: translateX(-50%) !important;
+	display: grid !important;
+	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+	justify-content: center;
+	align-content: center;
+	gap: 7px 8px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	white-space: normal;
+	pointer-events: none;
+	z-index: 80 !important;
+	box-sizing: border-box;
+}
+#window.shortcutpaused > #system > div,
+#window.shortcut-layout > #system.shortcut-layout > div {
+	position: static !important;
+	display: contents !important;
+	width: auto !important;
+	height: auto !important;
+	float: none !important;
+	transform: none !important;
+	transition-duration: 0s !important;
+}
+#window.shortcutpaused > #system > div > div,
+#window.shortcut-layout > #system.shortcut-layout > div > div {
+	position: relative !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	height: auto !important;
+	min-height: 34px;
+	min-width: 0;
+	max-width: none;
+	padding: 5px 10px !important;
+	margin: 0 !important;
+	font-size: 17px !important;
+	line-height: 20px !important;
+	letter-spacing: 0 !important;
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	word-break: keep-all;
+	text-align: center;
+	pointer-events: auto;
+	box-sizing: border-box;
+}
+#window.shortcutpaused > #system > div > div[style*="display: none"],
+#window.shortcut-layout > #system.shortcut-layout > div > div[style*="display: none"] {
+	display: none !important;
+}
+@media (max-width: 760px) {
+	#window.shortcutpaused > #system,
+	#window.shortcut-layout > #system.shortcut-layout {
+		grid-template-columns: repeat(auto-fit, minmax(102px, 1fr));
+		max-height: 150px !important;
+		gap: 6px;
+	}
+	#window.shortcutpaused > #system > div > div,
+	#window.shortcut-layout > #system.shortcut-layout > div > div {
+		font-size: 15px !important;
+		line-height: 18px !important;
+		min-height: 32px;
+		padding: 4px 7px !important;
+	}
+}
+
+#window.shortcutpaused > #shortcut > div.menubutton,
+#shortcut:not(.hidden).shortcut-layout > div.menubutton {
+	width: 66px !important;
+	height: 66px !important;
+	padding: 7px !important;
+	line-height: 66px !important;
+	font-size: 38px !important;
+	transform: scale(1.05) !important;
+	z-index: 70;
+}
+#window.shortcutpaused > #shortcut > div.menubutton > span,
+#shortcut:not(.hidden).shortcut-layout > div.menubutton > span {
+	width: 168px !important;
+	left: -51px !important;
+}
+#window.shortcutpaused > #shortcut > div[data-position="1"],
+#shortcut:not(.hidden).shortcut-layout > div[data-position="1"] {
+	left: calc(50% - 40px) !important;
+	top: calc(50% - 142px) !important;
+}
+#window.shortcutpaused > #shortcut > div[data-position="2"],
+#shortcut:not(.hidden).shortcut-layout > div[data-position="2"] {
+	left: calc(50% + 92px) !important;
+	top: calc(50% - 56px) !important;
+}
+#window.shortcutpaused > #shortcut > div[data-position="3"],
+#shortcut:not(.hidden).shortcut-layout > div[data-position="3"] {
+	left: calc(50% + 42px) !important;
+	top: calc(50% + 76px) !important;
+}
+#window.shortcutpaused > #shortcut > div[data-position="4"],
+#shortcut:not(.hidden).shortcut-layout > div[data-position="4"] {
+	left: calc(50% - 122px) !important;
+	top: calc(50% + 76px) !important;
+}
+#window.shortcutpaused > #shortcut > div[data-position="5"],
+#shortcut:not(.hidden).shortcut-layout > div[data-position="5"] {
+	left: calc(50% - 174px) !important;
+	top: calc(50% - 56px) !important;
+	font-size: 35px !important;
+}
+
 #arena.phonetop {
 	top: 80px !important;
 }

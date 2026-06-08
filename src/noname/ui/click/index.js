@@ -603,12 +603,14 @@ export class Click {
 		}
 		if (ui.shortcut.classList.contains("hidden")) {
 			ui.favmode.style.display = "none";
+			ui.shortcut.syncLayoutClass?.();
 			if (window.StatusBar && lib.config.show_statusbar_ios == "auto") {
 				document.body.classList.remove("statusbar");
 				window.StatusBar.hide();
 			}
 			ui.window.classList.remove("shortcutpaused");
 		} else {
+			ui.shortcut.syncLayoutClass?.();
 			if (lib.config.show_favmode) {
 				ui.favmode.style.display = "";
 			}
@@ -1520,7 +1522,10 @@ export class Click {
 
 		if (_status.mousedragging && e.touches.length) {
 			e.preventDefault();
+			var hiddenDragCard = ui.selected.cards.length ? ui.selected.cards[0] : null;
+			if (hiddenDragCard) hiddenDragCard.style.pointerEvents = "none";
 			var item = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+			if (hiddenDragCard) hiddenDragCard.style.pointerEvents = "";
 			if (game.chess && ui.selected.cards.length) {
 				var itemtype = get.itemtype(item);
 				if (itemtype != "card" && itemtype != "button") {
@@ -1540,37 +1545,14 @@ export class Click {
 			}
 			while (item) {
 				if (lib.config.enable_touchdragline && _status.mouseleft && !game.chess) {
-					ui.canvas.width = ui.arena.offsetWidth;
-					ui.canvas.height = ui.arena.offsetHeight;
+					get.resizeDragCanvas();
 					var ctx = ui.ctx;
-					ctx.shadowBlur = 5;
-					ctx.shadowColor = "rgba(0,0,0,0.3)";
-					ctx.strokeStyle = "white";
-					ctx.lineWidth = 3;
-					ctx.setLineDash([8, 2]);
-
-					ctx.beginPath();
-
-					ctx.moveTo(_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop);
-
-					if (_status.multitarget) {
-						for (var i = 0; i < _status.lastdragchange.length; i++) {
-							var exy = _status.lastdragchange[i]._lastdragchange;
-							ctx.lineTo(exy[0], exy[1]);
-						}
-					}
-					if (!_status.selectionfull) {
-						ctx.lineTo(e.touches[0].clientX / game.documentZoom - ui.arena.offsetLeft, e.touches[0].clientY / game.documentZoom - ui.arena.offsetTop);
-					}
-					ctx.stroke();
-					if (!_status.multitarget) {
-						for (var i = 0; i < _status.lastdragchange.length; i++) {
-							ctx.moveTo(_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop);
-							var exy = _status.lastdragchange[i]._lastdragchange;
-							ctx.lineTo(exy[0], exy[1]);
-							ctx.stroke();
-						}
-					}
+					ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+					get.drawDragLines(
+						ctx,
+						[_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop],
+						[e.touches[0].clientX / game.documentZoom - ui.arena.offsetLeft, e.touches[0].clientY / game.documentZoom - ui.arena.offsetTop]
+					);
 				}
 
 				if (item == _status.mousedragorigin) {
@@ -1805,8 +1787,8 @@ export class Click {
 				if (!event.filterOk || event.filterOk()) {
 					ui.click.ok();
 				}
-				ui.canvas.width = ui.arena.offsetWidth;
-				ui.canvas.height = ui.arena.offsetHeight;
+				get.resizeDragCanvas();
+				ui.ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
 			} else {
 				game.uncheck();
 				game.check();
@@ -1821,6 +1803,14 @@ export class Click {
 		_status.dragstatuschanged = false;
 		while (ui.touchlines.length) {
 			ui.touchlines.shift().delete();
+		}
+		if (_status.dragline?.length) {
+			_status.dragline.forEach(line => line?.remove?.());
+			_status.dragline.length = 0;
+		}
+		if (ui.canvas && ui.ctx) {
+			get.resizeDragCanvas();
+			ui.ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
 		}
 		if (tmpflag) {
 			game.check();
@@ -1870,7 +1860,10 @@ export class Click {
 			dialogs[i].delete();
 		}
 		var node = _status.currentmouseenter;
+		var hiddenDragCard = _status.mousedragging && ui.selected.cards.length ? ui.selected.cards[0] : null;
+		if (hiddenDragCard) hiddenDragCard.style.pointerEvents = "none";
 		var sourceitem = document.elementFromPoint(e.clientX, e.clientY);
+		if (hiddenDragCard) hiddenDragCard.style.pointerEvents = "";
 		if (game.chess && ui.selected.cards.length) {
 			var itemtype = get.itemtype(sourceitem);
 			if (itemtype != "card" && itemtype != "button") {
@@ -1922,36 +1915,14 @@ export class Click {
 				// 	if(remained[j]) remained[j].remove();
 				// }
 
-				ui.canvas.width = ui.arena.offsetWidth;
-				ui.canvas.height = ui.arena.offsetHeight;
+				get.resizeDragCanvas();
 				var ctx = ui.ctx;
-				ctx.shadowBlur = 5;
-				ctx.shadowColor = "rgba(0,0,0,0.3)";
-				ctx.strokeStyle = "white";
-				ctx.lineWidth = 3;
-				ctx.setLineDash([8, 2]);
-
-				ctx.beginPath();
-
-				ctx.moveTo(_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop);
-				if (_status.multitarget) {
-					for (var i = 0; i < _status.lastdragchange.length; i++) {
-						var exy = _status.lastdragchange[i]._lastdragchange;
-						ctx.lineTo(exy[0], exy[1]);
-					}
-				}
-				if (!_status.selectionfull) {
-					ctx.lineTo(e.clientX / game.documentZoom - ui.arena.offsetLeft, e.clientY / game.documentZoom - ui.arena.offsetTop);
-				}
-				ctx.stroke();
-				if (!_status.multitarget) {
-					for (var i = 0; i < _status.lastdragchange.length; i++) {
-						ctx.moveTo(_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop);
-						var exy = _status.lastdragchange[i]._lastdragchange;
-						ctx.lineTo(exy[0], exy[1]);
-						ctx.stroke();
-					}
-				}
+				ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+				get.drawDragLines(
+					ctx,
+					[_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop],
+					[e.clientX / game.documentZoom - ui.arena.offsetLeft, e.clientY / game.documentZoom - ui.arena.offsetTop]
+				);
 			}
 
 			while (item) {
@@ -2144,6 +2115,8 @@ export class Click {
 					_status.clicked = false;
 					ui.click[itemtype].call(item);
 					if (item.classList.contains("selected")) {
+						_status.lastdragchange.length = 0;
+						_status.dragstatuschanged = false;
 						_status.mousedragging = e;
 						_status.mousedragorigin = item;
 						_status.mouseleft = false;
@@ -2193,6 +2166,8 @@ export class Click {
 			ui.click.card.call(this);
 			_status.touchnocheck = false;
 			if (this.classList.contains("selected")) {
+				_status.lastdragchange.length = 0;
+				_status.dragstatuschanged = false;
 				_status.mousedragging = drag;
 				_status.mousedragorigin = this;
 				_status.mouseleft = false;
@@ -2237,6 +2212,8 @@ export class Click {
 			ui.click.target.call(this);
 			_status.touchnocheck = false;
 			if (this.classList.contains("selected")) {
+				_status.lastdragchange.length = 0;
+				_status.dragstatuschanged = false;
 				_status.mousedragging = drag;
 				_status.mousedragorigin = this;
 				_status.mouseleft = false;
@@ -2291,6 +2268,15 @@ export class Click {
 				_status.mouseleft = false;
 				_status.mousedragorigin = null;
 				_status.dragstatuschanged = false;
+				_status.lastdragchange.length = 0;
+				if (_status.dragline?.length) {
+					_status.dragline.forEach(line => line?.remove?.());
+					_status.dragline.length = 0;
+				}
+				if (ui.canvas && ui.ctx) {
+					get.resizeDragCanvas();
+					ui.ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+				}
 				game.uncheck();
 				game.check();
 				_status.noright = true;
@@ -2322,9 +2308,13 @@ export class Click {
 			_status.mouseleft = false;
 			_status.mousedragorigin = null;
 			_status.dragstatuschanged = false;
-			if (ui.arena) {
-				ui.canvas.width = ui.arena.offsetWidth;
-				ui.canvas.height = ui.arena.offsetHeight;
+			if (_status.dragline?.length) {
+				_status.dragline.forEach(line => line?.remove?.());
+				_status.dragline.length = 0;
+			}
+			if (ui.arena && ui.canvas && ui.ctx) {
+				get.resizeDragCanvas();
+				ui.ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
 			}
 			if (tmpflag) {
 				ui.click[get.itemtype(tmpflag)].call(tmpflag);
