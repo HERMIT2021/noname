@@ -1,0 +1,1837 @@
+{
+	"summary": {
+		"targetTotal": 40,
+		"targetUnique": 40,
+		"localCharacters": 2377,
+		"exactSingle": 37,
+		"exactMultiple": 1,
+		"exactMissing": 2,
+		"recoverableByFuzzy": 0
+	},
+	"packages": {
+		"zhi": [
+			{
+				"name": "费祎",
+				"exact": [
+					{
+						"pack": "sp",
+						"id": "ol_feiyi",
+						"name": "费祎",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp",
+						"id": "ol_feiyi",
+						"name": "费祎",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "孙邵",
+				"exact": [
+					{
+						"pack": "sp",
+						"id": "sunshao",
+						"name": "孙邵",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp",
+						"id": "sunshao",
+						"name": "孙邵",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "卞夫人",
+				"exact": [
+					{
+						"pack": "sp",
+						"id": "ol_bianfuren",
+						"name": "卞夫人",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp",
+						"id": "ol_bianfuren",
+						"name": "卞夫人",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "王粲",
+				"exact": [
+					{
+						"pack": "sp",
+						"id": "wangcan",
+						"name": "王粲",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp",
+						"id": "wangcan",
+						"name": "王粲",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "陈震",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "sp_chenzhen",
+						"name": "陈震",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "sp_chenzhen",
+						"name": "陈震",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "荀谌",
+				"exact": [
+					{
+						"pack": "huicui",
+						"id": "re_xunchen",
+						"name": "荀谌",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "huicui",
+						"id": "re_xunchen",
+						"name": "荀谌",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "骆统",
+				"exact": [
+					{
+						"pack": "xianding",
+						"id": "dc_luotong",
+						"name": "骆统",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "xianding",
+						"id": "dc_luotong",
+						"name": "骆统",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "杜预",
+				"exact": [
+					{
+						"pack": "xianding",
+						"id": "dc_duyu",
+						"name": "杜预",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "xianding",
+						"id": "dc_duyu",
+						"name": "杜预",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			}
+		],
+		"xin": [
+			{
+				"name": "王甫赵累",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "wangfuzhaolei",
+						"name": "王甫赵累",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "wangfuzhaolei",
+						"name": "王甫赵累",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "羊祜",
+				"exact": [
+					{
+						"pack": "huicui",
+						"id": "dc_yanghu",
+						"name": "羊祜",
+						"banned": false
+					}
+				],
+				"exactBanned": [
+					{
+						"pack": "diy",
+						"id": "ns_yanghu",
+						"name": "羊祜",
+						"banned": true
+					}
+				],
+				"fuzzy": [
+					{
+						"pack": "huicui",
+						"id": "dc_yanghu",
+						"name": "羊祜",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": [
+					{
+						"pack": "diy",
+						"id": "ns_yanghu",
+						"name": "羊祜",
+						"banned": true
+					}
+				]
+			},
+			{
+				"name": "糜夫人",
+				"exact": [
+					{
+						"pack": "sp",
+						"id": "mifuren",
+						"name": "糜夫人",
+						"banned": false
+					},
+					{
+						"pack": "xianding",
+						"id": "dc_mifuren",
+						"name": "糜夫人",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp",
+						"id": "mifuren",
+						"name": "糜夫人",
+						"banned": false
+					},
+					{
+						"pack": "xianding",
+						"id": "dc_mifuren",
+						"name": "糜夫人",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "孔融",
+				"exact": [
+					{
+						"pack": "huicui",
+						"id": "dc_kongrong",
+						"name": "孔融",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "huicui",
+						"id": "dc_kongrong",
+						"name": "孔融",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "辛毗",
+				"exact": [
+					{
+						"pack": "sp2",
+						"id": "xinpi",
+						"name": "辛毗",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp2",
+						"id": "xinpi",
+						"name": "辛毗",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "周处",
+				"exact": [
+					{
+						"pack": "sp",
+						"id": "jin_zhouchu",
+						"name": "周处",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp",
+						"id": "jin_zhouchu",
+						"name": "周处",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "吴景",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "wujing",
+						"name": "吴景",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "wujing",
+						"name": "吴景",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "王凌",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "wangling",
+						"name": "王凌",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "wangling",
+						"name": "王凌",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			}
+		],
+		"ren": [
+			{
+				"name": "华歆",
+				"exact": [
+					{
+						"pack": "huicui",
+						"id": "huaxin",
+						"name": "华歆",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "huicui",
+						"id": "huaxin",
+						"name": "华歆",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "张温",
+				"exact": [
+					{
+						"pack": "sp2",
+						"id": "zhangwen",
+						"name": "张温",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp2",
+						"id": "zhangwen",
+						"name": "张温",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "蔡贞姬",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "caizhenji",
+						"name": "蔡贞姬",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "caizhenji",
+						"name": "蔡贞姬",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "桥公",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "qiaogong",
+						"name": "桥公",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "qiaogong",
+						"name": "桥公",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "许靖",
+				"exact": [
+					{
+						"pack": "xianding",
+						"id": "dc_xujing",
+						"name": "许靖",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "xianding",
+						"id": "dc_xujing",
+						"name": "许靖",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "向宠",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "xiangchong",
+						"name": "向宠",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "xiangchong",
+						"name": "向宠",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "刘璋",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "liuzhang",
+						"name": "刘璋",
+						"banned": false
+					}
+				],
+				"exactBanned": [
+					{
+						"pack": "diy",
+						"id": "ns_liuzhang",
+						"name": "刘璋",
+						"banned": true
+					}
+				],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "liuzhang",
+						"name": "刘璋",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": [
+					{
+						"pack": "diy",
+						"id": "ns_liuzhang",
+						"name": "刘璋",
+						"banned": true
+					}
+				]
+			},
+			{
+				"name": "张仲景",
+				"exact": [],
+				"exactBanned": [],
+				"fuzzy": [],
+				"fuzzyBanned": []
+			}
+		],
+		"yong": [
+			{
+				"name": "宗预",
+				"exact": [],
+				"exactBanned": [],
+				"fuzzy": [],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "陈武董袭",
+				"exact": [
+					{
+						"pack": "xianding",
+						"id": "chendong",
+						"name": "陈武董袭",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "xianding",
+						"id": "chendong",
+						"name": "陈武董袭",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "袁涣",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "yuanhuan",
+						"name": "袁涣",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "yuanhuan",
+						"name": "袁涣",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "王双",
+				"exact": [
+					{
+						"pack": "xianding",
+						"id": "wangshuang",
+						"name": "王双",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "xianding",
+						"id": "wangshuang",
+						"name": "王双",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "孙翊",
+				"exact": [
+					{
+						"pack": "xianding",
+						"id": "re_sunyi",
+						"name": "孙翊",
+						"banned": false
+					}
+				],
+				"exactBanned": [
+					{
+						"pack": "diy",
+						"id": "ns_sunyi",
+						"name": "孙翊",
+						"banned": true
+					}
+				],
+				"fuzzy": [
+					{
+						"pack": "xianding",
+						"id": "re_sunyi",
+						"name": "孙翊",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": [
+					{
+						"pack": "diy",
+						"id": "ns_sunyi",
+						"name": "孙翊",
+						"banned": true
+					}
+				]
+			},
+			{
+				"name": "高览",
+				"exact": [
+					{
+						"pack": "huicui",
+						"id": "dc_gaolan",
+						"name": "高览",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "huicui",
+						"id": "dc_gaolan",
+						"name": "高览",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "花鬘",
+				"exact": [
+					{
+						"pack": "xianding",
+						"id": "huaman",
+						"name": "花鬘",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "xianding",
+						"id": "huaman",
+						"name": "花鬘",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "文鸯",
+				"exact": [
+					{
+						"pack": "xianding",
+						"id": "wenyang",
+						"name": "文鸯",
+						"banned": false
+					}
+				],
+				"exactBanned": [
+					{
+						"pack": "diy",
+						"id": "diy_wenyang",
+						"name": "文鸯",
+						"banned": true
+					}
+				],
+				"fuzzy": [
+					{
+						"pack": "xianding",
+						"id": "wenyang",
+						"name": "文鸯",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": [
+					{
+						"pack": "diy",
+						"id": "diy_wenyang",
+						"name": "文鸯",
+						"banned": true
+					}
+				]
+			}
+		],
+		"yan": [
+			{
+				"name": "蒋钦",
+				"exact": [
+					{
+						"pack": "shiji",
+						"id": "sp_jiangqing",
+						"name": "蒋钦",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "shiji",
+						"id": "sp_jiangqing",
+						"name": "蒋钦",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "崔琰",
+				"exact": [
+					{
+						"pack": "sp",
+						"id": "cuiyan",
+						"name": "崔琰",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp",
+						"id": "cuiyan",
+						"name": "崔琰",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "吕范",
+				"exact": [
+					{
+						"pack": "xianding",
+						"id": "lvfan",
+						"name": "吕范",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "xianding",
+						"id": "lvfan",
+						"name": "吕范",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "蒋琬",
+				"exact": [
+					{
+						"pack": "sp",
+						"id": "ol_jiangwan",
+						"name": "蒋琬",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp",
+						"id": "ol_jiangwan",
+						"name": "蒋琬",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "张昌蒲",
+				"exact": [
+					{
+						"pack": "sp2",
+						"id": "zhangchangpu",
+						"name": "张昌蒲",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp2",
+						"id": "zhangchangpu",
+						"name": "张昌蒲",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "皇甫嵩",
+				"exact": [
+					{
+						"pack": "sp",
+						"id": "huangfusong",
+						"name": "皇甫嵩",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp",
+						"id": "huangfusong",
+						"name": "皇甫嵩",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "朱儁",
+				"exact": [
+					{
+						"pack": "sp2",
+						"id": "zhujun",
+						"name": "朱儁",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "sp2",
+						"id": "zhujun",
+						"name": "朱儁",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			},
+			{
+				"name": "刘巴",
+				"exact": [
+					{
+						"pack": "huicui",
+						"id": "dc_liuba",
+						"name": "刘巴",
+						"banned": false
+					}
+				],
+				"exactBanned": [],
+				"fuzzy": [
+					{
+						"pack": "huicui",
+						"id": "dc_liuba",
+						"name": "刘巴",
+						"banned": false
+					}
+				],
+				"fuzzyBanned": []
+			}
+		]
+	},
+	"multiple": [
+		{
+			"name": "糜夫人",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "mifuren",
+					"name": "糜夫人",
+					"banned": false
+				},
+				{
+					"pack": "xianding",
+					"id": "dc_mifuren",
+					"name": "糜夫人",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "mifuren",
+					"name": "糜夫人",
+					"banned": false
+				},
+				{
+					"pack": "xianding",
+					"id": "dc_mifuren",
+					"name": "糜夫人",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		}
+	],
+	"missingWithFuzzy": [],
+	"missing": [
+		{
+			"name": "张仲景",
+			"exact": [],
+			"exactBanned": [],
+			"fuzzy": [],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "宗预",
+			"exact": [],
+			"exactBanned": [],
+			"fuzzy": [],
+			"fuzzyBanned": []
+		}
+	],
+	"all": [
+		{
+			"name": "费祎",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "ol_feiyi",
+					"name": "费祎",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "ol_feiyi",
+					"name": "费祎",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "孙邵",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "sunshao",
+					"name": "孙邵",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "sunshao",
+					"name": "孙邵",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "卞夫人",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "ol_bianfuren",
+					"name": "卞夫人",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "ol_bianfuren",
+					"name": "卞夫人",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "王粲",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "wangcan",
+					"name": "王粲",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "wangcan",
+					"name": "王粲",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "陈震",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "sp_chenzhen",
+					"name": "陈震",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "sp_chenzhen",
+					"name": "陈震",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "荀谌",
+			"exact": [
+				{
+					"pack": "huicui",
+					"id": "re_xunchen",
+					"name": "荀谌",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "huicui",
+					"id": "re_xunchen",
+					"name": "荀谌",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "骆统",
+			"exact": [
+				{
+					"pack": "xianding",
+					"id": "dc_luotong",
+					"name": "骆统",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "xianding",
+					"id": "dc_luotong",
+					"name": "骆统",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "杜预",
+			"exact": [
+				{
+					"pack": "xianding",
+					"id": "dc_duyu",
+					"name": "杜预",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "xianding",
+					"id": "dc_duyu",
+					"name": "杜预",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "王甫赵累",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "wangfuzhaolei",
+					"name": "王甫赵累",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "wangfuzhaolei",
+					"name": "王甫赵累",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "羊祜",
+			"exact": [
+				{
+					"pack": "huicui",
+					"id": "dc_yanghu",
+					"name": "羊祜",
+					"banned": false
+				}
+			],
+			"exactBanned": [
+				{
+					"pack": "diy",
+					"id": "ns_yanghu",
+					"name": "羊祜",
+					"banned": true
+				}
+			],
+			"fuzzy": [
+				{
+					"pack": "huicui",
+					"id": "dc_yanghu",
+					"name": "羊祜",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": [
+				{
+					"pack": "diy",
+					"id": "ns_yanghu",
+					"name": "羊祜",
+					"banned": true
+				}
+			]
+		},
+		{
+			"name": "糜夫人",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "mifuren",
+					"name": "糜夫人",
+					"banned": false
+				},
+				{
+					"pack": "xianding",
+					"id": "dc_mifuren",
+					"name": "糜夫人",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "mifuren",
+					"name": "糜夫人",
+					"banned": false
+				},
+				{
+					"pack": "xianding",
+					"id": "dc_mifuren",
+					"name": "糜夫人",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "孔融",
+			"exact": [
+				{
+					"pack": "huicui",
+					"id": "dc_kongrong",
+					"name": "孔融",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "huicui",
+					"id": "dc_kongrong",
+					"name": "孔融",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "辛毗",
+			"exact": [
+				{
+					"pack": "sp2",
+					"id": "xinpi",
+					"name": "辛毗",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp2",
+					"id": "xinpi",
+					"name": "辛毗",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "周处",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "jin_zhouchu",
+					"name": "周处",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "jin_zhouchu",
+					"name": "周处",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "吴景",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "wujing",
+					"name": "吴景",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "wujing",
+					"name": "吴景",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "王凌",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "wangling",
+					"name": "王凌",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "wangling",
+					"name": "王凌",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "华歆",
+			"exact": [
+				{
+					"pack": "huicui",
+					"id": "huaxin",
+					"name": "华歆",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "huicui",
+					"id": "huaxin",
+					"name": "华歆",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "张温",
+			"exact": [
+				{
+					"pack": "sp2",
+					"id": "zhangwen",
+					"name": "张温",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp2",
+					"id": "zhangwen",
+					"name": "张温",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "蔡贞姬",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "caizhenji",
+					"name": "蔡贞姬",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "caizhenji",
+					"name": "蔡贞姬",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "桥公",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "qiaogong",
+					"name": "桥公",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "qiaogong",
+					"name": "桥公",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "许靖",
+			"exact": [
+				{
+					"pack": "xianding",
+					"id": "dc_xujing",
+					"name": "许靖",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "xianding",
+					"id": "dc_xujing",
+					"name": "许靖",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "向宠",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "xiangchong",
+					"name": "向宠",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "xiangchong",
+					"name": "向宠",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "刘璋",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "liuzhang",
+					"name": "刘璋",
+					"banned": false
+				}
+			],
+			"exactBanned": [
+				{
+					"pack": "diy",
+					"id": "ns_liuzhang",
+					"name": "刘璋",
+					"banned": true
+				}
+			],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "liuzhang",
+					"name": "刘璋",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": [
+				{
+					"pack": "diy",
+					"id": "ns_liuzhang",
+					"name": "刘璋",
+					"banned": true
+				}
+			]
+		},
+		{
+			"name": "张仲景",
+			"exact": [],
+			"exactBanned": [],
+			"fuzzy": [],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "宗预",
+			"exact": [],
+			"exactBanned": [],
+			"fuzzy": [],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "陈武董袭",
+			"exact": [
+				{
+					"pack": "xianding",
+					"id": "chendong",
+					"name": "陈武董袭",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "xianding",
+					"id": "chendong",
+					"name": "陈武董袭",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "袁涣",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "yuanhuan",
+					"name": "袁涣",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "yuanhuan",
+					"name": "袁涣",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "王双",
+			"exact": [
+				{
+					"pack": "xianding",
+					"id": "wangshuang",
+					"name": "王双",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "xianding",
+					"id": "wangshuang",
+					"name": "王双",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "孙翊",
+			"exact": [
+				{
+					"pack": "xianding",
+					"id": "re_sunyi",
+					"name": "孙翊",
+					"banned": false
+				}
+			],
+			"exactBanned": [
+				{
+					"pack": "diy",
+					"id": "ns_sunyi",
+					"name": "孙翊",
+					"banned": true
+				}
+			],
+			"fuzzy": [
+				{
+					"pack": "xianding",
+					"id": "re_sunyi",
+					"name": "孙翊",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": [
+				{
+					"pack": "diy",
+					"id": "ns_sunyi",
+					"name": "孙翊",
+					"banned": true
+				}
+			]
+		},
+		{
+			"name": "高览",
+			"exact": [
+				{
+					"pack": "huicui",
+					"id": "dc_gaolan",
+					"name": "高览",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "huicui",
+					"id": "dc_gaolan",
+					"name": "高览",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "花鬘",
+			"exact": [
+				{
+					"pack": "xianding",
+					"id": "huaman",
+					"name": "花鬘",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "xianding",
+					"id": "huaman",
+					"name": "花鬘",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "文鸯",
+			"exact": [
+				{
+					"pack": "xianding",
+					"id": "wenyang",
+					"name": "文鸯",
+					"banned": false
+				}
+			],
+			"exactBanned": [
+				{
+					"pack": "diy",
+					"id": "diy_wenyang",
+					"name": "文鸯",
+					"banned": true
+				}
+			],
+			"fuzzy": [
+				{
+					"pack": "xianding",
+					"id": "wenyang",
+					"name": "文鸯",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": [
+				{
+					"pack": "diy",
+					"id": "diy_wenyang",
+					"name": "文鸯",
+					"banned": true
+				}
+			]
+		},
+		{
+			"name": "蒋钦",
+			"exact": [
+				{
+					"pack": "shiji",
+					"id": "sp_jiangqing",
+					"name": "蒋钦",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "shiji",
+					"id": "sp_jiangqing",
+					"name": "蒋钦",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "崔琰",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "cuiyan",
+					"name": "崔琰",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "cuiyan",
+					"name": "崔琰",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "吕范",
+			"exact": [
+				{
+					"pack": "xianding",
+					"id": "lvfan",
+					"name": "吕范",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "xianding",
+					"id": "lvfan",
+					"name": "吕范",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "蒋琬",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "ol_jiangwan",
+					"name": "蒋琬",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "ol_jiangwan",
+					"name": "蒋琬",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "张昌蒲",
+			"exact": [
+				{
+					"pack": "sp2",
+					"id": "zhangchangpu",
+					"name": "张昌蒲",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp2",
+					"id": "zhangchangpu",
+					"name": "张昌蒲",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "皇甫嵩",
+			"exact": [
+				{
+					"pack": "sp",
+					"id": "huangfusong",
+					"name": "皇甫嵩",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp",
+					"id": "huangfusong",
+					"name": "皇甫嵩",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "朱儁",
+			"exact": [
+				{
+					"pack": "sp2",
+					"id": "zhujun",
+					"name": "朱儁",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "sp2",
+					"id": "zhujun",
+					"name": "朱儁",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		},
+		{
+			"name": "刘巴",
+			"exact": [
+				{
+					"pack": "huicui",
+					"id": "dc_liuba",
+					"name": "刘巴",
+					"banned": false
+				}
+			],
+			"exactBanned": [],
+			"fuzzy": [
+				{
+					"pack": "huicui",
+					"id": "dc_liuba",
+					"name": "刘巴",
+					"banned": false
+				}
+			],
+			"fuzzyBanned": []
+		}
+	]
+}

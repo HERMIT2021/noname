@@ -1,5 +1,33 @@
 # AGENTS.md — 无名杀
 
+# Encoding and comments
+
+- Project encoding is UTF-8. Source files are saved as UTF-8.
+- When writing Java annotations, comments, or strings that contain Chinese, write them directly as UTF-8 Chinese characters.
+- Do NOT use \uXXXX unicode escape sequences for Chinese text unless I explicitly ask for it.
+  -不要使用 python -c 执行脚本。
+  -请直接使用文本 patch（代码补丁）的方式修改代码，此方法不行的话，再创建一个本地 python 脚本文件 rewrite.py，然后在其中写入完整代码，再调用 python rewrite.py。
+
+# PowerShell Usage Rules
+
+- Always use PowerShell 7 (pwsh) instead of Windows PowerShell (powershell.exe).
+
+- Do NOT invoke "powershell.exe" in any command.
+
+- All PowerShell commands should start with:
+
+  pwsh -Command "<script>"
+
+- When writing commands, assume UTF-8 environment and pwsh execution context.
+
+- Avoid using chcp or Windows PowerShell–specific behaviors.
+
+# Terminal Execution Preference
+
+- Prefer pwsh for all shell tasks in this project.
+- If the task requires Windows shell features, still use pwsh unless explicitly requested otherwise.
+- Avoid "cmd.exe" and "powershell.exe".
+
 pnpm monorepo (GPL-3.0), ESM only (`"type": "module"`). 浏览器端三国杀游戏.
 
 ## 常用命令
