@@ -1,9 +1,26 @@
 import "../../../noname.js";
 import { ui } from "../index.js";
+import { get } from "../../get/index.js";
 import { lib } from "../../library/index.js";
 import { _status } from "../../status/index.js";
-import { get } from "../../get/index.js";
 import { game } from "../../game/index.js";
+function isOwnHandCardNode(node) {
+  let current = node;
+  while (current && current != document.body) {
+    if (current == ui.handcards1 || current == ui.handcards2 || current == ui.handcards1Container || current == ui.handcards2Container) return true;
+    if (current.classList?.contains("handcards") && (current.parentNode == ui.handcards1Container || current.parentNode == ui.handcards2Container || current.parentNode?.parentNode == ui.me)) return true;
+    current = current.parentNode;
+  }
+  return false;
+}
+function hasWaitingHandCardDrag(node) {
+  let current = node;
+  while (current && current != document.body) {
+    if (current._waitingfordrag && get.itemtype(current) == "card") return true;
+    current = current.parentNode;
+  }
+  return false;
+}
 class Click {
   /**
    * @type {() => void}
@@ -2043,13 +2060,7 @@ class Click {
     if (!lib.config.enable_drag) {
       return;
     }
-    if (!this.parentNode) {
-      return;
-    }
-    if (!this.parentNode.parentNode) {
-      return;
-    }
-    if (this.parentNode.parentNode.parentNode != ui.me) {
+    if (!isOwnHandCardNode(this)) {
       return;
     }
     if (this.parentNode.parentNode.classList.contains("scrollh")) {
@@ -2066,6 +2077,11 @@ class Click {
     ui.click.longpresscancel.call(this);
     if (this._waitingfordrag) {
       var drag = this._waitingfordrag;
+      if (e.touches?.[0]) {
+        var dx = e.touches[0].clientX - drag.clientX;
+        var dy = e.touches[0].clientY - drag.clientY;
+        if (dx * dx + dy * dy < 36) return;
+      }
       _status.clicked = false;
       _status.touchnocheck = true;
       ui.click.card.call(this);
@@ -2084,7 +2100,7 @@ class Click {
   }
   cardmouseenter() {
     if (!lib.config.spread_card) return;
-    if (this.parentNode?.parentNode?.parentNode !== ui.me) return;
+    if (!isOwnHandCardNode(this)) return;
     if (ui.selected.cards.length) return;
     ui._handcardHover = this;
     ui.updatehl();
@@ -4409,6 +4425,9 @@ class Click {
   }
   touchScroll(e) {
     if (_status.mousedragging) {
+      return;
+    }
+    if (hasWaitingHandCardDrag(this)) {
       return;
     }
     if (_status.draggingtouchdialog) {

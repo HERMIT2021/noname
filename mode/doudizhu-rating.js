@@ -90,6 +90,22 @@ export function sortDoudizhuCandidates(candidates, role, ratings, options = {}) 
 		const zhuScoreB = getDoudizhuRating(ratings, b, "zhu");
 		const fanScoreA = getDoudizhuRating(ratings, a, "fan");
 		const fanScoreB = getDoudizhuRating(ratings, b, "fan");
+		if (role == "zhu") {
+			const zhuAdvantageA = zhuScoreA - fanScoreA;
+			const zhuAdvantageB = zhuScoreB - fanScoreB;
+			const zhuFitA = zhuScoreA * 2 + zhuAdvantageA;
+			const zhuFitB = zhuScoreB * 2 + zhuAdvantageB;
+			if (zhuFitA != zhuFitB) {
+				return zhuFitB - zhuFitA;
+			}
+			if (zhuScoreA != zhuScoreB) {
+				return zhuScoreB - zhuScoreA;
+			}
+			if (zhuAdvantageA != zhuAdvantageB) {
+				return zhuAdvantageB - zhuAdvantageA;
+			}
+			return String(a).localeCompare(String(b));
+		}
 		if (role == "fan" && targetScore != null) {
 			const inRangeA = scoreA >= minScore && scoreA <= maxScore;
 			const inRangeB = scoreB >= minScore && scoreB <= maxScore;
@@ -107,13 +123,6 @@ export function sortDoudizhuCandidates(candidates, role, ratings, options = {}) 
 		}
 		if (scoreA != scoreB) {
 			return scoreB - scoreA;
-		}
-		if (role == "zhu") {
-			const zhuAdvantageA = zhuScoreA - fanScoreA;
-			const zhuAdvantageB = zhuScoreB - fanScoreB;
-			if (zhuAdvantageA != zhuAdvantageB) {
-				return zhuAdvantageB - zhuAdvantageA;
-			}
 		}
 		return String(a).localeCompare(String(b));
 	});
