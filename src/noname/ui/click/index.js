@@ -108,7 +108,7 @@ function canUseDragReleaseZone(card) {
 }
 
 function startTouchHandCardDrag(card, point, forceSelected) {
-	if (!card || !point || !lib.config.touchscreen || !lib.config.enable_drag || !ui.arena.classList.contains("selecting")) return false;
+	if (!card || !point || !lib.config.touchscreen || !lib.config.enable_drag || !ui.arena?.classList.contains("selecting")) return false;
 	const event = _status.event;
 	if (!event?.isMine?.() || !isOwnHandCardNode(card) || card.classList.contains("noclick")) return false;
 	if (!card.classList.contains("selected")) {
@@ -130,7 +130,7 @@ function startTouchHandCardDrag(card, point, forceSelected) {
 	_status.selectionfull = false;
 	_status.multitarget = false;
 	_status.dragged = true;
-	ui.arena.classList.add("dragging");
+	ui.arena?.classList.add("dragging");
 	_status.dragReleaseZoneMode = canUseDragReleaseZone(card);
 	if (_status.dragReleaseZoneMode) {
 		_status.mouseleft = true;
@@ -1959,8 +1959,8 @@ export class Click {
 		_status.mousedragorigin = null;
 		_status.dragstatuschanged = false;
 		delete _status.dragReleaseZoneMode;
-		ui.arena.classList.remove("dragging");
-		while (ui.touchlines.length) {
+		ui.arena?.classList.remove("dragging");
+		while (ui.touchlines?.length) {
 			ui.touchlines.shift().delete();
 		}
 		if (_status.dragline?.length) {
@@ -2270,7 +2270,7 @@ export class Click {
 		if (!lib.config.enable_drag) {
 			return;
 		}
-		if (!ui.arena.classList.contains("selecting")) {
+		if (!ui.arena?.classList.contains("selecting")) {
 			return;
 		}
 		if (!evt.isMine()) {
@@ -2294,7 +2294,7 @@ export class Click {
 						_status.multitarget = false;
 						_status.lastmouseutc = get.utc();
 						_status.dragReleaseZoneMode = itemtype == "card" && canUseDragReleaseZone(item);
-						ui.arena.classList.add("dragging");
+						ui.arena?.classList.add("dragging");
 					}
 				}
 				return;
@@ -2488,7 +2488,7 @@ export class Click {
 			// ui.updatehl();
 		}
 		if (ui.arena) {
-			ui.arena.classList.remove("dragging");
+			ui.arena?.classList.remove("dragging");
 		}
 	}
 	mousemove() {
