@@ -1,4 +1,5 @@
 import { lib, game, ui, get, ai, _status } from "noname";
+import { getIdentityLordRating, normalizeIdentityLordRatings, sortIdentityLordCandidates } from "./identity-lord-rating.js";
 export const type = "mode";
 /**
  * @type { () => importModeConfig }
@@ -465,6 +466,40 @@ export default () => {
 			},
 		],
 		game: {
+			isIdentityLordRatingEnabled: function () {
+				if (_status.connectMode && lib.configOL) {
+					if (typeof lib.configOL.identity_lord_character_rating == "boolean") return lib.configOL.identity_lord_character_rating;
+					if (typeof lib.configOL.connect_identity_lord_character_rating == "boolean") return lib.configOL.connect_identity_lord_character_rating;
+				}
+				return get.config("identity_lord_character_rating", "identity") !== false;
+			},
+			getIdentityLordRatings: function () {
+				var ratings = normalizeIdentityLordRatings(get.config("identity_lord_character_rating_data", "identity"));
+				for (var name in lib.characterReplace) {
+					var list = lib.characterReplace[name];
+					if (!Array.isArray(list) || !list.length) continue;
+					var lord = getIdentityLordRating(ratings, name);
+					for (var i = 0; i < list.length; i++) lord = Math.max(lord, getIdentityLordRating(ratings, list[i]));
+					ratings[name] = lord;
+				}
+				return ratings;
+			},
+			getIdentityLordCharacterRating: function (name) {
+				if (!game.isIdentityLordRatingEnabled()) return 5;
+				return getIdentityLordRating(game.getIdentityLordRatings(), name);
+			},
+			getIdentityLordSortedCandidates: function (list) {
+				if (!Array.isArray(list)) return [];
+				if (!game.isIdentityLordRatingEnabled()) return list.slice();
+				return sortIdentityLordCandidates(list, game.getIdentityLordRatings());
+			},
+			getIdentityLordChoice: function (lordList, fallbackList) {
+				var primary = game.getIdentityLordSortedCandidates(Array.isArray(lordList) && lordList.length ? lordList : fallbackList);
+				var choice = primary[0] || (Array.isArray(fallbackList) ? fallbackList[0] : null);
+				var secondary = game.getIdentityLordSortedCandidates(Array.isArray(fallbackList) ? fallbackList.slice() : []);
+				secondary.remove(choice);
+				return [choice, secondary[0] || (Array.isArray(fallbackList) ? fallbackList.find(item => item != choice) : null)].filter(Boolean);
+			},
 			allowSameCharacter: function () {
 				return _status.connectMode ? lib.configOL.allow_same_character || lib.configOL.connect_allow_same_character : get.config("allow_same_character");
 			},
@@ -1637,18 +1672,8 @@ export default () => {
 							}
 						}
 					} else if (player.identity == "zhu" && !stratagemMode) {
-						list2.randomSort();
-						var choice, choice2;
-						if (!_status.event.zhongmode && Math.random() - 0.8 < 0 && list2.length) {
-							choice = list2[0];
-							choice2 = list[0];
-							if (choice2 == choice) {
-								choice2 = list[1];
-							}
-						} else {
-							choice = list[0];
-							choice2 = list[1];
-						}
+						var lordChoices = game.getIdentityLordChoice(list2 && list2.length ? list2 : list, list);
+						var choice = lordChoices[0] || list[0], choice2 = lordChoices[1] || (list[0] == choice ? list[1] : list[0]);
 						if (lib.characterReplace[choice] && lib.characterReplace[choice].length) {
 							choice = lib.characterReplace[choice].randomGet();
 						}

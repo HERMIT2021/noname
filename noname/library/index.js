@@ -13,6 +13,7 @@ import { PoptipManager } from "./poptip.js";
 import { ZhanfaManager } from "./zhanfa.js";
 import skills from "./skill.js";
 import { getDoudizhuEnabledCharacters, normalizeDoudizhuRatings, getDoudizhuRating } from "../../mode/doudizhu-rating.js";
+import { normalizeIdentityLordRatings, getIdentityLordRating } from "../../mode/identity-lord-rating.js";
 import { ui } from "../ui/index.js";
 import { get } from "../get/index.js";
 import { _status } from "../status/index.js";
@@ -6625,6 +6626,158 @@ class Library {
                 }
               }
               alert("请输入大于0的整数");
+            }
+          }
+        },
+        identity_lord_character_rating: {
+          name: "启用主公评分选将",
+          init: true,
+          restart: true,
+          frequent: true,
+          intro: "启用后，军争AI当主公时会按主公评分优先选择主公武将。"
+        },
+        edit_identity_lord_character_rating: {
+          name: "编辑主公评分",
+          intro: "打开图形化面板设置军争主公评分。评分越高，AI当主公时越优先选择。",
+          clear: true,
+          onclick() {
+            const added = /* @__PURE__ */ new Set();
+            const characters = [];
+            const addCharacter = function(name2) {
+              if (!name2 || added.has(name2) || !lib.character[name2] || lib.filter.characterDisabled(name2)) return;
+              added.add(name2);
+              characters.push(name2);
+            };
+            for (const name2 in lib.characterReplace) {
+              const list = lib.characterReplace[name2];
+              if (Array.isArray(list) && list.some((item) => lib.character[item]?.isZhugong)) addCharacter(name2);
+            }
+            for (const name2 in lib.character) {
+              if (lib.character[name2]?.isZhugong) addCharacter(name2);
+            }
+            characters.sort((a, b) => (get.translation(a) || a).localeCompare(get.translation(b) || b, "zh-Hans") || String(a).localeCompare(String(b)));
+            if (!characters.length) {
+              alert("当前没有可评分的主公候选武将。");
+              return;
+            }
+            const storedRatings = normalizeIdentityLordRatings(get.config("identity_lord_character_rating_data", "identity") || {});
+            const editingRatings = {};
+            for (const name2 of characters) editingRatings[name2] = getIdentityLordRating(storedRatings, name2);
+            const applyPanelStyle = function(node, cssText) {
+              node.style.cssText = "position:relative;display:block;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+              return node;
+            };
+            const applyFlexStyle = function(node, cssText) {
+              node.style.cssText = "position:relative;display:flex;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+              return node;
+            };
+            const applyGridStyle = function(node, cssText) {
+              node.style.cssText = "position:relative;display:grid;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+              return node;
+            };
+            const createTextNode = function(parent, text, cssText) {
+              return applyPanelStyle(ui.create.div("", text, parent), cssText);
+            };
+            const closePanel = function() {
+              ui.window.classList.remove("shortcutpaused");
+              ui.window.classList.remove("systempaused");
+              overlay.remove();
+            };
+            const overlay = ui.create.div(".popup-container", ui.window, function(event) {
+              if (event.target == overlay) closePanel();
+            });
+            overlay.style.cssText = "position:fixed;left:0;top:0;width:100%;height:100%;z-index:10000;background:rgba(0,0,0,0.72);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;transition:none;text-shadow:none;";
+            ui.window.classList.add("shortcutpaused");
+            ui.window.classList.add("systempaused");
+            const panel = ui.create.div("", overlay);
+            applyFlexStyle(panel, "width:min(820px,94vw);height:min(720px,90vh);background:rgba(28,27,25,0.97);border:1px solid rgba(226,198,126,0.58);border-radius:8px;box-shadow:0 18px 48px rgba(0,0,0,0.55);color:#f7ecd9;flex-direction:column;overflow:hidden;");
+            panel.addEventListener("click", (event) => event.stopPropagation());
+            const header = ui.create.div("", panel);
+            applyFlexStyle(header, "align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.12);");
+            const title = ui.create.div("", header);
+            applyPanelStyle(title, "flex:1;min-width:0;");
+            createTextNode(title, "军争主公评分", "font-size:20px;font-weight:700;line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+            const subTitle = createTextNode(title, "当前主公候选：" + characters.length + "名", "margin-top:4px;font-size:13px;line-height:18px;color:rgba(247,236,217,0.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+            const searchInput = document.createElement("input");
+            searchInput.type = "search";
+            searchInput.placeholder = "搜索武将";
+            searchInput.style.cssText = "position:relative;display:block;width:160px;height:32px;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.08);color:#f7ecd9;padding:0 10px;outline:none;box-sizing:border-box;transition:none;";
+            header.appendChild(searchInput);
+            const saveButton = ui.create.div(".menubutton.large", "保存", header);
+            applyPanelStyle(saveButton, "margin:0;min-width:66px;height:32px;line-height:32px;border-radius:6px;text-align:center;background:rgba(205,158,70,0.95);color:#191714;cursor:pointer;");
+            const closeButton = ui.create.div(".menubutton.large", "关闭", header);
+            applyPanelStyle(closeButton, "margin:0;min-width:66px;height:32px;line-height:32px;border-radius:6px;text-align:center;background:rgba(255,255,255,0.1);color:#f7ecd9;cursor:pointer;");
+            closeButton.listen(closePanel);
+            const table = ui.create.div("", panel);
+            applyPanelStyle(table, "flex:1;min-height:0;overflow:auto;padding:0 12px 12px 12px;");
+            const tableHeader = ui.create.div("", table);
+            applyGridStyle(tableHeader, "position:sticky;top:0;z-index:1;grid-template-columns:68px minmax(150px,1fr) 282px;gap:10px;align-items:center;min-width:520px;padding:10px 8px;background:rgba(28,27,25,0.98);border-bottom:1px solid rgba(255,255,255,0.12);color:rgba(247,236,217,0.74);font-size:13px;");
+            createTextNode(tableHeader, "头像", "");
+            createTextNode(tableHeader, "武将", "");
+            createTextNode(tableHeader, "主公评分", "");
+            const rows = [];
+            const setButtonActive = function(button, active) {
+              button.style.background = active ? "rgba(205,158,70,0.95)" : "rgba(255,255,255,0.08)";
+              button.style.color = active ? "#191714" : "#f7ecd9";
+              button.style.borderColor = active ? "rgba(255,232,170,0.7)" : "rgba(255,255,255,0.16)";
+              button.style.fontWeight = active ? "700" : "400";
+            };
+            const createScoreGroup = function(row, name2) {
+              const group = ui.create.div("", row);
+              applyGridStyle(group, "grid-template-columns:repeat(10,24px);gap:4px;align-items:center;");
+              const buttons = [];
+              for (let score = 1; score <= 10; score++) {
+                const button = ui.create.div("", String(score), group);
+                applyPanelStyle(button, "height:24px;line-height:24px;text-align:center;border:1px solid rgba(255,255,255,0.16);border-radius:5px;cursor:pointer;font-size:13px;");
+                button.listen(function() {
+                  editingRatings[name2] = score;
+                  for (const item of buttons) setButtonActive(item.button, item.score == score);
+                });
+                buttons.push({ button, score });
+              }
+              for (const item of buttons) setButtonActive(item.button, item.score == editingRatings[name2]);
+            };
+            for (const name2 of characters) {
+              const row = ui.create.div("", table);
+              applyGridStyle(row, "grid-template-columns:68px minmax(150px,1fr) 282px;gap:10px;align-items:center;min-width:520px;padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);");
+              const avatar = ui.create.div("", row);
+              applyPanelStyle(avatar, "width:52px;height:64px;border-radius:6px;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.2);");
+              avatar.setBackground(name2, "character");
+              const nameNode = ui.create.div("", row);
+              applyPanelStyle(nameNode, "min-width:0;");
+              const translatedName = get.translation(name2) || name2;
+              createTextNode(nameNode, translatedName, "font-size:16px;line-height:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+              createTextNode(nameNode, name2, "margin-top:3px;font-size:12px;line-height:16px;color:rgba(247,236,217,0.58);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+              createScoreGroup(row, name2);
+              rows.push({ node: row, searchText: (translatedName + " " + name2).toLowerCase() });
+            }
+            searchInput.addEventListener("input", function() {
+              const value = this.value.trim().toLowerCase();
+              let count = 0;
+              for (const row of rows) {
+                const visible = !value || row.searchText.includes(value);
+                row.node.style.display = visible ? "grid" : "none";
+                if (visible) count++;
+              }
+              subTitle.textContent = "当前显示：" + count + "/" + characters.length + "名";
+            });
+            saveButton.listen(function() {
+              const nextRatings = { ...storedRatings };
+              for (const name2 of characters) nextRatings[name2] = editingRatings[name2];
+              game.saveConfig("identity_lord_character_rating_data", nextRatings, "identity");
+              closePanel();
+              alert("军争主公评分已保存");
+            });
+          }
+        },
+        reset_identity_lord_character_rating: {
+          name: "重置主公评分",
+          intro: "清除军争主公评分配置。清除后所有未填写的武将都会按默认5分处理。",
+          clear: true,
+          onclick() {
+            if (confirm("是否清除军争主公评分配置？")) {
+              game.saveConfig("identity_lord_character_rating_data", null, "identity");
+              alert("军争主公评分已重置");
             }
           }
         },
