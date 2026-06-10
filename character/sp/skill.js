@@ -35994,7 +35994,7 @@ const skills = {
 				choiceMap.push("gain");
 			}
 			// 选项2：交换身份牌（主公身份不可被夺取，且相同身份无需交换）
-			event._canSwap = target.identity != "zhu" && player.identity != target.identity;
+			event._canSwap = player.identity != "zhu" && target.identity != "zhu" && player.identity != target.identity;
 			if (event._canSwap) {
 				choices.push("与其交换身份牌");
 				choiceMap.push("swap");
