@@ -863,9 +863,12 @@ async function loadConfig() {
   if (get("effect_speed_global") === void 0) set("effect_speed_global", "1");
   if (get("effect_speed_card") === void 0) set("effect_speed_card", get("card_animation") || "1");
   if (get("effect_speed_basic") === void 0) set("effect_speed_basic", "1");
+  if (get("effect_fast_basic") === void 0) set("effect_fast_basic", false);
   if (get("effect_speed_trick") === void 0) set("effect_speed_trick", "1");
+  if (get("effect_fast_trick") === void 0) set("effect_fast_trick", false);
   if (get("effect_speed_equip") === void 0) set("effect_speed_equip", "1");
   if (get("effect_fast_equip") === void 0) set("effect_fast_equip", false);
+  if (get("effect_fast_delay") === void 0) set("effect_fast_delay", "80");
   if (get("effect_speed_judge") === void 0) set("effect_speed_judge", "1");
   if (get("effect_speed_move") === void 0) set("effect_speed_move", "1");
   if (get("effect_speed_delay") === void 0) set("effect_speed_delay", "1");

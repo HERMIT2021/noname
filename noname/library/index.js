@@ -60,6 +60,16 @@ const effectCardHoldItems = {
   long: "较长",
   instant: "极短"
 };
+const effectFastDelayItems = {
+  "0": "0ms(无等待)",
+  "16": "16ms(一帧)",
+  "33": "33ms(两帧)",
+  "50": "50ms",
+  "80": "80ms",
+  "120": "120ms",
+  "160": "160ms",
+  "240": "240ms"
+};
 const effectParticleQualityItems = {
   off: "关闭",
   low: "低",
@@ -1823,11 +1833,21 @@ class Library {
           item: effectSpeedItems,
           intro: "调整【杀】【闪】【桃】【酒】等基本牌的出牌提示和跟随动画速度"
         },
+        effect_fast_basic: {
+          name: "基本牌极速结算",
+          init: false,
+          intro: "开启后压缩基本牌结算中的展示与收尾等待，连续使用【杀】【闪】【桃】【酒】时更快恢复响应"
+        },
         effect_speed_trick: {
           name: "锦囊牌特效速度",
           init: "1",
           item: effectSpeedItems,
           intro: "调整【顺手牵羊】等普通锦囊和延时锦囊的出牌提示和跟随动画速度"
+        },
+        effect_fast_trick: {
+          name: "锦囊牌极速结算",
+          init: false,
+          intro: "开启后压缩普通锦囊与延时锦囊结算中的展示与收尾等待，连续使用锦囊时更快恢复响应"
         },
         effect_speed_equip: {
           name: "装备牌特效速度",
@@ -1839,6 +1859,12 @@ class Library {
           name: "装备极速结算",
           init: false,
           intro: "开启后大幅压缩装备牌结算中的固定等待，连续装备时更快恢复点击响应"
+        },
+        effect_fast_delay: {
+          name: "极速等待时长",
+          init: "80",
+          item: effectFastDelayItems,
+          intro: "自定义极速结算开启后保留的最短等待；越低越连贯，若动画或提示来不及看清可调高"
         },
         effect_speed_judge: {
           name: "判定展示速度",

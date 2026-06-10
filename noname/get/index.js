@@ -1451,6 +1451,24 @@ class Get {
     const rate = rateMap[hold] || rateMap.normal;
     return Math.max(0, duration * rate);
   }
+  effectFastType(type = "card") {
+    if (type == "equip") return lib.config.effect_fast_equip === true;
+    if (type == "basic") return lib.config.effect_fast_basic === true;
+    if (type == "trick" || type == "delay") return lib.config.effect_fast_trick === true;
+    return false;
+  }
+  effectFastDelay(defaultDelay = 80, type = "card") {
+    let delay = parseFloat(lib.config.effect_fast_delay);
+    if (!isFinite(delay) || delay < 0) delay = defaultDelay;
+    return get.effectDuration(delay, type, delay > 0 ? 16 : 0);
+  }
+  effectCardDelay(duration, card, min = 80) {
+    const type = get.effectType(card);
+    if (get.effectFastType(type)) {
+      return get.effectFastDelay(Math.min(duration, 80), type);
+    }
+    return get.effectDuration(get.effectCardHold(duration), type, min);
+  }
   effectParticleRate() {
     switch (lib.config.effect_particle_quality) {
       case "off":

@@ -988,7 +988,7 @@ const Content = {
     if (event.cards.length) {
       if (event.draw) {
         player.$draw(event.cards);
-        await game.delay(0, fastEquip ? get.effectDuration(80, "equip", 16) : get.effectDuration(300, "equip", 16), false);
+        await game.delay(0, fastEquip ? get.effectFastDelay(80, "equip") : get.effectDuration(300, "equip", 16), false);
       } else {
         game.broadcast(
           function(cards, player2) {
@@ -1019,7 +1019,7 @@ const Content = {
       const loseEvent = player.lose(result.cards, "visible").set("type", "equip").set("getlx", false);
       loseEvent.swapEquip = true;
       if (get.info(event.card, true)?.loseThrow) {
-        player.$throw(result.cards, fastEquip ? get.effectDuration(160, "equip", 16) : get.effectDuration(1e3, "equip", 16));
+        player.$throw(result.cards, fastEquip ? get.effectFastDelay(160, "equip") : get.effectDuration(1e3, "equip", 16));
       }
       await loseEvent;
       for (let card2 of result.cards) {
@@ -9511,7 +9511,7 @@ card.${cardPackName}.${itemName}.${termName}`, term);
             _status.waitingForTransition = event.waitingForTransition;
             game.pause();
           } else {
-            game.delayx(get.effectDuration(get.effectCardHold(lib.config.duration), get.effectType(event.card), 80) / lib.config.duration, 0, false);
+            game.delay(0, get.effectCardDelay(lib.config.duration, event.card, 80), false);
           }
         }
       }
@@ -9770,7 +9770,7 @@ card.${cardPackName}.${itemName}.${termName}`, term);
       if (event.effectedCount < event.effectCount) {
         if (get.hasThrownCards()) {
           if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-            game.delayx(get.effectDuration(get.effectCardHold(lib.config.duration), get.effectType(event.card), 80) / lib.config.duration, 0, false);
+            game.delay(0, get.effectCardDelay(lib.config.duration, event.card, 80), false);
           }
         }
         event.goto(11);
@@ -9786,7 +9786,7 @@ card.${cardPackName}.${itemName}.${termName}`, term);
       }
       if (get.hasThrownCards()) {
         if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-          game.delayx(get.effectDuration(get.effectCardHold(lib.config.duration), get.effectType(event.card), 80) / lib.config.duration, 0, false);
+          game.delay(0, get.effectCardDelay(lib.config.duration, event.card, 80), false);
         }
       } else {
         event.finish();
