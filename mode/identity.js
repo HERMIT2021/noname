@@ -493,10 +493,24 @@ export default () => {
 				if (!game.isIdentityLordRatingEnabled()) return list.slice();
 				return sortIdentityLordCandidates(list, game.getIdentityLordRatings());
 			},
-			getIdentityLordChoice: function (lordList, fallbackList) {
-				var primary = game.getIdentityLordSortedCandidates(Array.isArray(lordList) && lordList.length ? lordList : fallbackList);
+			getIdentityLordCandidateList: function (lordList, fallbackList, randomCount) {
+				var candidates = [];
+				var fixed = Array.isArray(lordList) ? lordList.slice() : [];
+				var fallback = Array.isArray(fallbackList) ? fallbackList.slice() : [];
+				for (var i = 0; i < fixed.length; i++) candidates.add(fixed[i]);
+				if (Number.isFinite(randomCount) && randomCount > 0) {
+					var randomPool = fallback.filter(name => !fixed.includes(name));
+					candidates.addArray(randomPool.randomGets(Math.min(randomCount, randomPool.length)));
+				} else if (!candidates.length) {
+					candidates.addArray(fallback);
+				}
+				return candidates;
+			},
+			getIdentityLordChoice: function (lordList, fallbackList, randomCount) {
+				var candidates = game.getIdentityLordCandidateList(lordList, fallbackList, randomCount);
+				var primary = game.getIdentityLordSortedCandidates(candidates.length ? candidates : fallbackList);
 				var choice = primary[0] || (Array.isArray(fallbackList) ? fallbackList[0] : null);
-				var secondary = game.getIdentityLordSortedCandidates(Array.isArray(fallbackList) ? fallbackList.slice() : []);
+				var secondary = game.getIdentityLordSortedCandidates(candidates.length ? candidates.slice() : Array.isArray(fallbackList) ? fallbackList.slice() : []);
 				secondary.remove(choice);
 				return [choice, secondary[0] || (Array.isArray(fallbackList) ? fallbackList.find(item => item != choice) : null)].filter(Boolean);
 			},
@@ -1672,7 +1686,7 @@ export default () => {
 							}
 						}
 					} else if (player.identity == "zhu" && !stratagemMode) {
-						var lordChoices = game.getIdentityLordChoice(list2 && list2.length ? list2 : list, list);
+						var lordChoices = game.getIdentityLordChoice(list2 && list2.length ? list2 : [], list, get.config("choice_zhu"));
 						var choice = lordChoices[0] || list[0], choice2 = lordChoices[1] || (list[0] == choice ? list[1] : list[0]);
 						if (lib.characterReplace[choice] && lib.characterReplace[choice].length) {
 							choice = lib.characterReplace[choice].randomGet();

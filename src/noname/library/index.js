@@ -6786,6 +6786,7 @@ export class Library {
 					onclick() {
 						const added = new Set();
 						const characters = [];
+						const replacedCharacters = [];
 						const addCharacter = function (name) {
 							if (!name || added.has(name) || !lib.character[name] || lib.filter.characterDisabled(name)) return;
 							added.add(name);
@@ -6793,14 +6794,18 @@ export class Library {
 						};
 						for (const name in lib.characterReplace) {
 							const list = lib.characterReplace[name];
-							if (Array.isArray(list) && list.some(item => lib.character[item]?.isZhugong)) addCharacter(name);
+							if (!Array.isArray(list) || !list.length) continue;
+							const enabledList = list.filter(item => lib.character[item] && !lib.filter.characterDisabled(item));
+							if (!enabledList.length) continue;
+							replacedCharacters.addArray(enabledList);
+							addCharacter(name);
 						}
 						for (const name in lib.character) {
-							if (lib.character[name]?.isZhugong) addCharacter(name);
+							if (!replacedCharacters.includes(name)) addCharacter(name);
 						}
 						characters.sort((a, b) => (get.translation(a) || a).localeCompare(get.translation(b) || b, "zh-Hans") || String(a).localeCompare(String(b)));
 						if (!characters.length) {
-							alert("当前没有可评分的主公候选武将。");
+							alert("当前没有可评分的军争候选武将。");
 							return;
 						}
 						const storedRatings = normalizeIdentityLordRatings(get.config("identity_lord_character_rating_data", "identity") || {});
@@ -6840,7 +6845,7 @@ export class Library {
 						const title = ui.create.div("", header);
 						applyPanelStyle(title, "flex:1;min-width:0;");
 						createTextNode(title, "军争主公评分", "font-size:20px;font-weight:700;line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
-						const subTitle = createTextNode(title, "当前主公候选：" + characters.length + "名", "margin-top:4px;font-size:13px;line-height:18px;color:rgba(247,236,217,0.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+						const subTitle = createTextNode(title, "当前军争候选：" + characters.length + "名", "margin-top:4px;font-size:13px;line-height:18px;color:rgba(247,236,217,0.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
 						const searchInput = document.createElement("input");
 						searchInput.type = "search";
 						searchInput.placeholder = "搜索武将";
