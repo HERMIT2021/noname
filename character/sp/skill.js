@@ -35993,8 +35993,8 @@ const skills = {
 				choices.push("获得其武将牌上的所有技能（限定技、觉醒技、使命技、主公技和持恒技除外）");
 				choiceMap.push("gain");
 			}
-			// 选项2：交换身份牌（双方均非明置）
-			event._canSwap = !player.identityShown && !target.identityShown;
+			// 选项2：交换身份牌（主公身份不可被夺取）
+			event._canSwap = target.identity != "zhu";
 			if (event._canSwap) {
 				choices.push("与其交换身份牌");
 				choiceMap.push("swap");
