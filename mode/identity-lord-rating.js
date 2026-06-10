@@ -36,7 +36,9 @@ export function sortIdentityLordCandidates(candidates, ratings) {
 export function getDouzhuanIdentityLordPool(lib, mode = "identity") {
 	const prefix = "extension_斗转星移_";
 	const modePlan = lib?.config?.[prefix + "modePlan"] || {};
-	const planIndex = Number.isFinite(parseInt(modePlan.identity_junzheng)) ? parseInt(modePlan.identity_junzheng) : Number.isFinite(parseInt(modePlan[mode])) && parseInt(modePlan[mode]) !== 0 ? parseInt(modePlan[mode]) : 1;
+	const rawPlanIndex = Number.isFinite(parseInt(modePlan.identity_junzheng)) ? parseInt(modePlan.identity_junzheng) : Number.isFinite(parseInt(modePlan[mode])) ? parseInt(modePlan[mode]) : null;
+	if (!rawPlanIndex) return null;
+	const planIndex = rawPlanIndex;
 	const plan = lib?.config?.[prefix + "plan" + planIndex];
 	if (!plan || !Array.isArray(plan.pack)) return null;
 	const banned = Array.isArray(plan.banList) ? plan.banList : [];

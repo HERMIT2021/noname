@@ -6797,6 +6797,10 @@ export class Library {
 						};
 						const sourceList = hasDouzhuanPool ? douzhuanPool : Object.keys(lib.character);
 						for (const name of sourceList) {
+							if (hasDouzhuanPool) {
+								addCharacter(name, false);
+								continue;
+							}
 							const source = get.sourceCharacter(name);
 							if (source != name) {
 								replacedCharacters.add(name);
