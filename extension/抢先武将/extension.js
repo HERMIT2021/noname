@@ -342,7 +342,18 @@ let skill = {
 			return player.countMark("mbtingwei") >= 8 && !player.hasSkill("mbjimie_used");
 		},
 		async cost(event, trigger, player) {
-			event.result = await player.chooseTarget("寂灭：消耗8个“霆”，对一名角色造成等同其体力上限的伤害", true).forResult();
+			event.result = await player
+				.chooseTarget("寂灭：消耗8个“霆”，对一名角色造成等同其体力上限的伤害")
+				.set("ai", target => {
+					const player = get.event().player;
+					if (target == player) return -100;
+					const attitude = get.attitude(player, target);
+					if (attitude >= 0) return -50 - attitude;
+					const effect = get.damageEffect(target, player, player);
+					if (effect <= 0) return -10 - attitude;
+					return effect * Math.max(1, target.maxHp) - attitude;
+				})
+				.forResult();
 		},
 		async content(event, trigger, player) {
 			player.awakenSkill("mbjimie");

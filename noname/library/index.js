@@ -1835,6 +1835,11 @@ class Library {
           item: effectSpeedItems,
           intro: "调整武器、防具、坐骑、宝物等装备牌的使用和移动动画速度"
         },
+        effect_fast_equip: {
+          name: "装备极速结算",
+          init: false,
+          intro: "开启后大幅压缩装备牌结算中的固定等待，连续装备时更快恢复点击响应"
+        },
         effect_speed_judge: {
           name: "判定展示速度",
           init: "1",

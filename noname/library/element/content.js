@@ -839,6 +839,7 @@ const Content = {
   //装备牌
   async equip(event, trigger, player) {
     event.visible = true;
+    const fastEquip = lib.config.effect_fast_equip === true;
     if (event.cards.length > 1 && event.cards.some((cardx) => cardx.isViewAsCard)) {
       event.untrigger();
       return;
@@ -937,12 +938,12 @@ const Content = {
           next.card = event.vcards[0];
           await next;
         }
-        if (cardInfo2.equipDelay != false) {
+        if (!fastEquip && cardInfo2.equipDelay != false) {
           await game.delayx();
         }
       }
       delete player.equiping;
-      if (event.delay) {
+      if (!fastEquip && event.delay) {
         await game.delayx();
       }
     };
@@ -987,7 +988,7 @@ const Content = {
     if (event.cards.length) {
       if (event.draw) {
         player.$draw(event.cards);
-        await game.delay(0, 300);
+        await game.delay(0, fastEquip ? get.effectDuration(80, "equip", 16) : get.effectDuration(300, "equip", 16), false);
       } else {
         game.broadcast(
           function(cards, player2) {
@@ -1018,7 +1019,7 @@ const Content = {
       const loseEvent = player.lose(result.cards, "visible").set("type", "equip").set("getlx", false);
       loseEvent.swapEquip = true;
       if (get.info(event.card, true)?.loseThrow) {
-        player.$throw(result.cards, 1e3);
+        player.$throw(result.cards, fastEquip ? get.effectDuration(160, "equip", 16) : get.effectDuration(1e3, "equip", 16));
       }
       await loseEvent;
       for (let card2 of result.cards) {

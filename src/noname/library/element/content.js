@@ -947,6 +947,7 @@ export const Content = {
 	//装备牌
 	async equip(event, trigger, player) {
 		event.visible = true;
+		const fastEquip = lib.config.effect_fast_equip === true;
 		//先确定这次的cards是什么成分也防止有人在equipBegin之类的时机往里面塞垃圾
 		if (event.cards.length > 1 && event.cards.some(cardx => cardx.isViewAsCard)) {
 			//实体牌数大于1且里面有虚拟假牌，终止此事件
@@ -1055,12 +1056,12 @@ export const Content = {
 					next.card = event.vcards[0];
 					await next;
 				}
-				if (cardInfo.equipDelay != false) {
+				if (!fastEquip && cardInfo.equipDelay != false) {
 					await game.delayx();
 				}
 			}
 			delete player.equiping;
-			if (event.delay) {
+			if (!fastEquip && event.delay) {
 				await game.delayx();
 			}
 		};
@@ -1110,7 +1111,7 @@ export const Content = {
 		if (event.cards.length) {
 			if (event.draw) {
 				player.$draw(event.cards);
-				await game.delay(0, 300);
+				await game.delay(0, fastEquip ? get.effectDuration(80, "equip", 16) : get.effectDuration(300, "equip", 16), false);
 			} else {
 				// @ts-expect-error ignore
 				game.broadcast(
@@ -1146,7 +1147,7 @@ export const Content = {
 			const loseEvent = player.lose(result.cards, "visible").set("type", "equip").set("getlx", false);
 			loseEvent.swapEquip = true;
 			if (get.info(event.card, true)?.loseThrow) {
-				player.$throw(result.cards, 1000);
+				player.$throw(result.cards, fastEquip ? get.effectDuration(160, "equip", 16) : get.effectDuration(1000, "equip", 16));
 			}
 			await loseEvent;
 			// @ts-expect-error ignore

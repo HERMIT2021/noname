@@ -974,6 +974,7 @@ async function loadConfig() {
 	if (config.get("effect_speed_basic") === undefined) config.set("effect_speed_basic", "1");
 	if (config.get("effect_speed_trick") === undefined) config.set("effect_speed_trick", "1");
 	if (config.get("effect_speed_equip") === undefined) config.set("effect_speed_equip", "1");
+	if (config.get("effect_fast_equip") === undefined) config.set("effect_fast_equip", false);
 	if (config.get("effect_speed_judge") === undefined) config.set("effect_speed_judge", "1");
 	if (config.get("effect_speed_move") === undefined) config.set("effect_speed_move", "1");
 	if (config.get("effect_speed_delay") === undefined) config.set("effect_speed_delay", "1");
