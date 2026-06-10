@@ -24,7 +24,7 @@ import { PoptipManager, HTMLPoptipElement } from "./poptip.js";
 import { ZhanfaManager } from "./zhanfa.js";
 import skills from "./skill.js";
 import { getDoudizhuEnabledCharacters, getDoudizhuRating, normalizeDoudizhuRatings } from "../../mode/doudizhu-rating.js";
-import { getIdentityLordRating, normalizeIdentityLordRatings } from "../../mode/identity-lord-rating.js";
+import { getDouzhuanIdentityLordPool, getIdentityLordRating, normalizeIdentityLordRatings } from "../../mode/identity-lord-rating.js";
 
 const html = dedent;
 const effectSpeedItems = {
@@ -6787,21 +6787,31 @@ export class Library {
 						const added = new Set();
 						const characters = [];
 						const replacedCharacters = [];
-						const addCharacter = function (name) {
-							if (!name || added.has(name) || !lib.character[name] || lib.filter.characterDisabled(name)) return;
+						const douzhuanPool = getDouzhuanIdentityLordPool(lib, "identity");
+						const hasDouzhuanPool = Array.isArray(douzhuanPool) && douzhuanPool.length > 0;
+						const addCharacter = function (name, useCurrentModeFilter = true) {
+							if (!name || added.has(name) || !lib.character[name]) return;
+							if (useCurrentModeFilter && lib.filter.characterDisabled(name)) return;
 							added.add(name);
 							characters.push(name);
 						};
-						for (const name in lib.characterReplace) {
+						const sourceList = hasDouzhuanPool ? douzhuanPool : Object.keys(lib.character);
+						for (const name of sourceList) {
+							const source = get.sourceCharacter(name);
+							if (source != name) {
+								replacedCharacters.add(name);
+								addCharacter(source, !hasDouzhuanPool);
+							} else {
+								addCharacter(name, !hasDouzhuanPool);
+							}
+						}
+						if (!hasDouzhuanPool) for (const name in lib.characterReplace) {
 							const list = lib.characterReplace[name];
 							if (!Array.isArray(list) || !list.length) continue;
 							const enabledList = list.filter(item => lib.character[item] && !lib.filter.characterDisabled(item));
 							if (!enabledList.length) continue;
 							replacedCharacters.addArray(enabledList);
 							addCharacter(name);
-						}
-						for (const name in lib.character) {
-							if (!replacedCharacters.includes(name)) addCharacter(name);
 						}
 						characters.sort((a, b) => (get.translation(a) || a).localeCompare(get.translation(b) || b, "zh-Hans") || String(a).localeCompare(String(b)));
 						if (!characters.length) {

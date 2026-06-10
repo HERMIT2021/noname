@@ -366,6 +366,9 @@ class Card extends HTMLDivElement {
     if (info.cardimage) {
       bg = info.cardimage;
     }
+    if (!lib.card[bg]) {
+      bg = card[2];
+    }
     let img = get.dynamicVariable(lib.card[bg].image, this);
     if (img) {
       if (typeof img != "string") {

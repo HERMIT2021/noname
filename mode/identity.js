@@ -1,5 +1,5 @@
 import { lib, game, ui, get, ai, _status } from "noname";
-import { getIdentityLordRating, normalizeIdentityLordRatings, sortIdentityLordCandidates } from "./identity-lord-rating.js";
+import { getDouzhuanIdentityLordPool, getIdentityLordRating, normalizeIdentityLordRatings, sortIdentityLordCandidates } from "./identity-lord-rating.js";
 export const type = "mode";
 /**
  * @type { () => importModeConfig }
@@ -492,6 +492,11 @@ export default () => {
 				if (!Array.isArray(list)) return [];
 				if (!game.isIdentityLordRatingEnabled()) return list.slice();
 				return sortIdentityLordCandidates(list, game.getIdentityLordRatings());
+			},
+			getIdentityLordPoolCandidates: function (fallbackList) {
+				var pool = getDouzhuanIdentityLordPool(lib, "identity");
+				if (Array.isArray(pool) && pool.length) return pool;
+				return Array.isArray(fallbackList) ? fallbackList.slice() : [];
 			},
 			getIdentityLordCandidateList: function (lordList, fallbackList, randomCount) {
 				var candidates = [];
@@ -1686,7 +1691,7 @@ export default () => {
 							}
 						}
 					} else if (player.identity == "zhu" && !stratagemMode) {
-						var lordChoices = game.getIdentityLordChoice(list2 && list2.length ? list2 : [], list, get.config("choice_zhu"));
+						var lordChoices = game.getIdentityLordChoice(list2 && list2.length ? list2 : [], game.getIdentityLordPoolCandidates(list), get.config("choice_zhu"));
 						var choice = lordChoices[0] || list[0], choice2 = lordChoices[1] || (list[0] == choice ? list[1] : list[0]);
 						if (lib.characterReplace[choice] && lib.characterReplace[choice].length) {
 							choice = lib.characterReplace[choice].randomGet();

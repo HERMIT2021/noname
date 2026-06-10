@@ -32,3 +32,26 @@ export function sortIdentityLordCandidates(candidates, ratings) {
 	});
 	return list;
 }
+
+export function getDouzhuanIdentityLordPool(lib, mode = "identity") {
+	const prefix = "extension_斗转星移_";
+	const modePlan = lib?.config?.[prefix + "modePlan"] || {};
+	const planIndex = Number.isFinite(parseInt(modePlan.identity_junzheng)) ? parseInt(modePlan.identity_junzheng) : Number.isFinite(parseInt(modePlan[mode])) && parseInt(modePlan[mode]) !== 0 ? parseInt(modePlan[mode]) : 1;
+	const plan = lib?.config?.[prefix + "plan" + planIndex];
+	if (!plan || !Array.isArray(plan.pack)) return null;
+	const banned = Array.isArray(plan.banList) ? plan.banList : [];
+	const result = [];
+	const addCharacter = name => {
+		if (!name || banned.includes(name) || !lib.character?.[name]) return;
+		if (lib.character[name].isUnseen || lib.character[name].isAiForbidden) return;
+		if (Array.isArray(lib.config?.forbidai) && lib.config.forbidai.includes(name)) return;
+		if (lib.characterFilter?.[name] && !lib.characterFilter[name](mode)) return;
+		result.add(name);
+	};
+	for (const pack of plan.pack) {
+		const characterPack = pack == "all" ? lib.character : lib.characterPack?.[pack];
+		if (!characterPack) continue;
+		for (const name in characterPack) addCharacter(name);
+	}
+	return result;
+}
