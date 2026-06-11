@@ -1153,30 +1153,26 @@ const skills = {
 							],
 						])
 						.set("ai", button => {
-							const { player, target } = get.event();
-							const att = get.attitude(player, target);
-							const { links } = button;
-							const hs = target.getCards("h");
-							if (att > 0) {
-								if (!links.length) {
-									return 2;
+							const { player, target } = get.event(),
+								choice = button.link,
+								cards = Array.isArray(button.links) ? button.links : [],
+								hs = target.getCards("h"),
+								att = get.attitude(player, target);
+							if (player != target && att <= 1) return -1;
+							if (!cards.length) return 8;
+							if (target.getCardUsable("sha") <= 0) {
+								const shaCount = cards.filter(card => get.name(card, target) == "sha" && target.getUseValue(card, true, false) > 0).length;
+								if (shaCount) {
+									let maxShaCount = 0;
+									for (const suit of lib.suits) {
+										maxShaCount = Math.max(maxShaCount, hs.filter(card => get.suit(card, target) == suit && get.name(card, target) == "sha" && target.getUseValue(card, true, false) > 0).length);
+									}
+									return shaCount == maxShaCount ? 6 + shaCount : 1 + shaCount;
 								}
-								if (links.filter(card => card.name == "sha" && target.getUseValue(card, true, false)).length > 1 && hs.length - links.length < 3) {
-									return 1;
-								}
-								return get.event().getRand();
-							} else if (att <= 0) {
-								if (!links.length) {
-									return 0;
-								}
-								if (links.length < 2) {
-									return 2;
-								}
-								if (links.filter(card => card.name == "sha" && target.getUseValue(card, true, false)).length < 2) {
-									return 1;
-								}
-								return 0;
 							}
+							const keepValue = cards.reduce((sum, card) => sum + Math.max(0, get.value(card, target)), 0),
+								discardValue = hs.reduce((sum, card) => (get.suit(card, target) == choice ? sum : sum + Math.max(0, get.value(card, target))), 0);
+							return Math.max(0.1, keepValue - discardValue / 2);
 						})
 						.set("target", player)
 						.forResult();
@@ -1226,7 +1222,8 @@ const skills = {
 					order: 5,
 					result: {
 						player(player, target) {
-							return get.attitude(player, target);
+							if (player == target) return 1;
+							return get.attitude(target, player) > 1 ? 1 : 0;
 						},
 					},
 				},
@@ -3289,7 +3286,7 @@ const skills = {
 		trigger: { global: "damageBegin4" },
 		usable: 1,
 		filter(event, player) {
-			return get.distance(event.player, player) <= 1; // && player != event.player
+			return player != event.player && get.distance(event.player, player) <= 1;
 		},
 		popup: false,
 		logTarget: "player",

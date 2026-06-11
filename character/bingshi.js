@@ -1255,30 +1255,21 @@ const skills = {
               list.map((item) => [Array.isArray(item) ? item : [item], "addNewRow"])
             ]
           ]).set("ai", (button) => {
-            const { player: player3, target: target2 } = get.event();
-            const att = get.attitude(player3, target2);
-            const { links } = button;
-            const hs = target2.getCards("h");
-            if (att > 0) {
-              if (!links.length) {
-                return 2;
+            const { player: player3, target: target2 } = get.event(), choice = button.link, cards2 = Array.isArray(button.links) ? button.links : [], hs = target2.getCards("h"), att = get.attitude(player3, target2);
+            if (player3 != target2 && att <= 1) return -1;
+            if (!cards2.length) return 8;
+            if (target2.getCardUsable("sha") <= 0) {
+              const shaCount = cards2.filter((card) => get.name(card, target2) == "sha" && target2.getUseValue(card, true, false) > 0).length;
+              if (shaCount) {
+                let maxShaCount = 0;
+                for (const suit of lib.suits) {
+                  maxShaCount = Math.max(maxShaCount, hs.filter((card) => get.suit(card, target2) == suit && get.name(card, target2) == "sha" && target2.getUseValue(card, true, false) > 0).length);
+                }
+                return shaCount == maxShaCount ? 6 + shaCount : 1 + shaCount;
               }
-              if (links.filter((card) => card.name == "sha" && target2.getUseValue(card, true, false)).length > 1 && hs.length - links.length < 3) {
-                return 1;
-              }
-              return get.event().getRand();
-            } else if (att <= 0) {
-              if (!links.length) {
-                return 0;
-              }
-              if (links.length < 2) {
-                return 2;
-              }
-              if (links.filter((card) => card.name == "sha" && target2.getUseValue(card, true, false)).length < 2) {
-                return 1;
-              }
-              return 0;
             }
+            const keepValue = cards2.reduce((sum, card) => sum + Math.max(0, get.value(card, target2)), 0), discardValue = hs.reduce((sum, card) => get.suit(card, target2) == choice ? sum : sum + Math.max(0, get.value(card, target2)), 0);
+            return Math.max(0.1, keepValue - discardValue / 2);
           }).set("target", player2).forResult();
           if (result?.links?.length) {
             const [choice] = result.links;
@@ -1319,7 +1310,8 @@ const skills = {
           order: 5,
           result: {
             player(player2, target) {
-              return get.attitude(player2, target);
+              if (player2 == target) return 1;
+              return get.attitude(target, player2) > 1 ? 1 : 0;
             }
           }
         }
@@ -3213,7 +3205,7 @@ const skills = {
     trigger: { global: "damageBegin4" },
     usable: 1,
     filter(event2, player2) {
-      return get.distance(event2.player, player2) <= 1;
+      return player2 != event2.player && get.distance(event2.player, player2) <= 1;
     },
     popup: false,
     logTarget: "player",

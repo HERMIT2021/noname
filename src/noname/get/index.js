@@ -1517,6 +1517,9 @@ export class Get {
 		}
 		return get.effectDuration(get.effectCardHold(duration), type, min);
 	}
+	effectFastEvent(event) {
+		return get.effectFastType(get.effectType(event?.card));
+	}
 	effectParticleRate() {
 		switch (lib.config.effect_particle_quality) {
 			case "off":

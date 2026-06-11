@@ -10088,7 +10088,7 @@ export const Content = {
 						virtualCard_str
 					);
 				}
-				if (lib.config.sync_speed && throw_cards[0] && throw_cards[0].clone) {
+				if (lib.config.sync_speed && throw_cards[0] && throw_cards[0].clone && !get.effectFastEvent(event)) {
 					let waitingForTransition = get.time();
 					event.waitingForTransition = waitingForTransition;
 					throw_cards[0].clone.listenTransition(function () {
@@ -10341,7 +10341,7 @@ export const Content = {
 			let info = get.info(event.card, false);
 			if (!info.nodelay && event.animate != false) {
 				if (event.delayx !== false) {
-					if (event.waitingForTransition) {
+					if (event.waitingForTransition && !get.effectFastEvent(event)) {
 						_status.waitingForTransition = event.waitingForTransition;
 						game.pause();
 					} else {
@@ -10562,7 +10562,7 @@ export const Content = {
 			}
 			if (!info.nodelay && num > 0) {
 				if (event.targetDelay !== false) {
-					await game.delayx(0.5);
+					await game.delay(0, get.effectFastEvent(event) ? get.effectFastDelay(50, get.effectType(event.card)) : get.effectDuration(lib.config.duration * 0.5, "delay", 16), false);
 				}
 			}
 			event._result = await next.forResult();
@@ -10682,9 +10682,9 @@ export const Content = {
 					if (losecard) {
 						losecard.visible = true;
 					}
-					if (lib.config.sync_speed && cards[0] && cards[0].clone) {
-						const waitingForTransition = get.time();
-						event.waitingForTransition = waitingForTransition;
+				if (lib.config.sync_speed && cards[0] && cards[0].clone && !get.effectFastEvent(event)) {
+					const waitingForTransition = get.time();
+					event.waitingForTransition = waitingForTransition;
 						cards[0].clone.listenTransition(function () {
 							if (_status.waitingForTransition == waitingForTransition && _status.paused) {
 								game.resume();
@@ -10922,15 +10922,15 @@ export const Content = {
 				if (typeof info.delay == "number") {
 					game.delay(info.delay);
 				} else if (info.delay !== false && info.delay !== 0) {
-					if (event.waitingForTransition) {
+					if (event.waitingForTransition && !get.effectFastEvent(event)) {
 						_status.waitingForTransition = event.waitingForTransition;
 						game.pause();
 					} else {
-						await game.delayx();
+						await game.delay(0, get.effectFastEvent(event) ? get.effectFastDelay(80, get.effectType(event.card)) : get.effectDuration(lib.config.duration, "delay", 16), false);
 					}
 				}
 			} else {
-				await game.delayx(0.5);
+				await game.delay(0, get.effectFastEvent(event) ? get.effectFastDelay(50, get.effectType(event.card)) : get.effectDuration(lib.config.duration * 0.5, "delay", 16), false);
 			}
 			if (!info.multitarget && num < targets.length - 1) {
 				event.num++;

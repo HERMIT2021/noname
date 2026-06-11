@@ -6811,6 +6811,38 @@ export class Library {
 					frequent: true,
 					intro: "启用后，军争AI当主公时会按主公评分优先选择主公武将。",
 				},
+				identity_lord_rating_debug: {
+					name: "显示主公评分调试",
+					init: false,
+					intro: "开启后，AI主公选将时会在日志中输出实际候选池数量、评分排序和最终选择。",
+				},
+				show_identity_lord_rating_debug: {
+					name: "查看主公评分候选",
+					clear: true,
+					intro: "查看最近一次AI主公评分选将的候选池、排序和最终选择。需先开始一局AI主公局。",
+					onclick() {
+						const data = _status.identityLordRatingDebug || get.config("identity_lord_rating_debug_last", "identity");
+						if (!data) {
+							alert("暂无AI主公评分候选记录。请先开始一局AI当主公的军争局。注意：人类当主公不会产生AI主公选将记录；开启“显示主公评分调试”后，对局日志会出现“军争主公评分”字样。");
+							return;
+						}
+						const top = (data.sorted || []).slice(0, 30).map((name, index) => `${index + 1}. ${get.translation(name)} (${name})：${game.getIdentityLordCharacterRating(name)}分`).join("\n");
+						alert([
+							"军争主公评分候选调试",
+							"记录时间：" + (data.time || "未知"),
+							"评分启用：" + (data.enabled ? "是" : "否"),
+							"常备主公候选：" + (data.fixed || []).length + "名",
+							"开放军争池：" + data.poolSize + "名",
+							"随机补入数量：" + data.randomCount,
+							"本次实际候选：" + (data.candidates || []).length + "名",
+							"最终选择：" + (data.choice ? `${get.translation(data.choice)} (${data.choice})：${game.getIdentityLordCharacterRating(data.choice)}分` : "无"),
+							"副将/备用：" + (data.choice2 ? `${get.translation(data.choice2)} (${data.choice2})：${game.getIdentityLordCharacterRating(data.choice2)}分` : "无"),
+							"",
+							"评分排序前30：",
+							top || "无",
+						].join("\n"));
+					},
+				},
 				edit_identity_lord_character_rating: {
 					name: "编辑主公评分",
 					intro: "打开图形化面板设置军争主公评分。评分越高，AI当主公时越优先选择。",
