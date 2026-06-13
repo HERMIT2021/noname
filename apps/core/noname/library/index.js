@@ -23,7 +23,8 @@ import dedent from "dedent";
 import { PoptipManager, HTMLPoptipElement } from "./poptip.js";
 import { ZhanfaManager } from "./zhanfa.js";
 import skills from "./skill.js";
-import { getDoudizhuEnabledCharacters, getDoudizhuRating, normalizeDoudizhuRatings } from "../../mode/doudizhu-rating.js";
+import { getDoudizhuEnabledCharacters, getDoudizhuRating, getDoudizhuWinrate, normalizeDoudizhuRatings, normalizeDoudizhuWinrateStats } from "../../mode/doudizhu-rating.js";
+import { getDouzhuanIdentityLordPool, getIdentityLordRating, normalizeIdentityLordRatings } from "../../mode/identity-lord-rating.js";
 
 const html = dedent;
 const effectSpeedItems = {
@@ -40,6 +41,38 @@ const effectSpeedItems = {
 	"12": "12x(极快)",
 	"16": "16x(瞬发)",
 	"20": "20x(超瞬发)",
+};
+
+const effectAnimationProfileItems = {
+	classic: "经典",
+	smooth: "顺滑",
+	snappy: "紧凑",
+	light: "轻量",
+};
+
+const effectCardHoldItems = {
+	short: "较短",
+	normal: "默认",
+	long: "较长",
+	instant: "极短",
+};
+
+const effectFastDelayItems = {
+	"0": "0ms(无等待)",
+	"16": "16ms(一帧)",
+	"33": "33ms(两帧)",
+	"50": "50ms",
+	"80": "80ms",
+	"120": "120ms",
+	"160": "160ms",
+	"240": "240ms",
+};
+
+const effectParticleQualityItems = {
+	off: "关闭",
+	low: "低",
+	normal: "默认",
+	high: "高",
 };
 
 export class Library {
@@ -1183,6 +1216,20 @@ export class Library {
 					unfrequent: true,
 					intro: "拖拽时显示虚线，可能降低游戏速度",
 				},
+				dragline_style: {
+					name: "拖拽指示线样式",
+					init: "gold",
+					unfrequent: true,
+					item: {
+						classic: "经典虚线",
+						gold: "金色箭头",
+						blue: "青锋双线",
+						red: "赤焰脉冲",
+						purple: "紫电星点",
+						minimal: "极简实线",
+					},
+					intro: "调整拖拽选牌/选目标时的指示线样式，包括箭头、双线、脉冲点、星点和极简实线",
+				},
 				// enable_pressure:{
 				// 	name:'启用压感',
 				// 	init:false,
@@ -1810,11 +1857,28 @@ export class Library {
 					item: effectSpeedItems,
 					intro: "单独调整使用牌后，卡牌从屏幕中间飞向角色/牌区并消失的后段动画速度",
 				},
+				effect_animation_profile: {
+					name: "对局动画质感",
+					init: "smooth",
+					item: effectAnimationProfileItems,
+					intro: "调整用牌、出牌和指示线的过渡曲线与移动幅度；轻量档会减少动画位移以提升连续出牌流畅度",
+				},
+				effect_card_hold: {
+					name: "出牌展示停留",
+					init: "normal",
+					item: effectCardHoldItems,
+					intro: "调整牌飞到屏幕中间后的展示停留时间；极短适合高倍速连续结算",
+				},
 				effect_speed_basic: {
 					name: "基本牌特效速度",
 					init: "1",
 					item: effectSpeedItems,
 					intro: "调整【杀】【闪】【桃】【酒】等基本牌的出牌提示和跟随动画速度",
+				},
+				effect_fast_basic: {
+					name: "基本牌极速结算",
+					init: false,
+					intro: "开启后压缩基本牌结算中的展示与收尾等待，连续使用【杀】【闪】【桃】【酒】时更快恢复响应",
 				},
 				effect_speed_trick: {
 					name: "锦囊牌特效速度",
@@ -1822,11 +1886,27 @@ export class Library {
 					item: effectSpeedItems,
 					intro: "调整【顺手牵羊】等普通锦囊和延时锦囊的出牌提示和跟随动画速度",
 				},
+				effect_fast_trick: {
+					name: "锦囊牌极速结算",
+					init: false,
+					intro: "开启后压缩普通锦囊与延时锦囊结算中的展示与收尾等待，连续使用锦囊时更快恢复响应",
+				},
 				effect_speed_equip: {
 					name: "装备牌特效速度",
 					init: "1",
 					item: effectSpeedItems,
 					intro: "调整武器、防具、坐骑、宝物等装备牌的使用和移动动画速度",
+				},
+				effect_fast_equip: {
+					name: "装备极速结算",
+					init: false,
+					intro: "开启后大幅压缩装备牌结算中的固定等待，连续装备时更快恢复点击响应",
+				},
+				effect_fast_delay: {
+					name: "极速等待时长",
+					init: "80",
+					item: effectFastDelayItems,
+					intro: "自定义极速结算开启后保留的最短等待；越低越连贯，若动画或提示来不及看清可调高",
 				},
 				effect_speed_judge: {
 					name: "判定展示速度",
@@ -1874,6 +1954,12 @@ export class Library {
 					init: "1",
 					item: effectSpeedItems,
 					intro: "调整限定技、觉醒技、属性伤害、回复体力等粒子和全屏文字特效速度",
+				},
+				effect_particle_quality: {
+					name: "粒子特效质量",
+					init: "normal",
+					item: effectParticleQualityItems,
+					intro: "调整火焰、雷电、回复、品质光效等粒子数量；低配设备可改为低或关闭",
 				},
 			},
 		},
@@ -6718,6 +6804,209 @@ export class Library {
 						}
 					},
 				},
+				identity_lord_character_rating: {
+					name: "启用主公评分选将",
+					init: true,
+					restart: true,
+					frequent: true,
+					intro: "启用后，军争AI当主公时会按主公评分优先选择主公武将。",
+				},
+				identity_lord_rating_debug: {
+					name: "显示主公评分调试",
+					init: false,
+					intro: "开启后，AI主公选将时会在日志中输出实际候选池数量、评分排序和最终选择。",
+				},
+				show_identity_lord_rating_debug: {
+					name: "查看主公评分候选",
+					clear: true,
+					intro: "查看最近一次AI主公评分选将的候选池、排序和最终选择。需先开始一局AI主公局。",
+					onclick() {
+						const data = _status.identityLordRatingDebug || get.config("identity_lord_rating_debug_last", "identity");
+						if (!data) {
+							alert("暂无AI主公评分候选记录。请先开始一局AI当主公的军争局。注意：人类当主公不会产生AI主公选将记录；开启“显示主公评分调试”后，对局日志会出现“军争主公评分”字样。");
+							return;
+						}
+						const top = (data.sorted || []).slice(0, 30).map((name, index) => `${index + 1}. ${get.translation(name)} (${name})：${game.getIdentityLordCharacterRating(name)}分`).join("\n");
+						alert([
+							"军争主公评分候选调试",
+							"记录时间：" + (data.time || "未知"),
+							"评分启用：" + (data.enabled ? "是" : "否"),
+							"常备主公候选：" + (data.fixed || []).length + "名",
+							"开放军争池：" + data.poolSize + "名",
+							"随机补入数量：" + data.randomCount,
+							"本次实际候选：" + (data.candidates || []).length + "名",
+							"最终选择：" + (data.choice ? `${get.translation(data.choice)} (${data.choice})：${game.getIdentityLordCharacterRating(data.choice)}分` : "无"),
+							"副将/备用：" + (data.choice2 ? `${get.translation(data.choice2)} (${data.choice2})：${game.getIdentityLordCharacterRating(data.choice2)}分` : "无"),
+							"",
+							"评分排序前30：",
+							top || "无",
+						].join("\n"));
+					},
+				},
+				edit_identity_lord_character_rating: {
+					name: "编辑主公评分",
+					intro: "打开图形化面板设置军争主公评分。评分越高，AI当主公时越优先选择。",
+					clear: true,
+					onclick() {
+						const added = new Set();
+						const characters = [];
+						const replacedCharacters = [];
+						const douzhuanPool = getDouzhuanIdentityLordPool(lib, "identity");
+						const hasDouzhuanPool = Array.isArray(douzhuanPool) && douzhuanPool.length > 0;
+						const addCharacter = function (name, useCurrentModeFilter = true) {
+							if (!name || added.has(name) || !lib.character[name]) return;
+							if (useCurrentModeFilter && lib.filter.characterDisabled(name)) return;
+							added.add(name);
+							characters.push(name);
+						};
+						const sourceList = hasDouzhuanPool ? douzhuanPool : Object.keys(lib.character);
+						for (const name of sourceList) {
+							if (hasDouzhuanPool) {
+								addCharacter(name, false);
+								continue;
+							}
+							const source = get.sourceCharacter(name);
+							if (source != name) {
+								replacedCharacters.add(name);
+								addCharacter(source, !hasDouzhuanPool);
+							} else {
+								addCharacter(name, !hasDouzhuanPool);
+							}
+						}
+						if (!hasDouzhuanPool) for (const name in lib.characterReplace) {
+							const list = lib.characterReplace[name];
+							if (!Array.isArray(list) || !list.length) continue;
+							const enabledList = list.filter(item => lib.character[item] && !lib.filter.characterDisabled(item));
+							if (!enabledList.length) continue;
+							replacedCharacters.addArray(enabledList);
+							addCharacter(name);
+						}
+						characters.sort((a, b) => (get.translation(a) || a).localeCompare(get.translation(b) || b, "zh-Hans") || String(a).localeCompare(String(b)));
+						if (!characters.length) {
+							alert("当前没有可评分的军争候选武将。");
+							return;
+						}
+						const storedRatings = normalizeIdentityLordRatings(get.config("identity_lord_character_rating_data", "identity") || {});
+						const editingRatings = {};
+						for (const name of characters) editingRatings[name] = getIdentityLordRating(storedRatings, name);
+						const applyPanelStyle = function (node, cssText) {
+							node.style.cssText = "position:relative;display:block;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+							return node;
+						};
+						const applyFlexStyle = function (node, cssText) {
+							node.style.cssText = "position:relative;display:flex;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+							return node;
+						};
+						const applyGridStyle = function (node, cssText) {
+							node.style.cssText = "position:relative;display:grid;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+							return node;
+						};
+						const createTextNode = function (parent, text, cssText) {
+							return applyPanelStyle(ui.create.div("", text, parent), cssText);
+						};
+						const closePanel = function () {
+							ui.window.classList.remove("shortcutpaused");
+							ui.window.classList.remove("systempaused");
+							overlay.remove();
+						};
+						const overlay = ui.create.div(".popup-container", ui.window, function (event) {
+							if (event.target == overlay) closePanel();
+						});
+						overlay.style.cssText = "position:fixed;left:0;top:0;width:100%;height:100%;z-index:10000;background:rgba(0,0,0,0.72);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;transition:none;text-shadow:none;";
+						ui.window.classList.add("shortcutpaused");
+						ui.window.classList.add("systempaused");
+						const panel = ui.create.div("", overlay);
+						applyFlexStyle(panel, "width:min(820px,94vw);height:min(720px,90vh);background:rgba(28,27,25,0.97);border:1px solid rgba(226,198,126,0.58);border-radius:8px;box-shadow:0 18px 48px rgba(0,0,0,0.55);color:#f7ecd9;flex-direction:column;overflow:hidden;");
+						panel.addEventListener("click", event => event.stopPropagation());
+						const header = ui.create.div("", panel);
+						applyFlexStyle(header, "align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.12);");
+						const title = ui.create.div("", header);
+						applyPanelStyle(title, "flex:1;min-width:0;");
+						createTextNode(title, "军争主公评分", "font-size:20px;font-weight:700;line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+						const subTitle = createTextNode(title, "当前军争候选：" + characters.length + "名", "margin-top:4px;font-size:13px;line-height:18px;color:rgba(247,236,217,0.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+						const searchInput = document.createElement("input");
+						searchInput.type = "search";
+						searchInput.placeholder = "搜索武将";
+						searchInput.style.cssText = "position:relative;display:block;width:160px;height:32px;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.08);color:#f7ecd9;padding:0 10px;outline:none;box-sizing:border-box;transition:none;";
+						header.appendChild(searchInput);
+						const saveButton = ui.create.div(".menubutton.large", "保存", header);
+						applyPanelStyle(saveButton, "margin:0;min-width:66px;height:32px;line-height:32px;border-radius:6px;text-align:center;background:rgba(205,158,70,0.95);color:#191714;cursor:pointer;");
+						const closeButton = ui.create.div(".menubutton.large", "关闭", header);
+						applyPanelStyle(closeButton, "margin:0;min-width:66px;height:32px;line-height:32px;border-radius:6px;text-align:center;background:rgba(255,255,255,0.1);color:#f7ecd9;cursor:pointer;");
+						closeButton.listen(closePanel);
+						const table = ui.create.div("", panel);
+						applyPanelStyle(table, "flex:1;min-height:0;overflow:auto;padding:0 12px 12px 12px;");
+						const tableHeader = ui.create.div("", table);
+						applyGridStyle(tableHeader, "position:sticky;top:0;z-index:1;grid-template-columns:68px minmax(150px,1fr) 282px;gap:10px;align-items:center;min-width:520px;padding:10px 8px;background:rgba(28,27,25,0.98);border-bottom:1px solid rgba(255,255,255,0.12);color:rgba(247,236,217,0.74);font-size:13px;");
+						createTextNode(tableHeader, "头像", "");
+						createTextNode(tableHeader, "武将", "");
+						createTextNode(tableHeader, "主公评分", "");
+						const rows = [];
+						const setButtonActive = function (button, active) {
+							button.style.background = active ? "rgba(205,158,70,0.95)" : "rgba(255,255,255,0.08)";
+							button.style.color = active ? "#191714" : "#f7ecd9";
+							button.style.borderColor = active ? "rgba(255,232,170,0.7)" : "rgba(255,255,255,0.16)";
+							button.style.fontWeight = active ? "700" : "400";
+						};
+						const createScoreGroup = function (row, name) {
+							const group = ui.create.div("", row);
+							applyGridStyle(group, "grid-template-columns:repeat(10,24px);gap:4px;align-items:center;");
+							const buttons = [];
+							for (let score = 1; score <= 10; score++) {
+								const button = ui.create.div("", String(score), group);
+								applyPanelStyle(button, "height:24px;line-height:24px;text-align:center;border:1px solid rgba(255,255,255,0.16);border-radius:5px;cursor:pointer;font-size:13px;");
+								button.listen(function () {
+									editingRatings[name] = score;
+									for (const item of buttons) setButtonActive(item.button, item.score == score);
+								});
+								buttons.push({ button, score });
+							}
+							for (const item of buttons) setButtonActive(item.button, item.score == editingRatings[name]);
+						};
+						for (const name of characters) {
+							const row = ui.create.div("", table);
+							applyGridStyle(row, "grid-template-columns:68px minmax(150px,1fr) 282px;gap:10px;align-items:center;min-width:520px;padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);");
+							const avatar = ui.create.div("", row);
+							applyPanelStyle(avatar, "width:52px;height:64px;border-radius:6px;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.2);");
+							avatar.setBackground(name, "character");
+							const nameNode = ui.create.div("", row);
+							applyPanelStyle(nameNode, "min-width:0;");
+							const translatedName = get.translation(name) || name;
+							createTextNode(nameNode, translatedName, "font-size:16px;line-height:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+							createTextNode(nameNode, name, "margin-top:3px;font-size:12px;line-height:16px;color:rgba(247,236,217,0.58);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+							createScoreGroup(row, name);
+							rows.push({ node: row, searchText: (translatedName + " " + name).toLowerCase() });
+						}
+						searchInput.addEventListener("input", function () {
+							const value = this.value.trim().toLowerCase();
+							let count = 0;
+							for (const row of rows) {
+								const visible = !value || row.searchText.includes(value);
+								row.node.style.display = visible ? "grid" : "none";
+								if (visible) count++;
+							}
+							subTitle.textContent = "当前显示：" + count + "/" + characters.length + "名";
+						});
+						saveButton.listen(function () {
+							const nextRatings = { ...storedRatings };
+							for (const name of characters) nextRatings[name] = editingRatings[name];
+							game.saveConfig("identity_lord_character_rating_data", nextRatings, "identity");
+							closePanel();
+							alert("军争主公评分已保存");
+						});
+					},
+				},
+				reset_identity_lord_character_rating: {
+					name: "重置主公评分",
+					intro: "清除军争主公评分配置。清除后所有未填写的武将都会按默认5分处理。",
+					clear: true,
+					onclick() {
+						if (confirm("是否清除军争主公评分配置？")) {
+							game.saveConfig("identity_lord_character_rating_data", null, "identity");
+							alert("军争主公评分已重置");
+						}
+					},
+				},
 				choice_zhong: {
 					name: "忠臣候选武将数",
 					init: 4,
@@ -8326,6 +8615,222 @@ export class Library {
 						if (confirm("是否清除斗地主武将评分配置？")) {
 							game.saveConfig("doudizhu_character_rating_data", null, "doudizhu");
 							alert("斗地主武将评分已重置");
+						}
+					},
+				},
+				show_character_winrate: {
+					name: "查看胜率统计",
+					intro: "查看你在斗地主中使用各武将的场次、胜负、总胜率，以及地主/农民分项胜率。双将局会给两个武将分别记一场。",
+					clear: true,
+					onclick() {
+						const stats = normalizeDoudizhuWinrateStats(get.config("doudizhu_character_winrate_data", "doudizhu") || {});
+						const entries = Object.keys(stats)
+							.filter(name => stats[name].total > 0)
+							.map(name => {
+								const translatedName = get.translation(name) || name;
+								return {
+									name,
+									translatedName,
+									total: stats[name],
+									zhu: stats[name].zhu || { total: 0, win: 0, lose: 0 },
+									fan: stats[name].fan || { total: 0, win: 0, lose: 0 },
+									searchText: (translatedName + " " + name).toLowerCase(),
+								};
+							});
+						if (!entries.length) {
+							alert("暂无斗地主武将胜率记录。完成一局斗地主后会自动统计你本局使用的武将。");
+							return;
+						}
+
+						const applyPanelStyle = function (node, cssText) {
+							node.style.cssText = "position:relative;display:block;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+							return node;
+						};
+						const applyFlexStyle = function (node, cssText) {
+							node.style.cssText = "position:relative;display:flex;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+							return node;
+						};
+						const applyGridStyle = function (node, cssText) {
+							node.style.cssText = "position:relative;display:grid;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+							return node;
+						};
+						const createTextNode = function (parent, text, cssText) {
+							return applyPanelStyle(ui.create.div("", text, parent), cssText);
+						};
+						const formatRate = function (line) {
+							return line && line.total ? (getDoudizhuWinrate(line) * 100).toFixed(1) + "%" : "-";
+						};
+						const formatRole = function (line) {
+							return line && line.total ? line.win + "/" + line.total + " " + formatRate(line) : "-";
+						};
+						const compareName = function (a, b) {
+							return a.translatedName.localeCompare(b.translatedName, "zh-Hans") || a.name.localeCompare(b.name);
+						};
+						const closePanel = function () {
+							ui.window.classList.remove("shortcutpaused");
+							ui.window.classList.remove("systempaused");
+							overlay.remove();
+						};
+						const overlay = ui.create.div(".popup-container", ui.window, function (event) {
+							if (event.target == overlay) {
+								closePanel();
+							}
+						});
+						overlay.style.cssText = "position:fixed;left:0;top:0;width:100%;height:100%;z-index:10000;background:rgba(0,0,0,0.72);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;transition:none;text-shadow:none;";
+						ui.window.classList.add("shortcutpaused");
+						ui.window.classList.add("systempaused");
+
+						const panel = ui.create.div("", overlay);
+						applyFlexStyle(panel, "width:min(1040px,94vw);height:min(720px,90vh);background:rgba(28,27,25,0.97);border:1px solid rgba(226,198,126,0.58);border-radius:8px;box-shadow:0 18px 48px rgba(0,0,0,0.55);color:#f7ecd9;flex-direction:column;overflow:hidden;");
+						panel.addEventListener("click", event => event.stopPropagation());
+
+						const header = ui.create.div("", panel);
+						applyFlexStyle(header, "align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.12);");
+						const title = ui.create.div("", header);
+						applyPanelStyle(title, "flex:1;min-width:0;");
+						createTextNode(title, "斗地主胜率统计", "font-size:20px;font-weight:700;line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+						const subTitle = createTextNode(title, "共 " + entries.length + " 名武将有记录", "margin-top:4px;font-size:13px;line-height:18px;color:rgba(247,236,217,0.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+						const searchInput = document.createElement("input");
+						searchInput.type = "search";
+						searchInput.placeholder = "搜索武将";
+						searchInput.style.cssText = "position:relative;display:block;width:160px;height:32px;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.08);color:#f7ecd9;padding:0 10px;outline:none;box-sizing:border-box;transition:none;";
+						header.appendChild(searchInput);
+						const closeButton = ui.create.div(".menubutton.large", "关闭", header);
+						applyPanelStyle(closeButton, "margin:0;min-width:66px;height:32px;line-height:32px;border-radius:6px;text-align:center;background:rgba(255,255,255,0.1);color:#f7ecd9;cursor:pointer;");
+						closeButton.listen(closePanel);
+
+						const table = ui.create.div("", panel);
+						applyPanelStyle(table, "flex:1;min-height:0;overflow:auto;padding:0 12px 12px 12px;");
+						const tableHeader = ui.create.div("", table);
+						applyGridStyle(tableHeader, "position:sticky;top:0;z-index:1;grid-template-columns:46px 68px minmax(150px,1fr) 76px 88px 88px 130px 130px;gap:10px;align-items:center;min-width:900px;padding:10px 8px;background:rgba(28,27,25,0.98);border-bottom:1px solid rgba(255,255,255,0.12);color:rgba(247,236,217,0.74);font-size:13px;");
+						createTextNode(tableHeader, "排名", "text-align:center;");
+						createTextNode(tableHeader, "头像", "");
+						const headerLabels = {
+							name: "武将",
+							total: "场次",
+							record: "胜负",
+							rate: "胜率",
+							zhu: "地主",
+							fan: "农民",
+						};
+						const headerNodes = {};
+						const sortState = { key: "rate", direction: "desc" };
+						const createHeaderCell = function (key) {
+							const node = createTextNode(tableHeader, headerLabels[key], "cursor:pointer;user-select:none;");
+							node.listen(function () {
+								if (sortState.key == key) {
+									sortState.direction = sortState.direction == "desc" ? "asc" : "desc";
+								} else {
+									sortState.key = key;
+									sortState.direction = key == "name" ? "asc" : "desc";
+								}
+								renderRows();
+							});
+							headerNodes[key] = node;
+						};
+						createHeaderCell("name");
+						createHeaderCell("total");
+						createHeaderCell("record");
+						createHeaderCell("rate");
+						createHeaderCell("zhu");
+						createHeaderCell("fan");
+
+						const body = ui.create.div("", table);
+						applyPanelStyle(body, "min-width:900px;");
+						const rows = new Map();
+						for (const entry of entries) {
+							const row = ui.create.div("", body);
+							applyGridStyle(row, "grid-template-columns:46px 68px minmax(150px,1fr) 76px 88px 88px 130px 130px;gap:10px;align-items:center;min-width:900px;padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);");
+							const rankNode = createTextNode(row, "", "text-align:center;font-size:13px;color:rgba(247,236,217,0.64);");
+							const avatar = ui.create.div("", row);
+							applyPanelStyle(avatar, "width:52px;height:64px;border-radius:6px;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.2);");
+							if (lib.character[entry.name]) {
+								avatar.setBackground(entry.name, "character");
+							}
+							const nameNode = ui.create.div("", row);
+							applyPanelStyle(nameNode, "min-width:0;");
+							createTextNode(nameNode, entry.translatedName, "font-size:16px;line-height:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+							createTextNode(nameNode, entry.name, "margin-top:3px;font-size:12px;line-height:16px;color:rgba(247,236,217,0.58);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+							createTextNode(row, String(entry.total.total), "font-size:15px;line-height:22px;text-align:center;");
+							createTextNode(row, entry.total.win + "胜" + entry.total.lose + "负", "font-size:14px;line-height:22px;text-align:center;");
+							createTextNode(row, formatRate(entry.total), "font-size:16px;line-height:22px;text-align:center;color:#f0c36d;font-weight:700;");
+							createTextNode(row, formatRole(entry.zhu), "font-size:14px;line-height:22px;text-align:center;color:rgba(247,236,217,0.82);");
+							createTextNode(row, formatRole(entry.fan), "font-size:14px;line-height:22px;text-align:center;color:rgba(247,236,217,0.82);");
+							rows.set(entry.name, {
+								node: row,
+								rankNode,
+								entry,
+							});
+						}
+
+						const getSortValue = function (entry, key) {
+							switch (key) {
+								case "total":
+									return entry.total.total;
+								case "record":
+									return entry.total.win;
+								case "zhu":
+									return getDoudizhuWinrate(entry.zhu);
+								case "fan":
+									return getDoudizhuWinrate(entry.fan);
+								default:
+									return getDoudizhuWinrate(entry.total);
+							}
+						};
+						const updateHeaderLabels = function () {
+							for (const key in headerNodes) {
+								headerNodes[key].textContent = headerLabels[key] + (sortState.key == key ? (sortState.direction == "desc" ? " ↓" : " ↑") : "");
+							}
+						};
+						function sortEntries(a, b) {
+							if (sortState.key == "name") {
+								const result = compareName(a, b);
+								return sortState.direction == "desc" ? -result : result;
+							}
+							let result = getSortValue(a, sortState.key) - getSortValue(b, sortState.key);
+							if (!result && (sortState.key == "zhu" || sortState.key == "fan")) {
+								result = a[sortState.key].total - b[sortState.key].total;
+							}
+							if (!result) {
+								result = entryTotalTie(a) - entryTotalTie(b);
+							}
+							if (result) {
+								return sortState.direction == "desc" ? -result : result;
+							}
+							return compareName(a, b);
+						}
+						function entryTotalTie(entry) {
+							return entry.total.total * 10000 + entry.total.win;
+						}
+						function renderRows() {
+							const value = searchInput.value.trim().toLowerCase();
+							const sorted = entries.slice().sort(sortEntries);
+							let count = 0;
+							for (const entry of sorted) {
+								const row = rows.get(entry.name);
+								const visible = !value || entry.searchText.includes(value);
+								row.node.style.display = visible ? "grid" : "none";
+								body.appendChild(row.node);
+								if (visible) {
+									count++;
+									row.rankNode.textContent = String(count);
+								}
+							}
+							updateHeaderLabels();
+							subTitle.textContent = "共 " + entries.length + " 名武将有记录，当前显示：" + count + "名";
+						}
+						searchInput.addEventListener("input", renderRows);
+						renderRows();
+					},
+				},
+				reset_character_winrate: {
+					name: "重置胜率统计",
+					intro: "清除斗地主武将胜率统计数据。清除后下一局会重新开始统计。",
+					clear: true,
+					onclick() {
+						if (confirm("是否清除斗地主武将胜率统计？")) {
+							game.saveConfig("doudizhu_character_winrate_data", null, "doudizhu");
+							alert("斗地主武将胜率统计已重置");
 						}
 					},
 				},

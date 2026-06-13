@@ -947,6 +947,7 @@ export const Content = {
 	//装备牌
 	async equip(event, trigger, player) {
 		event.visible = true;
+		const fastEquip = lib.config.effect_fast_equip === true;
 		//先确定这次的cards是什么成分也防止有人在equipBegin之类的时机往里面塞垃圾
 		if (event.cards.length > 1 && event.cards.some(cardx => cardx.isViewAsCard)) {
 			//实体牌数大于1且里面有虚拟假牌，终止此事件
@@ -1055,12 +1056,12 @@ export const Content = {
 					next.card = event.vcards[0];
 					await next;
 				}
-				if (cardInfo.equipDelay != false) {
+				if (!fastEquip && cardInfo.equipDelay != false) {
 					await game.delayx();
 				}
 			}
 			delete player.equiping;
-			if (event.delay) {
+			if (!fastEquip && event.delay) {
 				await game.delayx();
 			}
 		};
@@ -1110,7 +1111,7 @@ export const Content = {
 		if (event.cards.length) {
 			if (event.draw) {
 				player.$draw(event.cards);
-				await game.delay(0, 300);
+				await game.delay(0, fastEquip ? get.effectFastDelay(80, "equip") : get.effectDuration(300, "equip", 16), false);
 			} else {
 				// @ts-expect-error ignore
 				game.broadcast(
@@ -1146,7 +1147,7 @@ export const Content = {
 			const loseEvent = player.lose(result.cards, "visible").set("type", "equip").set("getlx", false);
 			loseEvent.swapEquip = true;
 			if (get.info(event.card, true)?.loseThrow) {
-				player.$throw(result.cards, 1000);
+				player.$throw(result.cards, fastEquip ? get.effectFastDelay(160, "equip") : get.effectDuration(1000, "equip", 16));
 			}
 			await loseEvent;
 			// @ts-expect-error ignore
@@ -10087,7 +10088,7 @@ export const Content = {
 						virtualCard_str
 					);
 				}
-				if (lib.config.sync_speed && throw_cards[0] && throw_cards[0].clone) {
+				if (lib.config.sync_speed && throw_cards[0] && throw_cards[0].clone && !get.effectFastEvent(event)) {
 					let waitingForTransition = get.time();
 					event.waitingForTransition = waitingForTransition;
 					throw_cards[0].clone.listenTransition(function () {
@@ -10340,11 +10341,11 @@ export const Content = {
 			let info = get.info(event.card, false);
 			if (!info.nodelay && event.animate != false) {
 				if (event.delayx !== false) {
-					if (event.waitingForTransition) {
+					if (event.waitingForTransition && !get.effectFastEvent(event)) {
 						_status.waitingForTransition = event.waitingForTransition;
 						game.pause();
 					} else {
-						game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration, 0, false);
+						game.delay(0, get.effectCardDelay(lib.config.duration, event.card, 80), false);
 					}
 				}
 			}
@@ -10561,7 +10562,7 @@ export const Content = {
 			}
 			if (!info.nodelay && num > 0) {
 				if (event.targetDelay !== false) {
-					await game.delayx(0.5);
+					await game.delay(0, get.effectFastEvent(event) ? get.effectFastDelay(50, get.effectType(event.card)) : get.effectDuration(lib.config.duration * 0.5, "delay", 16), false);
 				}
 			}
 			event._result = await next.forResult();
@@ -10603,9 +10604,9 @@ export const Content = {
 				return;
 			}
 			if (event.effectedCount < event.effectCount) {
-				if (document.getElementsByClassName("thrown").length) {
+				if (get.hasThrownCards()) {
 					if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-						game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration, 0, false);
+						game.delay(0, get.effectCardDelay(lib.config.duration, event.card, 80), false);
 					}
 				}
 				event.goto(11);
@@ -10620,9 +10621,9 @@ export const Content = {
 				event.result = event._result;
 			}
 			//delete player.using;
-			if (document.getElementsByClassName("thrown").length) {
+			if (get.hasThrownCards()) {
 				if (event.delayx !== false && get.info(event.card, false).finalDelay !== false) {
-					game.delayx(get.effectDuration(lib.config.duration, get.effectType(event.card), 80) / lib.config.duration, 0, false);
+					game.delay(0, get.effectCardDelay(lib.config.duration, event.card, 80), false);
 				}
 			} else {
 				event.finish();
@@ -10681,9 +10682,9 @@ export const Content = {
 					if (losecard) {
 						losecard.visible = true;
 					}
-					if (lib.config.sync_speed && cards[0] && cards[0].clone) {
-						const waitingForTransition = get.time();
-						event.waitingForTransition = waitingForTransition;
+				if (lib.config.sync_speed && cards[0] && cards[0].clone && !get.effectFastEvent(event)) {
+					const waitingForTransition = get.time();
+					event.waitingForTransition = waitingForTransition;
 						cards[0].clone.listenTransition(function () {
 							if (_status.waitingForTransition == waitingForTransition && _status.paused) {
 								game.resume();
@@ -10921,15 +10922,15 @@ export const Content = {
 				if (typeof info.delay == "number") {
 					game.delay(info.delay);
 				} else if (info.delay !== false && info.delay !== 0) {
-					if (event.waitingForTransition) {
+					if (event.waitingForTransition && !get.effectFastEvent(event)) {
 						_status.waitingForTransition = event.waitingForTransition;
 						game.pause();
 					} else {
-						await game.delayx();
+						await game.delay(0, get.effectFastEvent(event) ? get.effectFastDelay(80, get.effectType(event.card)) : get.effectDuration(lib.config.duration, "delay", 16), false);
 					}
 				}
 			} else {
-				await game.delayx(0.5);
+				await game.delay(0, get.effectFastEvent(event) ? get.effectFastDelay(50, get.effectType(event.card)) : get.effectDuration(lib.config.duration * 0.5, "delay", 16), false);
 			}
 			if (!info.multitarget && num < targets.length - 1) {
 				event.num++;
@@ -10960,7 +10961,7 @@ export const Content = {
 				player._noSkill = true;
 				console.log(player.name, event.skill);
 			}
-			if (document.getElementsByClassName("thrown").length) {
+			if (get.hasThrownCards()) {
 				if (event.skill && get.info(event.skill).delay !== false && get.info(event.skill).delay !== 0) {
 					await game.delayx();
 				}

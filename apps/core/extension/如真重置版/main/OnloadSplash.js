@@ -1367,7 +1367,6 @@ export default {
 				}
 				//首屏加载
 				function setupx() {
-					console.timeEnd("y加载完毕");
 					let pica = new PIXI.Sprite(yloader.resources.pic.texture);
 					pica.name = "pica";
 					uiinit(pica);
@@ -2163,7 +2162,6 @@ export default {
 				});
 
 				function setupz() {
-					console.timeEnd("Z加载完毕");
 					//左边花纹，飘带，圈，龙头，星星，段位文字，巅峰赛，赛季等
 					let jj_tittle = paiweicreate("jj_tittle");
 					uiinit(jj_tittle);
@@ -2753,7 +2751,6 @@ export default {
 				});
 
 				function setupp() {
-					console.timeEnd("p加载完毕");
 					findpipei = new PIXI.spine.Spine(ploader.resources.zhuanpan.spineData);
 					findpipei.x = 0.5 * pixiapp.screen.width;
 					findpipei.y = pixiapp.screen.height;

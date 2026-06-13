@@ -14481,7 +14481,8 @@ export class Player extends HTMLDivElement {
 						}
 
 						// 等待动画之后添加喵
-						await waitForTransition(lastCard, get.effectDuration(500, "card", 80));
+						const profile = get.effectProfile();
+						await waitForTransition(lastCard, get.effectDuration(profile.throwDuration, "card", profile.throwMin));
 
 						// 创建一张实体假牌用于显示信息哦
 						const number = get.number(vcard, false);
@@ -14675,10 +14676,12 @@ export class Player extends HTMLDivElement {
 		// }
 	}
 	$throwordered1(node, nosource) {
+		const profile = get.effectProfile();
 		node.classList.add("thrown");
 		node.hide();
-		node.style.transitionProperty = "left,top,opacity,transform";
-		node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1000 + "s";
+		node.style.transitionProperty = profile.transition;
+		node.style.transitionTimingFunction = profile.timing;
+		node.style.transitionDuration = get.effectDuration(profile.throwDuration, node._effectType || "card", profile.throwMin) / 1000 + "s";
 		for (var i = 0; i < ui.thrown.length; i++) {
 			if (ui.thrown[i].parentNode != ui.arena || ui.thrown[i].classList.contains("removing")) {
 				ui.thrown.splice(i--, 1);
@@ -14794,11 +14797,13 @@ export class Player extends HTMLDivElement {
 		return node;
 	}
 	$throwordered2(node, nosource) {
+		const profile = get.effectProfile();
 		node.classList.add("thrown");
 		node.classList.add("center");
 		node.hide();
-		node.style.transitionProperty = "left,top,opacity,transform";
-		node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1000 + "s";
+		node.style.transitionProperty = profile.transition;
+		node.style.transitionTimingFunction = profile.timing;
+		node.style.transitionDuration = get.effectDuration(profile.throwDuration, node._effectType || "card", profile.throwMin) / 1000 + "s";
 		if (!nosource) {
 			var nx = [50, -52];
 			var ny = [50, -52];
@@ -14868,7 +14873,7 @@ export class Player extends HTMLDivElement {
 				dlcX += xx;
 				x -= xx;
 			}
-			cards[j].style.transform = "translate(" + x + "px, -30px)";
+			cards[j].style.transform = "translate(" + x + "px, " + profile.centerY + "px)";
 			if (cards[j].node && j < cards.length - 1 && infoOffset > 0) {
 				var actualInfoOffset = infoOffset;
 				if (infoOffset > 40) {
@@ -14914,12 +14919,14 @@ export class Player extends HTMLDivElement {
 		return node;
 	}
 	$throwxy(card, left, top) {
+		const profile = get.effectProfile();
 		var node = card.copy("thrown", "thrownhighlight");
 		node._effectType = get.effectTypeFromEvent(card);
 		node.dataset.position = this.dataset.position;
 		node.hide();
 		node.style.transitionProperty = "left,top,opacity";
-		node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1000 + "s";
+		node.style.transitionTimingFunction = profile.timing;
+		node.style.transitionDuration = get.effectDuration(profile.throwDuration, node._effectType || "card", profile.throwMin) / 1000 + "s";
 
 		ui.arena.appendChild(node);
 		ui.refresh(node);
@@ -14933,12 +14940,14 @@ export class Player extends HTMLDivElement {
 		if (game.chess) {
 			return this.$throwxy.apply(this, arguments);
 		}
+		const profile = get.effectProfile();
 		var node = card.copy("thrown", "thrownhighlight");
 		node._effectType = get.effectTypeFromEvent(card);
 		node.style.left = left;
 		node.style.top = top;
 		node.hide();
-		node.style.transitionDuration = get.effectDuration(500, node._effectType || "card", 80) / 1000 + "s";
+		node.style.transitionTimingFunction = profile.timing;
+		node.style.transitionDuration = get.effectDuration(profile.throwDuration, node._effectType || "card", profile.throwMin) / 1000 + "s";
 		// node.style.transitionProperty='left,top,opacity,transform';
 
 		var parseCalc = function (str) {

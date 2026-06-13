@@ -1446,6 +1446,229 @@ export class Get {
 		const minDuration = min > 0 && speed > 1 ? Math.max(16, Math.round(min / speed)) : min;
 		return Math.max(minDuration, result);
 	}
+	effectProfile() {
+		const name = lib.config.effect_animation_profile || "smooth";
+		const profiles = {
+			classic: {
+				transition: "left,top,opacity,transform",
+				timing: "ease",
+				throwDuration: 500,
+				throwMin: 80,
+				centerY: -30,
+				lineOpacity: 1,
+				lineHold: 1,
+			},
+			smooth: {
+				transition: "left,top,opacity,transform",
+				timing: "cubic-bezier(0.22, 1, 0.36, 1)",
+				throwDuration: 460,
+				throwMin: 70,
+				centerY: -24,
+				lineOpacity: 0.92,
+				lineHold: 0.9,
+			},
+			snappy: {
+				transition: "left,top,opacity,transform",
+				timing: "cubic-bezier(0.16, 1, 0.3, 1)",
+				throwDuration: 360,
+				throwMin: 55,
+				centerY: -18,
+				lineOpacity: 0.88,
+				lineHold: 0.75,
+			},
+			light: {
+				transition: "left,top,opacity,transform",
+				timing: "cubic-bezier(0.2, 0, 0, 1)",
+				throwDuration: 300,
+				throwMin: 48,
+				centerY: -12,
+				lineOpacity: 0.8,
+				lineHold: 0.6,
+			},
+		};
+		return profiles[name] || profiles.smooth;
+	}
+	effectCardHold(duration) {
+		const hold = lib.config.effect_card_hold || "normal";
+		const rateMap = {
+			instant: 0.18,
+			short: 0.55,
+			normal: 1,
+			long: 1.35,
+		};
+		const rate = rateMap[hold] || rateMap.normal;
+		return Math.max(0, duration * rate);
+	}
+	effectFastType(type = "card") {
+		if (type == "equip") return lib.config.effect_fast_equip === true;
+		if (type == "basic") return lib.config.effect_fast_basic === true;
+		if (type == "trick" || type == "delay") return lib.config.effect_fast_trick === true;
+		return false;
+	}
+	effectFastDelay(defaultDelay = 80, type = "card") {
+		let delay = parseFloat(lib.config.effect_fast_delay);
+		if (!isFinite(delay) || delay < 0) delay = defaultDelay;
+		return get.effectDuration(delay, type, delay > 0 ? 16 : 0);
+	}
+	effectCardDelay(duration, card, min = 80) {
+		const type = get.effectType(card);
+		if (get.effectFastType(type)) {
+			return get.effectFastDelay(Math.min(duration, 80), type);
+		}
+		return get.effectDuration(get.effectCardHold(duration), type, min);
+	}
+	effectFastEvent(event) {
+		return get.effectFastType(get.effectType(event?.card));
+	}
+	effectParticleRate() {
+		switch (lib.config.effect_particle_quality) {
+			case "off":
+				return 0;
+			case "low":
+				return 0.55;
+			case "high":
+				return 1.25;
+			default:
+				return 1;
+		}
+	}
+	hasThrownCards() {
+		if (Array.isArray(ui.thrown)) {
+			for (const node of ui.thrown) {
+				if (node?.parentNode && !node.classList?.contains("removing")) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return !!ui.arena?.getElementsByClassName?.("thrown")?.length;
+	}
+	dragLineStyle() {
+		const style = lib.config.dragline_style || "gold";
+		const styles = {
+			classic: { type: "dash", color: [255, 255, 255], core: [255, 255, 255], shadow: "rgba(0,0,0,0.35)", width: 3, dash: [8, 2], opacity: 1, cap: "butt" },
+			gold: { type: "arrow", color: [255, 213, 82], core: [255, 252, 205], shadow: "rgba(255,196,48,0.75)", width: 4, dash: [14, 5], opacity: 0.96, cap: "round", arrowSize: 15 },
+			blue: { type: "double", color: [82, 202, 255], core: [214, 248, 255], shadow: "rgba(60,170,255,0.85)", width: 3, dash: [], opacity: 0.95, cap: "round", gap: 5, arrowSize: 11 },
+			red: { type: "pulse", color: [255, 91, 55], core: [255, 226, 190], shadow: "rgba(255,80,40,0.82)", width: 4, dash: [18, 7], opacity: 0.92, cap: "round", dotRadius: 4, arrowSize: 13 },
+			purple: { type: "stars", color: [188, 118, 255], core: [244, 226, 255], shadow: "rgba(170,80,255,0.85)", width: 3, dash: [4, 7], opacity: 0.94, cap: "round", dotRadius: 3, arrowSize: 12 },
+			minimal: { type: "solid", color: [236, 201, 71], core: [236, 201, 71], shadow: "rgba(0,0,0,0.18)", width: 2, dash: [], opacity: 0.75, cap: "round" },
+		};
+		return styles[style] || styles.gold;
+	}
+	applyDragLineCanvasStyle(ctx) {
+		const style = get.dragLineStyle();
+		ctx.shadowBlur = style.width <= 2 ? 2 : 8;
+		ctx.shadowColor = style.shadow;
+		ctx.strokeStyle = `rgba(${style.color.toString()},${style.opacity})`;
+		ctx.lineWidth = style.width;
+		ctx.lineCap = style.cap;
+		ctx.lineJoin = "round";
+		ctx.setLineDash(style.dash);
+		return style;
+	}
+	drawDragLines(ctx, start, current) {
+		if (!ctx || !start || !current) return;
+		const style = get.applyDragLineCanvasStyle(ctx);
+		const drawLine = (from, to, lineStyle = style) => {
+			ctx.save();
+			get.applyDragLineCanvasStyle(ctx);
+			ctx.beginPath();
+			ctx.moveTo(from[0], from[1]);
+			ctx.lineTo(to[0], to[1]);
+			ctx.stroke();
+			if (lineStyle.core && lineStyle.width > 2) {
+				ctx.shadowBlur = 0;
+				ctx.strokeStyle = `rgba(${lineStyle.core.toString()},${Math.min(1, lineStyle.opacity + 0.04)})`;
+				ctx.lineWidth = Math.max(1, Math.round(lineStyle.width * 0.45));
+				ctx.stroke();
+			}
+			ctx.restore();
+		};
+		const drawArrow = (from, to, size = style.arrowSize || 12) => {
+			const angle = Math.atan2(to[1] - from[1], to[0] - from[0]);
+			ctx.save();
+			ctx.shadowBlur = style.width <= 2 ? 2 : 8;
+			ctx.shadowColor = style.shadow;
+			ctx.fillStyle = `rgba(${style.core.toString()},${style.opacity})`;
+			ctx.beginPath();
+			ctx.moveTo(to[0], to[1]);
+			ctx.lineTo(to[0] - size * Math.cos(angle - Math.PI / 7), to[1] - size * Math.sin(angle - Math.PI / 7));
+			ctx.lineTo(to[0] - size * 0.55 * Math.cos(angle), to[1] - size * 0.55 * Math.sin(angle));
+			ctx.lineTo(to[0] - size * Math.cos(angle + Math.PI / 7), to[1] - size * Math.sin(angle + Math.PI / 7));
+			ctx.closePath();
+			ctx.fill();
+			ctx.restore();
+		};
+		const drawDots = (from, to, radius = style.dotRadius || 3, star = false) => {
+			const dx = to[0] - from[0], dy = to[1] - from[1], distance = Math.sqrt(dx * dx + dy * dy);
+			if (!distance) return;
+			const count = Math.max(1, Math.floor(distance / 42));
+			ctx.save();
+			ctx.shadowBlur = 8;
+			ctx.shadowColor = style.shadow;
+			ctx.fillStyle = `rgba(${style.core.toString()},${style.opacity})`;
+			for (let i = 1; i <= count; i++) {
+				const rate = i / (count + 1);
+				const x = from[0] + dx * rate;
+				const y = from[1] + dy * rate;
+				ctx.beginPath();
+				if (star) {
+					ctx.moveTo(x, y - radius - 1);
+					ctx.lineTo(x + radius * 0.35, y - radius * 0.35);
+					ctx.lineTo(x + radius + 1, y);
+					ctx.lineTo(x + radius * 0.35, y + radius * 0.35);
+					ctx.lineTo(x, y + radius + 1);
+					ctx.lineTo(x - radius * 0.35, y + radius * 0.35);
+					ctx.lineTo(x - radius - 1, y);
+					ctx.lineTo(x - radius * 0.35, y - radius * 0.35);
+					ctx.closePath();
+				} else {
+					ctx.arc(x, y, radius, 0, Math.PI * 2);
+				}
+				ctx.fill();
+			}
+			ctx.restore();
+		};
+		const drawSegment = (from, to) => {
+			if (style.type == "double") {
+				const dx = to[0] - from[0], dy = to[1] - from[1], distance = Math.sqrt(dx * dx + dy * dy) || 1;
+				const ox = (-dy / distance) * style.gap;
+				const oy = (dx / distance) * style.gap;
+				drawLine([from[0] + ox, from[1] + oy], [to[0] + ox, to[1] + oy]);
+				drawLine([from[0] - ox, from[1] - oy], [to[0] - ox, to[1] - oy]);
+				drawArrow(from, to, style.arrowSize);
+				return;
+			}
+			drawLine(from, to);
+			if (style.type == "arrow" || style.type == "pulse" || style.type == "stars") drawArrow(from, to, style.arrowSize);
+			if (style.type == "pulse") drawDots(from, to, style.dotRadius, false);
+			if (style.type == "stars") drawDots(from, to, style.dotRadius, true);
+		};
+		let last = start;
+		if (_status.multitarget) {
+			for (let i = 0; i < _status.lastdragchange.length; i++) {
+				const exy = _status.lastdragchange[i]._lastdragchange;
+				drawSegment(last, exy);
+				last = exy;
+			}
+		}
+		if (!_status.selectionfull) {
+			drawSegment(last, current);
+		}
+		if (!_status.multitarget) {
+			for (let i = 0; i < _status.lastdragchange.length; i++) {
+				const exy = _status.lastdragchange[i]._lastdragchange;
+				drawSegment(start, exy);
+			}
+		}
+	}
+	resizeDragCanvas() {
+		if (!ui.canvas || !ui.arena) return;
+		const width = ui.arena.offsetWidth;
+		const height = ui.arena.offsetHeight;
+		if (ui.canvas.width != width) ui.canvas.width = width;
+		if (ui.canvas.height != height) ui.canvas.height = height;
+	}
 	effectType(card) {
 		if (!card) {
 			return "card";

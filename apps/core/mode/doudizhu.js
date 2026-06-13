@@ -1,5 +1,5 @@
 import { lib, game, ui, get, ai, _status } from "noname";
-import { getDoudizhuRating, normalizeDoudizhuRatings, sortDoudizhuCandidates } from "./doudizhu-rating.js";
+import { getDoudizhuRating, normalizeDoudizhuRatings, recordDoudizhuWinrateStats, sortDoudizhuCandidates } from "./doudizhu-rating.js";
 export const type = "mode";
 /**
  * @type { () => importModeConfig }
@@ -279,6 +279,49 @@ export default () => {
 				var role = player && player.identity == "zhu" ? "zhu" : "fan";
 				return game.getDoudizhuSortedCandidates(list, role, role == "fan" ? game.getDoudizhuTargetScore() : null).slice(0, num || 1);
 			},
+			getDoudizhuChoiceProfile(list) {
+				var profile = { zhu: 5, fan: 5, advantage: 0, fit: 10, name: null };
+				if (!Array.isArray(list) || !list.length) return profile;
+				var sorted = game.getDoudizhuSortedCandidates(list, "zhu");
+				var name = sorted[0] || list[0];
+				var zhu = game.getDoudizhuCharacterRating(name, "zhu");
+				var fan = game.getDoudizhuCharacterRating(name, "fan");
+				return {
+					zhu,
+					fan,
+					advantage: zhu - fan,
+					fit: zhu * 2 + zhu - fan,
+					name,
+				};
+			},
+			chooseDoudizhuBidControl(player, controls, choiceMap) {
+				if (!Array.isArray(controls) || !controls.length) return "不叫地主";
+				var choices = choiceMap && player ? choiceMap[player.playerid] : null;
+				var profile = game.getDoudizhuChoiceProfile(choices);
+				var noCall = controls.includes("不叫地主") ? "不叫地主" : controls.includes("不叫") ? "不叫" : null;
+				var canCall = profile.zhu >= 7 && profile.advantage >= 0;
+				if (profile.zhu >= 8 && profile.advantage >= -1) canCall = true;
+				if (profile.zhu <= 6 || profile.advantage <= -2) canCall = false;
+				if (!canCall && noCall) return noCall;
+				if (controls.includes("三倍") && profile.zhu >= 9 && profile.advantage >= 1) return "三倍";
+				if (controls.includes("两倍") && profile.zhu >= 8 && profile.advantage >= 0) return "两倍";
+				if (controls.includes("二倍") && profile.zhu >= 8 && profile.advantage >= 0) return "二倍";
+				if (controls.includes("一倍") && canCall) return "一倍";
+				if (controls.includes("叫地主") && canCall) return "叫地主";
+				return noCall || controls[controls.length - 1];
+			},
+			getBestDoudizhuBidder(players, choiceMap) {
+				if (!Array.isArray(players) || !players.length) return null;
+				var list = players.slice();
+				list.sort(function (a, b) {
+					var profileA = game.getDoudizhuChoiceProfile(choiceMap && a ? choiceMap[a.playerid] : null);
+					var profileB = game.getDoudizhuChoiceProfile(choiceMap && b ? choiceMap[b.playerid] : null);
+					if (profileA.fit != profileB.fit) return profileB.fit - profileA.fit;
+					if (profileA.zhu != profileB.zhu) return profileB.zhu - profileA.zhu;
+					return profileB.advantage - profileA.advantage;
+				});
+				return list[0];
+			},
 			addDoudizhuCandidates(target, source, num, role, targetScore) {
 				if (!Array.isArray(target) || !Array.isArray(source) || num <= 0) {
 					return [];
@@ -289,12 +332,40 @@ export default () => {
 			},
 			isDoudizhuRecommendedDizhu(name) {
 				if (game.isDoudizhuRatingEnabled()) {
-					return game.getDoudizhuCharacterRating(name, "zhu") >= 7;
+					var zhu = game.getDoudizhuCharacterRating(name, "zhu"),
+						fan = game.getDoudizhuCharacterRating(name, "fan");
+					return zhu >= 7 && (zhu >= fan || zhu >= 8);
 				}
 				return game.recommendDizhu.includes(name);
 			},
+			getDoudizhuRecordCharacters(player) {
+				const list = [];
+				if (!player) {
+					return list;
+				}
+				const names = [player.name1 || player.name, player.name2];
+				for (const name of names) {
+					if (typeof name == "string" && name && lib.character[name] && !list.includes(name)) {
+						list.push(name);
+					}
+				}
+				return list;
+			},
+			addDoudizhuWinrateRecord(bool) {
+				if (typeof bool != "boolean") {
+					return;
+				}
+				const me = game.me?._trueMe || game.me;
+				const characters = game.getDoudizhuRecordCharacters(me);
+				if (!characters.length) {
+					return;
+				}
+				const stats = recordDoudizhuWinrateStats(get.config("doudizhu_character_winrate_data", "doudizhu"), characters, me.identity, bool);
+				game.saveConfig("doudizhu_character_winrate_data", stats, "doudizhu");
+			},
 			addRecord(bool) {
 				if (typeof bool == "boolean") {
+					game.addDoudizhuWinrateRecord(bool);
 					var data = lib.config.gameRecord.doudizhu.data;
 					var identity = game.me.identity;
 					if (!data[identity]) {
@@ -503,7 +574,8 @@ export default () => {
 						game.delay(2);
 					}
 					event.current.chooseControl(event.controls).set("ai", function () {
-						return _status.event.getParent().controls.randomGet();
+						var evt = _status.event.getParent();
+						return game.chooseDoudizhuBidControl(evt.current, evt.controls, evt.map);
 					});
 					"step 3";
 					event.current.classList.remove("glow_phase");
@@ -516,13 +588,13 @@ export default () => {
 					} else if (result.control != "不叫地主") {
 						event.controls.splice(1, event.controls.indexOf(result.control));
 						event.tempDizhu = event.current;
-						if (result.control == "二倍") {
+						if (result.control == "二倍" || result.control == "两倍") {
 							game.bonusNum = 2;
 						}
 					}
 					event.current = event.current.next;
 					if (event.current == event.start && (event.start == event.tempDizhu || event.start._control == "不叫地主")) {
-						game.zhu = event.tempDizhu || event.start.previous;
+						game.zhu = event.tempDizhu || game.getBestDoudizhuBidder(game.players, event.map) || event.start.previous;
 					} else if (event.current == event.start.next && event.current._control) {
 						game.zhu = event.tempDizhu;
 					} else {
@@ -603,7 +675,8 @@ export default () => {
 						game.delay(2);
 					}
 					event.current.chooseControl(event.controls).set("ai", function () {
-						return _status.event.getParent().controls.randomGet();
+						var evt = _status.event.getParent();
+						return game.chooseDoudizhuBidControl(evt.current, evt.controls, evt.map);
 					});
 					"step 3";
 					event.current.classList.remove("glow_phase");
@@ -616,13 +689,13 @@ export default () => {
 					} else if (result.control != "不叫地主") {
 						event.controls.splice(1, event.controls.indexOf(result.control));
 						event.tempDizhu = event.current;
-						if (result.control == "二倍") {
+						if (result.control == "二倍" || result.control == "两倍") {
 							game.bonusNum = 2;
 						}
 					}
 					event.current = event.current.next;
 					if (event.current == event.start) {
-						game.zhu = event.tempDizhu || event.start.previous;
+						game.zhu = event.tempDizhu || game.getBestDoudizhuBidder(game.players, event.map) || event.start.previous;
 					} else {
 						event.goto(2);
 					}
@@ -738,7 +811,8 @@ export default () => {
 					game.delay(2.5);
 					"step 1";
 					event.current.chooseControl(event.controls).set("ai", function () {
-						return Math.random() > 0.5 ? "不叫" : "叫地主";
+						var evt = _status.event.getParent();
+						return game.chooseDoudizhuBidControl(evt.current, evt.controls, evt.map);
 					});
 					if (event.current == game.me) {
 						event.dialog.content.childNodes[0].innerHTML = "是否抢地主？";
@@ -746,7 +820,7 @@ export default () => {
 					"step 2";
 					event.current.chat(result.control);
 					if (result.control == "叫地主" || event.current == event.start.next) {
-						game.zhu = result.control == "叫地主" ? event.current : event.current.next;
+						game.zhu = result.control == "叫地主" ? event.current : game.getBestDoudizhuBidder(game.players, event.map);
 						for (var player of game.players) {
 							player.identity = player == game.zhu ? "zhu" : "fan";
 							player.showIdentity();
@@ -1594,12 +1668,13 @@ export default () => {
 					}
 					"step 1";
 					event.current.chooseControl(event.controls).set("ai", function () {
-						return Math.random() > 0.5 ? "不叫" : "叫地主";
+						var evt = _status.event.getParent();
+						return game.chooseDoudizhuBidControl(evt.current, evt.controls, evt.map);
 					});
 					"step 2";
 					event.current.chat(result.control);
 					if (result.control == "叫地主" || event.current == event.start.next) {
-						game.zhu = result.control == "叫地主" ? event.current : event.current.next;
+						game.zhu = result.control == "叫地主" ? event.current : game.getBestDoudizhuBidder(game.players, event.map);
 						for (var player of game.players) {
 							player.identity = player == game.zhu ? "zhu" : "fan";
 							player.showIdentity();
@@ -1741,7 +1816,8 @@ export default () => {
 						game.delay(2);
 					}
 					event.current.chooseControl(event.controls).set("ai", function () {
-						return _status.event.getParent().controls.randomGet();
+						var evt = _status.event.getParent();
+						return game.chooseDoudizhuBidControl(evt.current, evt.controls, evt.map);
 					});
 					"step 2";
 					event.current._control = result.control;
@@ -1753,13 +1829,13 @@ export default () => {
 					} else if (result.control != "不叫地主") {
 						event.controls.splice(1, event.controls.indexOf(result.control));
 						event.tempDizhu = event.current;
-						if (result.control == "二倍") {
+						if (result.control == "二倍" || result.control == "两倍") {
 							game.bonusNum = 2;
 						}
 					}
 					event.current = event.current.next;
 					if (event.current == event.start) {
-						game.zhu = event.tempDizhu || event.start;
+						game.zhu = event.tempDizhu || game.getBestDoudizhuBidder(game.players, event.map) || event.start;
 					} else {
 						event.goto(1);
 					}
@@ -1948,7 +2024,8 @@ export default () => {
 						game.delay(2);
 					}
 					event.current.chooseControl(event.controls).set("ai", function () {
-						return _status.event.getParent().controls.randomGet();
+						var evt = _status.event.getParent();
+						return game.chooseDoudizhuBidControl(evt.current, evt.controls, evt.map);
 					});
 					"step 2";
 					event.current._control = result.control;
@@ -1960,13 +2037,13 @@ export default () => {
 					} else if (result.control != "不叫地主") {
 						event.controls.splice(1, event.controls.indexOf(result.control));
 						event.tempDizhu = event.current;
-						if (result.control == "二倍") {
+						if (result.control == "二倍" || result.control == "两倍") {
 							game.bonusNum = 2;
 						}
 					}
 					event.current = event.current.next;
 					if (event.current == event.start && (event.start == event.tempDizhu || event.start._control == "不叫地主")) {
-						game.zhu = event.tempDizhu || event.start.previous;
+						game.zhu = event.tempDizhu || game.getBestDoudizhuBidder(game.players, event.map) || event.start.previous;
 					} else if (event.current == event.start.next && event.current._control) {
 						game.zhu = event.tempDizhu;
 					} else {

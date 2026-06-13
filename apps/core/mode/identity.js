@@ -1,4 +1,5 @@
 import { lib, game, ui, get, ai, _status } from "noname";
+import { getDouzhuanIdentityLordPool, getIdentityLordRating, normalizeIdentityLordRatings, sortIdentityLordCandidates } from "./identity-lord-rating.js";
 export const type = "mode";
 /**
  * @type { () => importModeConfig }
@@ -14,6 +15,43 @@ export default () => {
 				_status.mode = get.config("identity_mode");
 				if (_status.brawl && _status.brawl.submode) {
 					_status.mode = _status.brawl.submode;
+				}
+				if (typeof window != "undefined") {
+					window.nonameShowIdentityLordPool = function () {
+						const all = Object.keys(lib.character || {}).filter(name => lib.character[name] && !lib.filter.characterDisabled(name));
+						const fixed = all.filter(name => lib.character[name]?.isZhugong);
+						const fallback = game.getIdentityLordPoolCandidates(all);
+						const randomCount = get.config("choice_zhu", "identity");
+						const candidates = game.getIdentityLordCandidateList(fixed, fallback, randomCount);
+						const sorted = game.getIdentityLordSortedCandidates(candidates.length ? candidates : fallback);
+						const secondary = game.getIdentityLordSortedCandidates(candidates.length ? candidates.slice() : fallback.slice());
+						const choice = sorted[0] || null;
+						secondary.remove(choice);
+						const data = {
+							enabled: game.isIdentityLordRatingEnabled(),
+							mode: _status.mode,
+							choiceZhu: randomCount,
+							fixed,
+							poolSize: fallback.length,
+							candidates,
+							sorted,
+							choice,
+							choice2: secondary[0] || null,
+							top30: sorted.slice(0, 30).map((name, index) => ({
+								index: index + 1,
+								name,
+								translation: get.translation(name),
+								rating: game.getIdentityLordCharacterRating(name),
+							})),
+						};
+						_status.identityLordRatingDebug = data;
+						window.nonameIdentityLordRatingDebug = data;
+						game.saveConfig("identity_lord_rating_debug_last", data, "identity");
+						console.log("军争主公评分手动调试", data);
+						console.table(data.top30);
+						return data;
+					};
+					console.log("军争主公评分调试工具已加载：在控制台输入 nonameShowIdentityLordPool() 查看候选池");
 				}
 				event.replacePile = function () {
 					var list = ["shengdong", "qijia", "caomu", "jinchan", "zengbin", "fulei", "qibaodao", "zhungangshuo", "lanyinjia"];
@@ -465,6 +503,85 @@ export default () => {
 			},
 		],
 		game: {
+			isIdentityLordRatingEnabled: function () {
+				if (_status.connectMode && lib.configOL) {
+					if (typeof lib.configOL.identity_lord_character_rating == "boolean") return lib.configOL.identity_lord_character_rating;
+					if (typeof lib.configOL.connect_identity_lord_character_rating == "boolean") return lib.configOL.connect_identity_lord_character_rating;
+				}
+				return get.config("identity_lord_character_rating", "identity") !== false;
+			},
+			getIdentityLordRatings: function () {
+				var ratings = normalizeIdentityLordRatings(get.config("identity_lord_character_rating_data", "identity"));
+				for (var name in lib.characterReplace) {
+					var list = lib.characterReplace[name];
+					if (!Array.isArray(list) || !list.length) continue;
+					var lord = getIdentityLordRating(ratings, name);
+					for (var i = 0; i < list.length; i++) lord = Math.max(lord, getIdentityLordRating(ratings, list[i]));
+					ratings[name] = lord;
+				}
+				return ratings;
+			},
+			getIdentityLordCharacterRating: function (name) {
+				if (!game.isIdentityLordRatingEnabled()) return 5;
+				return getIdentityLordRating(game.getIdentityLordRatings(), name);
+			},
+			getIdentityLordSortedCandidates: function (list) {
+				if (!Array.isArray(list)) return [];
+				if (!game.isIdentityLordRatingEnabled()) return list.slice();
+				return sortIdentityLordCandidates(list, game.getIdentityLordRatings());
+			},
+			getIdentityLordPoolCandidates: function (fallbackList) {
+				var pool = getDouzhuanIdentityLordPool(lib, "identity");
+				if (Array.isArray(pool) && pool.length) return pool;
+				return Array.isArray(fallbackList) ? fallbackList.slice() : [];
+			},
+			getIdentityLordCandidateList: function (lordList, fallbackList, randomCount) {
+				var candidates = [];
+				var fixed = Array.isArray(lordList) ? lordList.slice() : [];
+				var fallback = Array.isArray(fallbackList) ? fallbackList.slice() : [];
+				randomCount = parseInt(randomCount);
+				for (var i = 0; i < fixed.length; i++) candidates.add(fixed[i]);
+				if (Number.isFinite(randomCount) && randomCount > 0) {
+					var randomPool = fallback.filter(name => !fixed.includes(name));
+					candidates.addArray(randomPool.randomGets(Math.min(randomCount, randomPool.length)));
+				} else if (!candidates.length) {
+					candidates.addArray(fallback);
+				}
+				return candidates;
+			},
+			getIdentityLordChoice: function (lordList, fallbackList, randomCount) {
+				var candidates = game.getIdentityLordCandidateList(lordList, fallbackList, randomCount);
+				var primary = game.getIdentityLordSortedCandidates(candidates.length ? candidates : fallbackList);
+				var choice = primary[0] || (Array.isArray(fallbackList) ? fallbackList[0] : null);
+				var secondary = game.getIdentityLordSortedCandidates(candidates.length ? candidates.slice() : Array.isArray(fallbackList) ? fallbackList.slice() : []);
+				secondary.remove(choice);
+				_status.identityLordRatingDebug = {
+					enabled: game.isIdentityLordRatingEnabled(),
+					mode: get.config("identity_lord_rating_debug", "identity") ? "debug" : "normal",
+					time: new Date().toLocaleString(),
+					fixed: Array.isArray(lordList) ? lordList.slice() : [],
+					poolSize: Array.isArray(fallbackList) ? fallbackList.length : 0,
+					randomCount: parseInt(randomCount) || 0,
+					candidates: candidates.slice(),
+					sorted: primary.slice(),
+					choice: choice,
+					choice2: secondary[0] || null,
+					ratings: primary.slice(0, 20).map(function (name) {
+						return [name, game.getIdentityLordCharacterRating(name)];
+					}),
+				};
+				if (typeof window != "undefined") window.nonameIdentityLordRatingDebug = _status.identityLordRatingDebug;
+				game.saveConfig("identity_lord_rating_debug_last", _status.identityLordRatingDebug, "identity");
+				var lines = primary.slice(0, 12).map(function (name, index) {
+					return (index + 1) + "." + get.translation(name) + "(" + name + ")=" + game.getIdentityLordCharacterRating(name);
+				});
+				if (get.config("identity_lord_rating_debug", "identity")) {
+					game.log("#y军争主公评分", "候选", candidates.length, "名，开放池", _status.identityLordRatingDebug.poolSize, "名，选择", choice ? get.translation(choice) : "无");
+					game.print("军争主公评分候选：" + lines.join(" / "));
+				}
+				console.log("军争主公评分调试", _status.identityLordRatingDebug);
+				return [choice, secondary[0] || (Array.isArray(fallbackList) ? fallbackList.find(item => item != choice) : null)].filter(Boolean);
+			},
 			allowSameCharacter: function () {
 				return _status.connectMode ? lib.configOL.allow_same_character || lib.configOL.connect_allow_same_character : get.config("allow_same_character");
 			},
@@ -1610,7 +1727,18 @@ export default () => {
 					return game.players.randomGet(game.me, game.zhu);
 				};
 				next.ai = function (player, list, list2, back) {
+					console.log("军争主公评分入口", {
+						player: player?.playerid,
+						identity: player?.identity,
+						isZhu: player == game.zhu,
+						isMe: player == game.me,
+						stratagemMode: _status.event?.stratagemMode,
+						zhongmode: _status.event?.zhongmode,
+						listLength: Array.isArray(list) ? list.length : 0,
+						lordListLength: Array.isArray(list2) ? list2.length : 0,
+					});
 					if (_status.brawl && _status.brawl.chooseCharacterAi) {
+						console.log("军争主公评分入口：brawl chooseCharacterAi 接管");
 						if (_status.brawl.chooseCharacterAi(player, list, list2, back) !== false) {
 							return;
 						}
@@ -1637,18 +1765,9 @@ export default () => {
 							}
 						}
 					} else if (player.identity == "zhu" && !stratagemMode) {
-						list2.randomSort();
-						var choice, choice2;
-						if (!_status.event.zhongmode && Math.random() - 0.8 < 0 && list2.length) {
-							choice = list2[0];
-							choice2 = list[0];
-							if (choice2 == choice) {
-								choice2 = list[1];
-							}
-						} else {
-							choice = list[0];
-							choice2 = list[1];
-						}
+						console.log("军争主公评分入口：命中AI主公分支");
+						var lordChoices = game.getIdentityLordChoice(list2 && list2.length ? list2 : [], game.getIdentityLordPoolCandidates(list), get.config("choice_zhu"));
+						var choice = lordChoices[0] || list[0], choice2 = lordChoices[1] || (list[0] == choice ? list[1] : list[0]);
 						if (lib.characterReplace[choice] && lib.characterReplace[choice].length) {
 							choice = lib.characterReplace[choice].randomGet();
 						}
@@ -2167,6 +2286,12 @@ export default () => {
 					if (stratagemMode) {
 						list = event.list.slice(0, num);
 					} else if (game.zhu != game.me) {
+						console.log("军争主公评分流程：AI主公先选将", {
+							zhu: game.zhu?.playerid,
+							identity: game.zhu?.identity,
+							poolLength: event.list.length,
+							lordLength: getZhuList().length,
+						});
 						event.ai(game.zhu, event.list, getZhuList());
 						game.removeSameCharacterChoice(event.list, game.zhu.name1, game.zhu.name2);
 						if (_status.brawl && _status.brawl.chooseCharacter) {
@@ -3778,6 +3903,12 @@ export default () => {
 						}
 						if (fanshown) {
 							aishown = 0.3;
+						}
+					}
+					if (aishown == 0 && from.identity == "zhu" && from != to && _status.event && _status.event.name == "chooseToUse" && _status.event.type == "phase" && _status.event.player == from && !from.isUnderControl()) {
+						var card = get.card();
+						if (card && get.type(card, null, from) == "trick" && !get.info(card)?.toself) {
+							return get.realAttitude(from, to) * 0.35 + difficulty * 1.5;
 						}
 					}
 					return get.realAttitude(from, to) * aishown + difficulty * 1.5;

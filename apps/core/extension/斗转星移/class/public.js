@@ -682,13 +682,104 @@ function addSkill_shouqika() {
 	};
 }
 addSkill_shouqika();
+
+function getPlayerTotalStat(player) {
+	const total = {
+		damage: 0,
+		damaged: 0,
+		gain: 0,
+		cards: 0,
+		kills: 0,
+		skills: 0,
+	};
+	if (!player || !Array.isArray(player.stat)) return total;
+	for (const stat of player.stat) {
+		if (!stat) continue;
+		total.damage += Number(stat.damage) || 0;
+		total.damaged += Number(stat.damaged) || 0;
+		total.gain += Number(stat.gain) || 0;
+		total.kills += Number(stat.kill) || 0;
+		if (stat.card) {
+			for (const name in stat.card) total.cards += Number(stat.card[name]) || 0;
+		}
+		if (stat.skill) {
+			for (const name in stat.skill) total.skills += Number(stat.skill[name]) || 0;
+		}
+	}
+	return total;
+}
+
+function getAlivePlayerCount(filter) {
+	if (!Array.isArray(game.players)) return 0;
+	return game.players.filter(filter).length;
+}
+
+function getIdentityPerformanceBonusRate(player) {
+	const stat = getPlayerTotalStat(player);
+	const playerCount = Math.max(game.players?.length || 0, (game.players?.length || 0) + (game.dead?.length || 0), get.playerNumber?.() || 0);
+	let score = 0;
+	score += Math.min(32, stat.damage * 8);
+	score += Math.min(24, stat.kills * 18);
+	score += Math.min(18, stat.cards * 0.45);
+	score += Math.min(12, stat.gain * 0.2);
+	if (player?.isAlive?.()) score += 8;
+	if (stat.damaged <= Math.max(1, Math.floor(playerCount / 3))) score += 6;
+	if (player?.identity == "zhu" && player.isAlive?.()) score += 12;
+	else if (["zhong", "mingzhong"].includes(player?.identity) && game.zhu?.isAlive?.()) score += 10;
+	else if (player?.identity == "fan" && !game.zhu?.isAlive?.()) score += 10;
+	else if (player?.identity == "nei" && player.isAlive?.() && getAlivePlayerCount(current => current.identity != "commoner") <= 1) score += 12;
+	const rate = Math.min(0.25, Math.max(0, score / 400));
+	return rate >= 0.1 ? rate : 0;
+}
+
+function getDoudizhuPerformanceBonusRate(player) {
+	const stat = getPlayerTotalStat(player);
+	const isDizhu = player && player == game.zhu;
+	let score = 0;
+	score += Math.min(40, stat.damage * (isDizhu ? 12 : 14));
+	score += Math.min(30, stat.kills * 25);
+	score += Math.min(16, stat.cards * 0.65);
+	score += Math.min(10, stat.gain * 0.2);
+	if (player?.isAlive?.()) score += 12;
+	if (!isDizhu && game.players?.some(current => current != player && current.identity == "fan" && current.isAlive?.())) score += 8;
+	if (isDizhu && getAlivePlayerCount(current => current != player) == 0) score += 10;
+	if (stat.damaged == 0) score += 6;
+	const rate = Math.min(0.2, Math.max(0, score / 450));
+	return rate >= 0.1 ? rate : 0;
+}
+
+function getYuanbaoPerformanceBonus(mode, baseAmount) {
+	if (!Number.isInteger(baseAmount) || baseAmount <= 0 || !game.me) return 0;
+	const rate = mode == "identity" ? getIdentityPerformanceBonusRate(game.me) : mode == "doudizhu" ? getDoudizhuPerformanceBonusRate(game.me) : 0;
+	return Math.max(0, Math.floor(baseAmount * rate));
+}
+
 // 对局结束
 lib.onover.push(result => {
 	let mode = get.mode();
 	let submode = get.config(mode + "_mode", mode);
 	if (result && ["identity", "doudizhu"].includes(mode) && Math.random() < 0.75) {
-		let count = 100 + Math.floor(Math.random() * 789);
-		propToast.addToast("yuanbao", count);
+		const randomRange = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+		const getYuanbaoRange = () => {
+			if (mode == "identity") {
+				const playerCount = Math.max(game.players?.length || 0, (game.players?.length || 0) + (game.dead?.length || 0), get.playerNumber?.() || 0);
+				if (playerCount >= 8) return [500, 3800];
+				if (playerCount >= 5) return [200, 1600];
+				return [200, 1600];
+			}
+			if (mode == "doudizhu") {
+				const doudizhuMode = _status.mode || submode;
+				if (doudizhuMode == "huanle") return [300, 1500];
+				if (doudizhuMode == "zhizun") return [400, 1800];
+				return [100, 888];
+			}
+			return [100, 888];
+		};
+		const [min, max] = getYuanbaoRange();
+		const baseAmount = randomRange(min, max);
+		const bonusAmount = getYuanbaoPerformanceBonus(mode, baseAmount);
+		const totalAmount = baseAmount + bonusAmount;
+		propToast.addToast("yuanbao", totalAmount, bonusAmount > 0 ? `元宝X${totalAmount}（表现加成+${bonusAmount}）` : undefined);
 	}
 	//欢乐斗地主
 	if (mode == "doudizhu" && submode == "huanle") {

@@ -149,6 +149,57 @@ table {
 }
 #window.shortcutpaused > #system {
 	z-index: 31;
+	left: 50%;
+	top: auto;
+	bottom: 18px;
+	width: min(620px, calc(100% - 28px));
+	max-height: 96px;
+	padding: 0;
+	transform: translateX(-50%);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	gap: 5px 7px;
+	overflow: hidden;
+	white-space: normal;
+	pointer-events: none;
+}
+#window.shortcutpaused > #system > div {
+	display: contents;
+}
+#window.shortcutpaused > #system > div:last-child {
+	float: none;
+	text-align: center;
+}
+#window.shortcutpaused > #system > div > div {
+	position: relative;
+	flex: 0 0 auto;
+	margin: 0;
+	padding: 4px 8px;
+	font-size: 15px;
+	line-height: 19px;
+	letter-spacing: 0;
+	max-width: 96px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	pointer-events: auto;
+}
+@media (max-height: 760px) {
+	#window.shortcutpaused > #system {
+		bottom: 10px;
+		width: min(560px, calc(100% - 20px));
+		max-height: 78px;
+		gap: 4px;
+	}
+	#window.shortcutpaused > #system > div > div {
+		padding: 3px 7px;
+		font-size: 14px;
+		line-height: 18px;
+		max-width: 86px;
+	}
 }
 #window.systempaused > #system {
 	opacity: 0.3 !important;
@@ -209,17 +260,17 @@ table {
 	/*background-color: rgba(0, 0, 0, 0.6);*/
 }
 #shortcut > div {
-	width: 80px;
-	height: 80px;
-	padding: 10px;
+	width: 68px;
+	height: 68px;
+	padding: 8px;
 	margin: 0;
 	overflow: hidden;
-	line-height: 80px;
-	font-size: 50px;
+	line-height: 68px;
+	font-size: 40px;
 	white-space: nowrap;
 	text-align: center;
-	letter-spacing: -6px;
-	transform: scale(1.3);
+	letter-spacing: -5px;
+	transform: scale(1.12);
 }
 #shortcut > div:not(.menubutton) {
 	width: 100%;
@@ -230,42 +281,86 @@ table {
 	top: 0;
 }
 #shortcut > div > span {
-	width: 200px;
-	left: -63px;
+	width: 170px;
+	left: -51px;
 	position: relative;
 	display: inline-block;
 }
 #shortcut > div[data-position="1"] {
-	left: calc(50% - 50px);
-	top: calc(50% - 190px);
+	left: calc(50% - 42px);
+	top: calc(50% - 156px);
 }
 #shortcut.hidden > div[data-position="1"] {
-	transform: scale(1) translateY(150px);
+	transform: scale(0.92) translateY(112px);
 }
 #shortcut > div[data-position="2"] {
-	left: calc(50% + 100px);
-	top: calc(50% - 40px);
+	left: calc(50% + 98px);
+	top: calc(50% - 62px);
 }
 #shortcut.hidden > div[data-position="2"] {
-	transform: scale(1) translateX(-150px);
+	transform: scale(0.92) translate(-122px, 48px);
 }
 #shortcut > div[data-position="3"] {
-	left: calc(50% - 50px);
-	top: calc(50% + 110px);
+	left: calc(50% + 44px);
+	top: calc(50% + 82px);
 }
 #shortcut.hidden > div[data-position="3"] {
-	transform: scale(1) translateY(-150px);
+	transform: scale(0.92) translate(-66px, -92px);
 }
 #shortcut > div[data-position="4"] {
-	left: calc(50% - 200px);
-	top: calc(50% - 40px);
+	left: calc(50% - 128px);
+	top: calc(50% + 82px);
 }
 #shortcut.hidden > div[data-position="4"] {
-	transform: scale(1) translateX(150px);
+	transform: scale(0.92) translate(86px, -92px);
 }
 #shortcut > div[data-position="5"] {
-	left: calc(50% - 50px);
-	top: calc(50% - 50px);
+	left: calc(50% - 182px);
+	top: calc(50% - 62px);
+	transition-duration: 0.55s;
+	z-index: 1;
+	letter-spacing: -3px;
+	font-size: 37px;
+	transform: scale(1.08);
+
+}
+#shortcut.hidden > div[data-position="5"] {
+	transform: scale(0.92) translate(132px, 48px);
+}
+@media (max-height: 760px), (max-width: 900px) {
+	#shortcut > div.menubutton {
+		width: 58px;
+		height: 58px;
+		padding: 7px;
+		line-height: 58px;
+		font-size: 34px;
+		transform: scale(1.05);
+	}
+	#shortcut > div.menubutton > span {
+		width: 150px;
+		left: -47px;
+	}
+	#shortcut > div[data-position="1"] {
+		left: calc(50% - 36px);
+		top: calc(50% - 126px);
+	}
+	#shortcut > div[data-position="2"] {
+		left: calc(50% + 78px);
+		top: calc(50% - 48px);
+	}
+	#shortcut > div[data-position="3"] {
+		left: calc(50% + 34px);
+		top: calc(50% + 68px);
+	}
+	#shortcut > div[data-position="4"] {
+		left: calc(50% - 106px);
+		top: calc(50% + 68px);
+	}
+	#shortcut > div[data-position="5"] {
+		left: calc(50% - 150px);
+		top: calc(50% - 48px);
+		font-size: 32px;
+	}
 }
 #shortcut > .favmodelist:not(.menubutton) {
 	width: 130px;
@@ -936,6 +1031,19 @@ table {
 }
 .linexy.drag {
 	transition-property: none !important;
+}
+.linexy.drag > .dragline-head {
+	position: absolute;
+	left: 50%;
+	bottom: -5px;
+	width: 0;
+	height: 0;
+	border-top: 7px solid transparent;
+	border-bottom: 7px solid transparent;
+	border-left: 13px solid white;
+	transform: translateX(-50%) rotate(90deg);
+	transform-origin: center;
+	pointer-events: none;
 }
 #me,
 #mebg {
@@ -3687,6 +3795,70 @@ div.select-all:not(.card):not(.player) {
 }
 #arena.dragging {
 	cursor: -webkit-grabbing;
+}
+
+.touch-drag-release-zone {
+	position: absolute;
+	left: 50%;
+	bottom: 214px;
+	width: min(54%, 430px);
+	height: 98px;
+	transform: translateX(-50%);
+	border: 2px solid rgba(226, 184, 92, 0.72);
+	border-radius: 18px;
+	background: radial-gradient(circle at center, rgba(255, 231, 164, 0.12), rgba(155, 111, 37, 0.08));
+	box-shadow: 0 0 16px rgba(226, 184, 92, 0.28), inset 0 0 18px rgba(255, 228, 156, 0.1);
+	color: rgba(255, 235, 186, 0.92);
+	text-align: center;
+	pointer-events: none;
+	z-index: 85;
+	transition: opacity 0.16s, transform 0.16s, border-color 0.16s, box-shadow 0.16s;
+	opacity: 1;
+}
+.touch-drag-release-zone.hidden {
+	display: none;
+}
+.touch-drag-release-zone.active {
+	border-color: rgba(255, 218, 119, 0.98);
+	box-shadow: 0 0 26px rgba(255, 206, 84, 0.55), inset 0 0 26px rgba(255, 236, 175, 0.22);
+	transform: translateX(-50%) scale(1.04);
+}
+.touch-drag-release-zone .touch-drag-release-title {
+	margin-top: 22px;
+	font-size: 26px;
+	line-height: 30px;
+	font-weight: bold;
+	letter-spacing: 2px;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.68);
+}
+.touch-drag-release-zone .touch-drag-release-subtitle {
+	margin-top: 4px;
+	font-size: 14px;
+	line-height: 18px;
+	color: rgba(255, 242, 205, 0.74);
+}
+@media (max-width: 760px) {
+	.touch-drag-release-zone {
+		bottom: 190px;
+		width: min(70%, 370px);
+		height: 88px;
+	}
+	.touch-drag-release-zone .touch-drag-release-title {
+		margin-top: 18px;
+		font-size: 23px;
+		line-height: 27px;
+	}
+}
+
+.drag-floating-card {
+	position: fixed !important;
+	transform: none !important;
+	pointer-events: none !important;
+	z-index: 9999 !important;
+	opacity: 0.96;
+	filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.48)) drop-shadow(0 0 10px rgba(255, 212, 116, 0.28));
+	transition: none !important;
+	will-change: left, top;
 }
 
 #arena.selecting:not(.video) .player[data-position="0"] .marks > .card:not(.selectable) > .image,

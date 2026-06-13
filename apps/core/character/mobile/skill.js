@@ -4891,7 +4891,7 @@ const skills = {
 			},
 			check() {
 				const player = get.player();
-				const num = game
+				const recover = game
 					.filterPlayer(
 						target =>
 							get.attitude(target, player) > 0 &&
@@ -4903,8 +4903,8 @@ const skills = {
 						const cards = target.getCards("hs", card => lib.filter.cardSavable(card, player));
 						return sum + cards.reduce((sum2, card) => sum2 + (get.tag(card, "recover") || 0), 0);
 					}, 0);
-				const minHp = player.getHp() + num;
-				return minHp <= 1 ? "cancel2" : Math.min(2, Math.max(0, minHp - 1));
+				const maxLoss = player.getHp() + recover - 1;
+				return maxLoss <= 0 ? "cancel2" : Math.min(2, Math.max(0, Math.min(3, maxLoss) - 1));
 			},
 			backup(result, player) {
 				return {
@@ -4933,7 +4933,7 @@ const skills = {
 					if (player.hasUnknown() || player.getHp() > 3) {
 						return 0;
 					}
-					const num = game
+					const recover = game
 						.filterPlayer(
 							target =>
 								get.attitude(target, player) > 0 &&
@@ -4945,8 +4945,8 @@ const skills = {
 							const cards = target.getCards("hs", card => lib.filter.cardSavable(card, player));
 							return sum + cards.reduce((sum2, card) => sum2 + (get.tag(card, "recover") || 0), 0);
 						}, 0);
-					const minHp = player.getHp() + num;
-					return num > 0 && minHp > 1 ? 1 : 0;
+					const maxLoss = player.getHp() + recover - 1;
+					return maxLoss > 0 ? 1 : 0;
 				},
 			},
 		},

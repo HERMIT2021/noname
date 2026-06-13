@@ -107,6 +107,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 skinSwitch.saveSkinParams = {}
             });
             lib.init.js(skinSwitch.url, 'animation')
+			window.skinSwitchDynamicRenderFps = Number(lib.config[skinSwitch.configKey.dynamicRenderFps]) > 0 ? Number(lib.config[skinSwitch.configKey.dynamicRenderFps]) : null;
             lib.init.js(skinSwitch.url + 'component', 'any-touch.umd.min')
             const loadSpineFiles = (files, index = 0) => {
                 if (index >= files.length) return;

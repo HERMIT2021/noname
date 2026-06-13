@@ -1,4 +1,153 @@
 import { lib, game, get, _status, ui } from "noname";
+
+function isOwnHandCardNode(node) {
+	let current = node;
+	while (current && current != document.body) {
+		if (current == ui.handcards1 || current == ui.handcards2 || current == ui.handcards1Container || current == ui.handcards2Container) return true;
+		if (current.classList?.contains("handcards") && (current.parentNode == ui.handcards1Container || current.parentNode == ui.handcards2Container || current.parentNode?.parentNode == ui.me)) return true;
+		current = current.parentNode;
+	}
+	return false;
+}
+
+function hasWaitingHandCardDrag(node) {
+	let current = node;
+	while (current && current != document.body) {
+		if (current._waitingfordrag && get.itemtype(current) == "card") return true;
+		current = current.parentNode;
+	}
+	return false;
+}
+
+function ensureTouchDragReleaseZone() {
+	if (!ui.touchDragReleaseZone) {
+		const zone = ui.create.div(".touch-drag-release-zone.hidden", ui.arena);
+		zone.innerHTML = '<div class="touch-drag-release-title">松手使用</div><div class="touch-drag-release-subtitle">拖到这里确认出牌</div>';
+		ui.touchDragReleaseZone = zone;
+	}
+	return ui.touchDragReleaseZone;
+}
+
+function hideTouchDragReleaseZone() {
+	if (!ui.touchDragReleaseZone) return;
+	ui.touchDragReleaseZone.classList.add("hidden");
+	ui.touchDragReleaseZone.classList.remove("active");
+	_status.touchDragReleaseActive = false;
+}
+
+function clearDragFloatingCard() {
+	const data = _status.dragFloatingCard;
+	if (!data) return;
+	if (data.origin) {
+		data.origin.style.opacity = data.originOpacity || "";
+	}
+	data.node?.remove?.();
+	delete _status.dragFloatingCard;
+}
+
+function updateDragFloatingCard(point) {
+	const data = _status.dragFloatingCard;
+	if (!data || !point) return;
+	data.node.style.left = point.clientX + "px";
+	data.node.style.top = point.clientY + "px";
+}
+
+function showDragFloatingCard(card, point) {
+	if (!card || !point) return;
+	if (_status.dragFloatingCard?.origin == card) {
+		updateDragFloatingCard(point);
+		return;
+	}
+	clearDragFloatingCard();
+	const rect = card.getBoundingClientRect();
+	const node = card.copy ? card.copy() : card.cloneNode(true);
+	node.classList.add("drag-floating-card");
+	node.style.width = rect.width + "px";
+	node.style.height = rect.height + "px";
+	node.style.marginLeft = -rect.width / 2 + "px";
+	node.style.marginTop = -rect.height / 2 + "px";
+	node.style.left = point.clientX + "px";
+	node.style.top = point.clientY + "px";
+	document.body.appendChild(node);
+	_status.dragFloatingCard = {
+		node,
+		origin: card,
+		originOpacity: card.style.opacity,
+	};
+	card.style.opacity = "0.35";
+}
+
+function showTouchDragReleaseZone() {
+	const zone = ensureTouchDragReleaseZone();
+	zone.classList.remove("hidden");
+	_status.touchDragReleaseActive = false;
+}
+
+function updateTouchDragReleaseZone(point) {
+	if (!ui.touchDragReleaseZone || ui.touchDragReleaseZone.classList.contains("hidden") || !point) return false;
+	const rect = ui.touchDragReleaseZone.getBoundingClientRect();
+	const active = point.clientX >= rect.left && point.clientX <= rect.right && point.clientY >= rect.top && point.clientY <= rect.bottom;
+	ui.touchDragReleaseZone.classList.toggle("active", active);
+	_status.touchDragReleaseActive = active;
+	return active;
+}
+
+function needsDragReleaseZone() {
+	return _status.dragReleaseZoneMode && ui.selected.cards.length > 0 && ui.selected.targets.length == 0 && ui.selected.buttons.length == 0;
+}
+
+function canUseDragReleaseZone(card) {
+	if (!card) return false;
+	const info = get.info(card);
+	if (!info) return false;
+	const type = get.type(card);
+	if (type == "delay" || info.type == "delay") return false;
+	if (type == "equip" || info.type == "equip") return true;
+	if (info.toself) return true;
+	return info.selectTarget === -1;
+}
+
+function startTouchHandCardDrag(card, point, forceSelected) {
+	if (!card || !point || !lib.config.touchscreen || !lib.config.enable_drag || !ui.arena?.classList.contains("selecting")) return false;
+	const event = _status.event;
+	if (!event?.isMine?.() || !isOwnHandCardNode(card) || card.classList.contains("noclick")) return false;
+	if (!card.classList.contains("selected")) {
+		if (!forceSelected && !card.classList.contains("selectable")) return false;
+		_status.clicked = false;
+		_status.touchnocheck = true;
+		ui.click.card.call(card);
+		_status.touchnocheck = false;
+	}
+	if (!card.classList.contains("selected")) return false;
+	_status.lastdragchange.length = 0;
+	_status.dragstatuschanged = false;
+	_status.mousedragging = {
+		clientX: point.clientX,
+		clientY: point.clientY,
+	};
+	_status.mousedragorigin = card;
+	_status.mouseleft = true;
+	_status.selectionfull = false;
+	_status.multitarget = false;
+	_status.dragged = true;
+	ui.arena?.classList.add("dragging");
+	_status.dragReleaseZoneMode = canUseDragReleaseZone(card);
+	if (_status.dragReleaseZoneMode) {
+		_status.mouseleft = true;
+		showTouchDragReleaseZone();
+		updateTouchDragReleaseZone(point);
+		showDragFloatingCard(card, point);
+	} else {
+		_status.mouseleft = false;
+	}
+	if (ui.selected.cards.length) ui.selected.cards[0].updateTransform(true, 100);
+	return true;
+}
+
+function showDragReleaseZoneForSelectedCard() {
+	if (needsDragReleaseZone()) showTouchDragReleaseZone();
+}
+
 export class Click {
 	/**
 	 * @type {() => void}
@@ -603,12 +752,14 @@ export class Click {
 		}
 		if (ui.shortcut.classList.contains("hidden")) {
 			ui.favmode.style.display = "none";
+			ui.shortcut.syncLayoutClass?.();
 			if (window.StatusBar && lib.config.show_statusbar_ios == "auto") {
 				document.body.classList.remove("statusbar");
 				window.StatusBar.hide();
 			}
 			ui.window.classList.remove("shortcutpaused");
 		} else {
+			ui.shortcut.syncLayoutClass?.();
 			if (lib.config.show_favmode) {
 				ui.favmode.style.display = "";
 			}
@@ -1520,7 +1671,12 @@ export class Click {
 
 		if (_status.mousedragging && e.touches.length) {
 			e.preventDefault();
+			updateTouchDragReleaseZone(e.touches[0]);
+			if (_status.dragReleaseZoneMode && ui.selected.cards.length) showDragFloatingCard(ui.selected.cards[0], e.touches[0]);
+			var hiddenDragCard = ui.selected.cards.length ? ui.selected.cards[0] : null;
+			if (hiddenDragCard) hiddenDragCard.style.pointerEvents = "none";
 			var item = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+			if (hiddenDragCard) hiddenDragCard.style.pointerEvents = "";
 			if (game.chess && ui.selected.cards.length) {
 				var itemtype = get.itemtype(item);
 				if (itemtype != "card" && itemtype != "button") {
@@ -1539,38 +1695,15 @@ export class Click {
 				}
 			}
 			while (item) {
-				if (lib.config.enable_touchdragline && _status.mouseleft && !game.chess) {
-					ui.canvas.width = ui.arena.offsetWidth;
-					ui.canvas.height = ui.arena.offsetHeight;
+				if (!_status.dragReleaseZoneMode && lib.config.enable_touchdragline && _status.mouseleft && !game.chess) {
+					get.resizeDragCanvas();
 					var ctx = ui.ctx;
-					ctx.shadowBlur = 5;
-					ctx.shadowColor = "rgba(0,0,0,0.3)";
-					ctx.strokeStyle = "white";
-					ctx.lineWidth = 3;
-					ctx.setLineDash([8, 2]);
-
-					ctx.beginPath();
-
-					ctx.moveTo(_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop);
-
-					if (_status.multitarget) {
-						for (var i = 0; i < _status.lastdragchange.length; i++) {
-							var exy = _status.lastdragchange[i]._lastdragchange;
-							ctx.lineTo(exy[0], exy[1]);
-						}
-					}
-					if (!_status.selectionfull) {
-						ctx.lineTo(e.touches[0].clientX / game.documentZoom - ui.arena.offsetLeft, e.touches[0].clientY / game.documentZoom - ui.arena.offsetTop);
-					}
-					ctx.stroke();
-					if (!_status.multitarget) {
-						for (var i = 0; i < _status.lastdragchange.length; i++) {
-							ctx.moveTo(_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop);
-							var exy = _status.lastdragchange[i]._lastdragchange;
-							ctx.lineTo(exy[0], exy[1]);
-							ctx.stroke();
-						}
-					}
+					ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+					get.drawDragLines(
+						ctx,
+						[_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop],
+						[e.touches[0].clientX / game.documentZoom - ui.arena.offsetLeft, e.touches[0].clientY / game.documentZoom - ui.arena.offsetTop]
+					);
 				}
 
 				if (item == _status.mousedragorigin) {
@@ -1578,6 +1711,9 @@ export class Click {
 						_status.mousedragging = null;
 						_status.mousedragorigin = null;
 						_status.clicked = false;
+						delete _status.dragReleaseZoneMode;
+						clearDragFloatingCard();
+						hideTouchDragReleaseZone();
 						game.uncheck();
 						game.check();
 						_status.clicked = true;
@@ -1587,6 +1723,8 @@ export class Click {
 				var itemtype = get.itemtype(item);
 				if (itemtype == "card" || itemtype == "button" || itemtype == "player") {
 					_status.mouseleft = true;
+					showDragReleaseZoneForSelectedCard();
+					updateTouchDragReleaseZone(e.touches[0]);
 					if (ui.selected.cards.length) {
 						ui.selected.cards[0].updateTransform(true, 100);
 					}
@@ -1797,7 +1935,8 @@ export class Click {
 		_status.mousedown = false;
 		_status.clicked = false;
 		if (_status.mousedragging && _status.mouseleft) {
-			if (game.check()) {
+			var releaseZoneRequired = lib.config.touchscreen && needsDragReleaseZone();
+			if (game.check() && (!releaseZoneRequired || _status.touchDragReleaseActive)) {
 				if (ui.confirm) {
 					ui.confirm.close();
 				}
@@ -1805,8 +1944,8 @@ export class Click {
 				if (!event.filterOk || event.filterOk()) {
 					ui.click.ok();
 				}
-				ui.canvas.width = ui.arena.offsetWidth;
-				ui.canvas.height = ui.arena.offsetHeight;
+				get.resizeDragCanvas();
+				ui.ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
 			} else {
 				game.uncheck();
 				game.check();
@@ -1819,9 +1958,21 @@ export class Click {
 		_status.mouseleft = false;
 		_status.mousedragorigin = null;
 		_status.dragstatuschanged = false;
-		while (ui.touchlines.length) {
+		delete _status.dragReleaseZoneMode;
+		ui.arena?.classList.remove("dragging");
+		while (ui.touchlines?.length) {
 			ui.touchlines.shift().delete();
 		}
+		if (_status.dragline?.length) {
+			_status.dragline.forEach(line => line?.remove?.());
+			_status.dragline.length = 0;
+		}
+		if (ui.canvas && ui.ctx) {
+			get.resizeDragCanvas();
+			ui.ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+		}
+		clearDragFloatingCard();
+		hideTouchDragReleaseZone();
 		if (tmpflag) {
 			game.check();
 		}
@@ -1870,7 +2021,12 @@ export class Click {
 			dialogs[i].delete();
 		}
 		var node = _status.currentmouseenter;
+		if (_status.mousedragging) updateTouchDragReleaseZone(e);
+		if (_status.dragReleaseZoneMode && _status.mousedragging && ui.selected.cards.length) showDragFloatingCard(ui.selected.cards[0], e);
+		var hiddenDragCard = _status.mousedragging && ui.selected.cards.length ? ui.selected.cards[0] : null;
+		if (hiddenDragCard) hiddenDragCard.style.pointerEvents = "none";
 		var sourceitem = document.elementFromPoint(e.clientX, e.clientY);
+		if (hiddenDragCard) hiddenDragCard.style.pointerEvents = "";
 		if (game.chess && ui.selected.cards.length) {
 			var itemtype = get.itemtype(sourceitem);
 			if (itemtype != "card" && itemtype != "button") {
@@ -1891,7 +2047,7 @@ export class Click {
 		var item = sourceitem;
 		if (_status.mousedragging) {
 			e.preventDefault();
-			if (lib.config.enable_dragline) {
+			if (!_status.dragReleaseZoneMode && lib.config.enable_dragline) {
 				// var i=0;
 				// var startPoint0=[_status.mousedragging.clientX/game.documentZoom-ui.arena.offsetLeft,_status.mousedragging.clientY/game.documentZoom-ui.arena.offsetTop];
 				// var startPoint=startPoint0;
@@ -1922,36 +2078,14 @@ export class Click {
 				// 	if(remained[j]) remained[j].remove();
 				// }
 
-				ui.canvas.width = ui.arena.offsetWidth;
-				ui.canvas.height = ui.arena.offsetHeight;
+				get.resizeDragCanvas();
 				var ctx = ui.ctx;
-				ctx.shadowBlur = 5;
-				ctx.shadowColor = "rgba(0,0,0,0.3)";
-				ctx.strokeStyle = "white";
-				ctx.lineWidth = 3;
-				ctx.setLineDash([8, 2]);
-
-				ctx.beginPath();
-
-				ctx.moveTo(_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop);
-				if (_status.multitarget) {
-					for (var i = 0; i < _status.lastdragchange.length; i++) {
-						var exy = _status.lastdragchange[i]._lastdragchange;
-						ctx.lineTo(exy[0], exy[1]);
-					}
-				}
-				if (!_status.selectionfull) {
-					ctx.lineTo(e.clientX / game.documentZoom - ui.arena.offsetLeft, e.clientY / game.documentZoom - ui.arena.offsetTop);
-				}
-				ctx.stroke();
-				if (!_status.multitarget) {
-					for (var i = 0; i < _status.lastdragchange.length; i++) {
-						ctx.moveTo(_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop);
-						var exy = _status.lastdragchange[i]._lastdragchange;
-						ctx.lineTo(exy[0], exy[1]);
-						ctx.stroke();
-					}
-				}
+				ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+				get.drawDragLines(
+					ctx,
+					[_status.mousedragging.clientX / game.documentZoom - ui.arena.offsetLeft, _status.mousedragging.clientY / game.documentZoom - ui.arena.offsetTop],
+					[e.clientX / game.documentZoom - ui.arena.offsetLeft, e.clientY / game.documentZoom - ui.arena.offsetTop]
+				);
 			}
 
 			while (item) {
@@ -1960,6 +2094,9 @@ export class Click {
 						_status.mousedragging = null;
 						_status.mousedragorigin = null;
 						_status.clicked = false;
+						delete _status.dragReleaseZoneMode;
+						clearDragFloatingCard();
+						hideTouchDragReleaseZone();
 						if (_status.event.type == "phase" && !_status.event.skill && ui.confirm) {
 							ui.confirm.classList.add("removing");
 						}
@@ -1972,6 +2109,8 @@ export class Click {
 				var itemtype = get.itemtype(item);
 				if (itemtype == "card" || itemtype == "button" || itemtype == "player") {
 					_status.mouseleft = true;
+					showDragReleaseZoneForSelectedCard();
+					updateTouchDragReleaseZone(e);
 					if (ui.selected.cards.length) {
 						ui.selected.cards[0].updateTransform(true, 100);
 					}
@@ -2020,6 +2159,8 @@ export class Click {
 			}
 			if (!_status.mouseleft) {
 				_status.mouseleft = true;
+				showDragReleaseZoneForSelectedCard();
+				updateTouchDragReleaseZone(e);
 				game.check();
 				for (var i = 0; i < ui.selected.cards.length; i++) {
 					ui.selected.cards[i].updateTransform(true);
@@ -2129,7 +2270,7 @@ export class Click {
 		if (!lib.config.enable_drag) {
 			return;
 		}
-		if (!ui.arena.classList.contains("selecting")) {
+		if (!ui.arena?.classList.contains("selecting")) {
 			return;
 		}
 		if (!evt.isMine()) {
@@ -2144,13 +2285,16 @@ export class Click {
 					_status.clicked = false;
 					ui.click[itemtype].call(item);
 					if (item.classList.contains("selected")) {
+						_status.lastdragchange.length = 0;
+						_status.dragstatuschanged = false;
 						_status.mousedragging = e;
 						_status.mousedragorigin = item;
 						_status.mouseleft = false;
 						_status.selectionfull = false;
 						_status.multitarget = false;
 						_status.lastmouseutc = get.utc();
-						ui.arena.classList.add("dragging");
+						_status.dragReleaseZoneMode = itemtype == "card" && canUseDragReleaseZone(item);
+						ui.arena?.classList.add("dragging");
 					}
 				}
 				return;
@@ -2165,13 +2309,7 @@ export class Click {
 		if (!lib.config.enable_drag) {
 			return;
 		}
-		if (!this.parentNode) {
-			return;
-		}
-		if (!this.parentNode.parentNode) {
-			return;
-		}
-		if (this.parentNode.parentNode.parentNode != ui.me) {
+		if (!isOwnHandCardNode(this)) {
 			return;
 		}
 		if (this.parentNode.parentNode.classList.contains("scrollh")) {
@@ -2188,23 +2326,18 @@ export class Click {
 		ui.click.longpresscancel.call(this);
 		if (this._waitingfordrag) {
 			var drag = this._waitingfordrag;
-			_status.clicked = false;
-			_status.touchnocheck = true;
-			ui.click.card.call(this);
-			_status.touchnocheck = false;
-			if (this.classList.contains("selected")) {
-				_status.mousedragging = drag;
-				_status.mousedragorigin = this;
-				_status.mouseleft = false;
-				_status.selectionfull = false;
-				_status.multitarget = false;
+			if (e.touches?.[0]) {
+				var dx = e.touches[0].clientX - drag.clientX;
+				var dy = e.touches[0].clientY - drag.clientY;
+				if (dx * dx + dy * dy < 36) return;
 			}
+			startTouchHandCardDrag(this, drag);
 			delete this._waitingfordrag;
 		}
 	}
 	cardmouseenter() {
 		if (!lib.config.spread_card) return;
-		if (this.parentNode?.parentNode?.parentNode !== ui.me) return;
+		if (!isOwnHandCardNode(this)) return;
 		if (ui.selected.cards.length) return;
 		ui._handcardHover = this;
 		ui.updatehl();
@@ -2237,6 +2370,8 @@ export class Click {
 			ui.click.target.call(this);
 			_status.touchnocheck = false;
 			if (this.classList.contains("selected")) {
+				_status.lastdragchange.length = 0;
+				_status.dragstatuschanged = false;
 				_status.mousedragging = drag;
 				_status.mousedragorigin = this;
 				_status.mouseleft = false;
@@ -2291,6 +2426,18 @@ export class Click {
 				_status.mouseleft = false;
 				_status.mousedragorigin = null;
 				_status.dragstatuschanged = false;
+				delete _status.dragReleaseZoneMode;
+				_status.lastdragchange.length = 0;
+				if (_status.dragline?.length) {
+					_status.dragline.forEach(line => line?.remove?.());
+					_status.dragline.length = 0;
+				}
+				if (ui.canvas && ui.ctx) {
+					get.resizeDragCanvas();
+					ui.ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+				}
+				clearDragFloatingCard();
+				hideTouchDragReleaseZone();
 				game.uncheck();
 				game.check();
 				_status.noright = true;
@@ -2302,7 +2449,8 @@ export class Click {
 				ui.selected.cards[i].updateTransform(true);
 			}
 			if (_status.mousedragging && _status.mouseleft) {
-				if (game.check()) {
+				var releaseZoneRequired = needsDragReleaseZone();
+				if (game.check() && (!releaseZoneRequired || _status.touchDragReleaseActive)) {
 					if (ui.confirm) {
 						ui.confirm.close();
 					}
@@ -2322,10 +2470,17 @@ export class Click {
 			_status.mouseleft = false;
 			_status.mousedragorigin = null;
 			_status.dragstatuschanged = false;
-			if (ui.arena) {
-				ui.canvas.width = ui.arena.offsetWidth;
-				ui.canvas.height = ui.arena.offsetHeight;
+			delete _status.dragReleaseZoneMode;
+			hideTouchDragReleaseZone();
+			if (_status.dragline?.length) {
+				_status.dragline.forEach(line => line?.remove?.());
+				_status.dragline.length = 0;
 			}
+			if (ui.arena && ui.canvas && ui.ctx) {
+				get.resizeDragCanvas();
+				ui.ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+			}
+			clearDragFloatingCard();
 			if (tmpflag) {
 				ui.click[get.itemtype(tmpflag)].call(tmpflag);
 				game.check();
@@ -2333,7 +2488,7 @@ export class Click {
 			// ui.updatehl();
 		}
 		if (ui.arena) {
-			ui.arena.classList.remove("dragging");
+			ui.arena?.classList.remove("dragging");
 		}
 	}
 	mousemove() {
@@ -2419,6 +2574,13 @@ export class Click {
 			setTimeout(function () {
 				_status.longpressed = false;
 			}, 500);
+			if (lib.config.touchscreen && lib.config.enable_drag && get.itemtype(node) == "card" && isOwnHandCardNode(node) && node.classList.contains("selectable")) {
+				const touch = e.touches?.[0] || e.changedTouches?.[0];
+				if (touch && startTouchHandCardDrag(node, touch, true)) {
+					delete node._waitingfordrag;
+					return;
+				}
+			}
 			func.call(node, e);
 			if (lib.config.touchscreen && lib.config.enable_drag && !node._waitingfordrag) {
 				_status.mousedragging = null;
@@ -4645,6 +4807,9 @@ export class Click {
 	}
 	touchScroll(e) {
 		if (_status.mousedragging) {
+			return;
+		}
+		if (hasWaitingHandCardDrag(this)) {
 			return;
 		}
 		if (_status.draggingtouchdialog) {
