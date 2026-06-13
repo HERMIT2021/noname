@@ -12,7 +12,7 @@ import dedent from "../../node_modules/.pnpm/dedent@1.7.1/node_modules/dedent/di
 import { PoptipManager } from "./poptip.js";
 import { ZhanfaManager } from "./zhanfa.js";
 import skills from "./skill.js";
-import { getDoudizhuEnabledCharacters, normalizeDoudizhuRatings, getDoudizhuRating } from "../../mode/doudizhu-rating.js";
+import { normalizeDoudizhuWinrateStats, getDoudizhuWinrate, getDoudizhuEnabledCharacters, normalizeDoudizhuRatings, getDoudizhuRating } from "../../mode/doudizhu-rating.js";
 import { getDouzhuanIdentityLordPool, normalizeIdentityLordRatings, getIdentityLordRating } from "../../mode/identity-lord-rating.js";
 import { ui } from "../ui/index.js";
 import { get } from "../get/index.js";
@@ -8009,7 +8009,6 @@ class Library {
           }
           if (config.connect_doudizhu_mode !== "normal") {
             map.connect_double_character.hide();
-            map.connect_allow_same_character[config.connect_doudizhu_mode === "kaihei" ? "show" : "hide"]();
             if (config.connect_doudizhu_mode !== "kaihei") {
               map.connect_choice_zhu.hide();
               map.connect_choice_fan.hide();
@@ -8022,12 +8021,16 @@ class Library {
             map.connect_feiyang_version.hide();
           } else {
             map.connect_double_character.show();
-            map.connect_allow_same_character.show();
             map.connect_choice_zhu.show();
             map.connect_choice_fan.show();
             map.connect_enhance_dizhu.show();
             map.connect_enhance_nongmin.show();
             map.connect_feiyang_version.show();
+          }
+          if (config.connect_doudizhu_mode !== "online") {
+            map.connect_allow_same_character.show();
+          } else {
+            map.connect_allow_same_character.hide();
           }
         },
         connect_doudizhu_mode: {
@@ -8149,11 +8152,9 @@ class Library {
             if (config.doudizhu_mode === "kaihei") {
               map.choice_zhu.show();
               map.choice_fan.show();
-              map.allow_same_character.show();
             } else {
               map.choice_zhu.hide();
               map.choice_fan.hide();
-              map.allow_same_character.hide();
             }
             map.double_character.hide();
             map.free_choose.hide();
@@ -8167,7 +8168,6 @@ class Library {
             map.feiyang_version.hide();
           } else {
             map.double_character.show();
-            map.allow_same_character.show();
             map.choice_zhu.show();
             map.choice_fan.show();
             map.free_choose.show();
@@ -8179,6 +8179,11 @@ class Library {
             map.enhance_dizhu.show();
             map.enhance_nongmin.show();
             map.feiyang_version.show();
+          }
+          if (config.doudizhu_mode !== "online") {
+            map.allow_same_character.show();
+          } else {
+            map.allow_same_character.hide();
           }
           if (config.double_character && config.doudizhu_mode == "normal") {
             map.double_hp.show();
@@ -8445,6 +8450,214 @@ class Library {
             if (confirm("是否清除斗地主武将评分配置？")) {
               game.saveConfig("doudizhu_character_rating_data", null, "doudizhu");
               alert("斗地主武将评分已重置");
+            }
+          }
+        },
+        show_character_winrate: {
+          name: "查看胜率统计",
+          intro: "查看你在斗地主中使用各武将的场次、胜负、总胜率，以及地主/农民分项胜率。双将局会给两个武将分别记一场。",
+          clear: true,
+          onclick() {
+            const stats = normalizeDoudizhuWinrateStats(get.config("doudizhu_character_winrate_data", "doudizhu") || {});
+            const entries = Object.keys(stats).filter((name2) => stats[name2].total > 0).map((name2) => {
+              const translatedName = get.translation(name2) || name2;
+              return {
+                name: name2,
+                translatedName,
+                total: stats[name2],
+                zhu: stats[name2].zhu || { total: 0, win: 0, lose: 0 },
+                fan: stats[name2].fan || { total: 0, win: 0, lose: 0 },
+                searchText: (translatedName + " " + name2).toLowerCase()
+              };
+            });
+            if (!entries.length) {
+              alert("暂无斗地主武将胜率记录。完成一局斗地主后会自动统计你本局使用的武将。");
+              return;
+            }
+            const applyPanelStyle = function(node, cssText) {
+              node.style.cssText = "position:relative;display:block;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+              return node;
+            };
+            const applyFlexStyle = function(node, cssText) {
+              node.style.cssText = "position:relative;display:flex;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+              return node;
+            };
+            const applyGridStyle = function(node, cssText) {
+              node.style.cssText = "position:relative;display:grid;box-sizing:border-box;transition:none;text-shadow:none;" + cssText;
+              return node;
+            };
+            const createTextNode = function(parent, text, cssText) {
+              return applyPanelStyle(ui.create.div("", text, parent), cssText);
+            };
+            const formatRate = function(line) {
+              return line && line.total ? (getDoudizhuWinrate(line) * 100).toFixed(1) + "%" : "-";
+            };
+            const formatRole = function(line) {
+              return line && line.total ? line.win + "/" + line.total + " " + formatRate(line) : "-";
+            };
+            const compareName = function(a, b) {
+              return a.translatedName.localeCompare(b.translatedName, "zh-Hans") || a.name.localeCompare(b.name);
+            };
+            const closePanel = function() {
+              ui.window.classList.remove("shortcutpaused");
+              ui.window.classList.remove("systempaused");
+              overlay.remove();
+            };
+            const overlay = ui.create.div(".popup-container", ui.window, function(event) {
+              if (event.target == overlay) {
+                closePanel();
+              }
+            });
+            overlay.style.cssText = "position:fixed;left:0;top:0;width:100%;height:100%;z-index:10000;background:rgba(0,0,0,0.72);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;transition:none;text-shadow:none;";
+            ui.window.classList.add("shortcutpaused");
+            ui.window.classList.add("systempaused");
+            const panel = ui.create.div("", overlay);
+            applyFlexStyle(panel, "width:min(1040px,94vw);height:min(720px,90vh);background:rgba(28,27,25,0.97);border:1px solid rgba(226,198,126,0.58);border-radius:8px;box-shadow:0 18px 48px rgba(0,0,0,0.55);color:#f7ecd9;flex-direction:column;overflow:hidden;");
+            panel.addEventListener("click", (event) => event.stopPropagation());
+            const header = ui.create.div("", panel);
+            applyFlexStyle(header, "align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.12);");
+            const title = ui.create.div("", header);
+            applyPanelStyle(title, "flex:1;min-width:0;");
+            createTextNode(title, "斗地主胜率统计", "font-size:20px;font-weight:700;line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+            const subTitle = createTextNode(title, "共 " + entries.length + " 名武将有记录", "margin-top:4px;font-size:13px;line-height:18px;color:rgba(247,236,217,0.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+            const searchInput = document.createElement("input");
+            searchInput.type = "search";
+            searchInput.placeholder = "搜索武将";
+            searchInput.style.cssText = "position:relative;display:block;width:160px;height:32px;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.08);color:#f7ecd9;padding:0 10px;outline:none;box-sizing:border-box;transition:none;";
+            header.appendChild(searchInput);
+            const closeButton = ui.create.div(".menubutton.large", "关闭", header);
+            applyPanelStyle(closeButton, "margin:0;min-width:66px;height:32px;line-height:32px;border-radius:6px;text-align:center;background:rgba(255,255,255,0.1);color:#f7ecd9;cursor:pointer;");
+            closeButton.listen(closePanel);
+            const table = ui.create.div("", panel);
+            applyPanelStyle(table, "flex:1;min-height:0;overflow:auto;padding:0 12px 12px 12px;");
+            const tableHeader = ui.create.div("", table);
+            applyGridStyle(tableHeader, "position:sticky;top:0;z-index:1;grid-template-columns:46px 68px minmax(150px,1fr) 76px 88px 88px 130px 130px;gap:10px;align-items:center;min-width:900px;padding:10px 8px;background:rgba(28,27,25,0.98);border-bottom:1px solid rgba(255,255,255,0.12);color:rgba(247,236,217,0.74);font-size:13px;");
+            createTextNode(tableHeader, "排名", "text-align:center;");
+            createTextNode(tableHeader, "头像", "");
+            const headerLabels = {
+              name: "武将",
+              total: "场次",
+              record: "胜负",
+              rate: "胜率",
+              zhu: "地主",
+              fan: "农民"
+            };
+            const headerNodes = {};
+            const sortState = { key: "rate", direction: "desc" };
+            const createHeaderCell = function(key) {
+              const node = createTextNode(tableHeader, headerLabels[key], "cursor:pointer;user-select:none;");
+              node.listen(function() {
+                if (sortState.key == key) {
+                  sortState.direction = sortState.direction == "desc" ? "asc" : "desc";
+                } else {
+                  sortState.key = key;
+                  sortState.direction = key == "name" ? "asc" : "desc";
+                }
+                renderRows();
+              });
+              headerNodes[key] = node;
+            };
+            createHeaderCell("name");
+            createHeaderCell("total");
+            createHeaderCell("record");
+            createHeaderCell("rate");
+            createHeaderCell("zhu");
+            createHeaderCell("fan");
+            const body = ui.create.div("", table);
+            applyPanelStyle(body, "min-width:900px;");
+            const rows = /* @__PURE__ */ new Map();
+            for (const entry of entries) {
+              const row = ui.create.div("", body);
+              applyGridStyle(row, "grid-template-columns:46px 68px minmax(150px,1fr) 76px 88px 88px 130px 130px;gap:10px;align-items:center;min-width:900px;padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);");
+              const rankNode = createTextNode(row, "", "text-align:center;font-size:13px;color:rgba(247,236,217,0.64);");
+              const avatar = ui.create.div("", row);
+              applyPanelStyle(avatar, "width:52px;height:64px;border-radius:6px;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.2);");
+              if (lib.character[entry.name]) {
+                avatar.setBackground(entry.name, "character");
+              }
+              const nameNode = ui.create.div("", row);
+              applyPanelStyle(nameNode, "min-width:0;");
+              createTextNode(nameNode, entry.translatedName, "font-size:16px;line-height:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+              createTextNode(nameNode, entry.name, "margin-top:3px;font-size:12px;line-height:16px;color:rgba(247,236,217,0.58);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+              createTextNode(row, String(entry.total.total), "font-size:15px;line-height:22px;text-align:center;");
+              createTextNode(row, entry.total.win + "胜" + entry.total.lose + "负", "font-size:14px;line-height:22px;text-align:center;");
+              createTextNode(row, formatRate(entry.total), "font-size:16px;line-height:22px;text-align:center;color:#f0c36d;font-weight:700;");
+              createTextNode(row, formatRole(entry.zhu), "font-size:14px;line-height:22px;text-align:center;color:rgba(247,236,217,0.82);");
+              createTextNode(row, formatRole(entry.fan), "font-size:14px;line-height:22px;text-align:center;color:rgba(247,236,217,0.82);");
+              rows.set(entry.name, {
+                node: row,
+                rankNode,
+                entry
+              });
+            }
+            const getSortValue = function(entry, key) {
+              switch (key) {
+                case "total":
+                  return entry.total.total;
+                case "record":
+                  return entry.total.win;
+                case "zhu":
+                  return getDoudizhuWinrate(entry.zhu);
+                case "fan":
+                  return getDoudizhuWinrate(entry.fan);
+                default:
+                  return getDoudizhuWinrate(entry.total);
+              }
+            };
+            const updateHeaderLabels = function() {
+              for (const key in headerNodes) {
+                headerNodes[key].textContent = headerLabels[key] + (sortState.key == key ? sortState.direction == "desc" ? " ↓" : " ↑" : "");
+              }
+            };
+            function sortEntries(a, b) {
+              if (sortState.key == "name") {
+                const result2 = compareName(a, b);
+                return sortState.direction == "desc" ? -result2 : result2;
+              }
+              let result = getSortValue(a, sortState.key) - getSortValue(b, sortState.key);
+              if (!result && (sortState.key == "zhu" || sortState.key == "fan")) {
+                result = a[sortState.key].total - b[sortState.key].total;
+              }
+              if (!result) {
+                result = entryTotalTie(a) - entryTotalTie(b);
+              }
+              if (result) {
+                return sortState.direction == "desc" ? -result : result;
+              }
+              return compareName(a, b);
+            }
+            function entryTotalTie(entry) {
+              return entry.total.total * 1e4 + entry.total.win;
+            }
+            function renderRows() {
+              const value = searchInput.value.trim().toLowerCase();
+              const sorted = entries.slice().sort(sortEntries);
+              let count = 0;
+              for (const entry of sorted) {
+                const row = rows.get(entry.name);
+                const visible = !value || entry.searchText.includes(value);
+                row.node.style.display = visible ? "grid" : "none";
+                body.appendChild(row.node);
+                if (visible) {
+                  count++;
+                  row.rankNode.textContent = String(count);
+                }
+              }
+              updateHeaderLabels();
+              subTitle.textContent = "共 " + entries.length + " 名武将有记录，当前显示：" + count + "名";
+            }
+            searchInput.addEventListener("input", renderRows);
+            renderRows();
+          }
+        },
+        reset_character_winrate: {
+          name: "重置胜率统计",
+          intro: "清除斗地主武将胜率统计数据。清除后下一局会重新开始统计。",
+          clear: true,
+          onclick() {
+            if (confirm("是否清除斗地主武将胜率统计？")) {
+              game.saveConfig("doudizhu_character_winrate_data", null, "doudizhu");
+              alert("斗地主武将胜率统计已重置");
             }
           }
         },

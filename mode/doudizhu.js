@@ -1,5 +1,5 @@
 import { lib, game, ui, get, ai, _status } from "noname";
-import { getDoudizhuRating, normalizeDoudizhuRatings, sortDoudizhuCandidates } from "./doudizhu-rating.js";
+import { getDoudizhuRating, normalizeDoudizhuRatings, recordDoudizhuWinrateStats, sortDoudizhuCandidates } from "./doudizhu-rating.js";
 export const type = "mode";
 /**
  * @type { () => importModeConfig }
@@ -338,8 +338,34 @@ export default () => {
 				}
 				return game.recommendDizhu.includes(name);
 			},
+			getDoudizhuRecordCharacters(player) {
+				const list = [];
+				if (!player) {
+					return list;
+				}
+				const names = [player.name1 || player.name, player.name2];
+				for (const name of names) {
+					if (typeof name == "string" && name && lib.character[name] && !list.includes(name)) {
+						list.push(name);
+					}
+				}
+				return list;
+			},
+			addDoudizhuWinrateRecord(bool) {
+				if (typeof bool != "boolean") {
+					return;
+				}
+				const me = game.me?._trueMe || game.me;
+				const characters = game.getDoudizhuRecordCharacters(me);
+				if (!characters.length) {
+					return;
+				}
+				const stats = recordDoudizhuWinrateStats(get.config("doudizhu_character_winrate_data", "doudizhu"), characters, me.identity, bool);
+				game.saveConfig("doudizhu_character_winrate_data", stats, "doudizhu");
+			},
 			addRecord(bool) {
 				if (typeof bool == "boolean") {
+					game.addDoudizhuWinrateRecord(bool);
 					var data = lib.config.gameRecord.doudizhu.data;
 					var identity = game.me.identity;
 					if (!data[identity]) {
