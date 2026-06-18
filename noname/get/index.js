@@ -6,7 +6,7 @@ import dictionary from "./pinyins/noname-dict.js";
 import { Audio } from "./audio.js";
 import { AsyncGeneratorFunction, AsyncFunction, GeneratorFunction, userAgentLowerCase } from "../util/index.js";
 import "../util/sandbox.js";
-import JSZip from "../../_virtual/index2.js";
+import JSZip from "../../_virtual/index.js";
 import { HTMLPoptipElement } from "../library/poptip.js";
 import { CacheContext } from "../library/cache/cacheContext.js";
 import { lib } from "../library/index.js";

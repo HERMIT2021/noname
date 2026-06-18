@@ -456,6 +456,34 @@ var Props = {
 			return false;
 		},
 	},
+	shop_shishibaozhu_huanledou: {
+		name: "史诗宝珠→欢乐豆",
+		intro: "消耗1个史诗宝珠兑换10000欢乐豆",
+		dyintro() {
+			let count_sbz = Props.getCount("shishibaozhu");
+			return `消耗1个史诗宝珠兑换10000欢乐豆<br>(当前史诗宝珠：${count_sbz})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shishibaozhu.png`,
+		use() {
+			let sbz = Props.getCount("shishibaozhu");
+			if (sbz < 1) {
+				dzxy.create.bottomBarTip("史诗宝珠不足", document.body);
+				return false;
+			}
+			Props.changeCount("shishibaozhu", -1);
+			propToast.addToast("huanledou", 10000);
+		},
+		useAll() {
+			while (true) {
+				let bool = this.use();
+				if (bool == false) break;
+			}
+			return false;
+		},
+	},
 	/*--------------------------------------------------------------------------------------------------------*/
 	/**
 	 * 获取所有道具数组

@@ -74,11 +74,11 @@ export function nanhualaoxian() {
 			//2400*866
 			game.thunderForbidTouch();
 			game.pause();
-			if (decadeUI && decadeUI.ease) {
-				_status.old_duiease = decadeUI.ease;
-				decadeUI.ease = function (fraction) {
-					if (!decadeUI.b3ease) decadeUI.b3ease = new decadeUI.CubicBezierEase(0.1, 0.1, 0.1, 0.1);
-					return decadeUI.b3ease.ease(fraction);
+			if (window.decadeUI && window.decadeUI.ease) {
+				_status.old_duiease = window.decadeUI.ease;
+				window.decadeUI.ease = function (fraction) {
+					if (!window.decadeUI.b3ease) window.decadeUI.b3ease = new window.decadeUI.CubicBezierEase(0.1, 0.1, 0.1, 0.1);
+					return window.decadeUI.b3ease.ease(fraction);
 				};
 			}
 			var blackbg = ui.create.div(".th-dibeijing", document.body);
@@ -521,7 +521,7 @@ export function nanhualaoxian() {
 				}
 			};
 			("step 1");
-			if (_status.old_duiease) decadeUI.ease = _status.old_duiease;
+			if (_status.old_duiease) window.decadeUI.ease = _status.old_duiease;
 			if (result.bool && !_status.qhly_skillTest) {
 				player.storage.th_yufeng = Math.min(3, ++player.storage.th_yufeng);
 				player

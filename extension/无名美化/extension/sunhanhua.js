@@ -46,11 +46,11 @@ export function mbsunhanhua() {
 		content: function () {
 			"step 0";
 			game.thunderForbidTouch();
-			if (decadeUI && decadeUI.ease) {
-				_status.old_duiease = decadeUI.ease;
-				decadeUI.ease = function (fraction) {
-					if (!decadeUI.b3ease) decadeUI.b3ease = new decadeUI.CubicBezierEase(0.1, 0.1, 0.1, 0.1);
-					return decadeUI.b3ease.ease(fraction);
+			if (window.decadeUI && window.decadeUI.ease) {
+				_status.old_duiease = window.decadeUI.ease;
+				window.decadeUI.ease = function (fraction) {
+					if (!window.decadeUI.b3ease) window.decadeUI.b3ease = new window.decadeUI.CubicBezierEase(0.1, 0.1, 0.1, 0.1);
+					return window.decadeUI.b3ease.ease(fraction);
 				};
 			}
 			game.pause();
@@ -469,7 +469,7 @@ export function mbsunhanhua() {
 			});
 			("step 2");
 			game.pause();
-			if (_status.old_duiease) decadeUI.ease = _status.old_duiease;
+			if (_status.old_duiease) window.decadeUI.ease = _status.old_duiease;
 			event.resultBg = ui.create.div(".th-cxresultload", document.body);
 			if (event.score == 5) game.playAudio("..", "extension", "无名美化", "audio", "chongxu", "Five_lotus");
 			var bigCircle = ui.create.div(".th-cxcircle", event.resultBg);

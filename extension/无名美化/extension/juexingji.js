@@ -10,7 +10,7 @@ window._testjx = function (skillName, seat = 1, test = false) {
 	}
 	console.log("viewSkill", viewSkill);
 	console.log("skills", game.players[seat].skills);
-	decadeUI.effect.skill(game.players[seat], skillName || "决进", "", test);
+	window.window.decadeUI.effect.skill(game.players[seat], skillName || "决进", "", test);
 	// avatar_wenzhi.style.visibility = "visible";
 };
 //获取武将所有技能
@@ -81,8 +81,8 @@ export function juexingji1() {
 			name: "../../../无名美化/animation/juexingji/juexingji1/animation/shimingji",
 		},
 	};
-	if (decadeUI) {
-		decadeUI.effect.skill = function (player, skillName, vice, test) {
+	if (window.decadeUI) {
+		window.decadeUI.effect.skill = function (player, skillName, vice, test) {
 			var name = getName(player, skillName);
 			if (name && lib.juexingjiTXPool && name in lib.juexingjiTXPool) {
 				lib.juexingjiTXPool[name](player, skillName, vice);
@@ -147,8 +147,8 @@ export function juexingji2() {
 	let txname = "../../../无名美化/animation/juexingji/juexingji2/animation/jxxd";
 	dcdAnim.loadSpine(txname, "skel");
 	
-	if (decadeUI) {
-		decadeUI.effect.skill = function (player, skillName, vice, test) {
+	if (window.decadeUI) {
+		window.decadeUI.effect.skill = function (player, skillName, vice, test) {
 			// function getName(skill) {
 			// 	for (let i = 0; i < player.skills.length; i++) {
 			// 		let temp = player.skills[i];
@@ -240,8 +240,8 @@ export function juexingji3() {
 			name: "../../../无名美化/animation/juexingji/juexingji3/animation/olshimingji",
 		},
 	};
-	if (decadeUI) {
-		decadeUI.effect.skill = function (player, skillName, vice, test) {
+	if (window.decadeUI) {
+		window.decadeUI.effect.skill = function (player, skillName, vice, test) {
 			// function getName(skill) {
 			// 	for (let i = 0; i < player.skills.length; i++) {
 			// 		let temp = player.skills[i];

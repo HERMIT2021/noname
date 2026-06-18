@@ -172,7 +172,7 @@ export function zhouqun() {
 				var skeletons = event.zhongqian.skeleton;
 				var slots = skeletons.findSlot("jgqian3");
 				var attachments = slots.getAttachment();
-				var regions = decadeUI.animation.createTextureRegion(qianImg);
+				var regions = window.decadeUI.animation.createTextureRegion(qianImg);
 				var scaleQ = 1.17;
 				attachments.width = (regions.width * scaleQ) / 1.15;
 				attachments.height = (regions.height * scaleQ) / 1.15;
