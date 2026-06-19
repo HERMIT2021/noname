@@ -62,18 +62,24 @@ export function gameSettlement() {
 		if (bool === true && (isTargetMode("doudizhu", "huanle") || isTargetMode("doudizhu", "zhizun"))) {
 			let streak = doudizhuStats.getStats().currentStreak;
 			let isZhizun = isTargetMode("doudizhu", "zhizun");
+			let addToast = window.dzxy?.propToast?.addToast;
 			if (streak >= 3 && streak % 3 === 0) {
 				let base = 300 + Math.floor((streak - 3) / 3) * 150;
 				let bonus = isZhizun ? 250 : 0;
 				let total = base + bonus;
-				if (game.changeGlobalItemCount) {
+				if (addToast) {
+					addToast("huanledou", total, `斗地主${streak}连胜奖励`);
+				} else if (game.changeGlobalItemCount) {
 					game.changeGlobalItemCount("huanledou", total);
 				}
 			}
 			if (streak === 11) {
 				let douBonus = isZhizun ? 2000 : 1000;
 				let boxBonus = isZhizun ? 100 : 50;
-				if (game.changeGlobalItemCount) {
+				if (addToast) {
+					addToast("huanledou", douBonus, `斗地主11连胜额外奖励`);
+					addToast("czg_box", boxBonus, `斗地主11连胜额外奖励`);
+				} else if (game.changeGlobalItemCount) {
 					game.changeGlobalItemCount("huanledou", douBonus);
 					game.changeGlobalItemCount("czg_box", boxBonus);
 				}
