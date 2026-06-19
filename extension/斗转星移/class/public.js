@@ -887,6 +887,41 @@ lib.onover.push(result => {
 			}
 		}
 	}
+	//斗地主连胜奖励
+	if (mode == "doudizhu" && (submode == "huanle" || submode == "zhizun")) {
+		let streakData = {};
+		try {
+			streakData = JSON.parse(localStorage.getItem("doudizhuStats") || "{}");
+		} catch (e) {}
+		if (typeof streakData.currentStreak !== "number") streakData.currentStreak = 0;
+		if (typeof streakData.maxStreak !== "number") streakData.maxStreak = 0;
+		let currentStreak = streakData.currentStreak;
+		if (result) {
+			currentStreak++;
+		} else {
+			currentStreak = 0;
+		}
+		streakData.currentStreak = currentStreak;
+		if (result && currentStreak > streakData.maxStreak) {
+			streakData.maxStreak = currentStreak;
+		}
+		if (typeof streakData.totalGames !== "number") streakData.totalGames = 0;
+		streakData.totalGames++;
+		localStorage.setItem("doudizhuStats", JSON.stringify(streakData));
+
+		if (result && currentStreak >= 3 && currentStreak % 3 === 0) {
+			let base = 300 + Math.floor((currentStreak - 3) / 3) * 150;
+			let bonus = submode == "zhizun" ? 250 : 0;
+			let total = base + bonus;
+			propToast.addToast("huanledou", total, `斗地主${currentStreak}连胜奖励`);
+		}
+		if (result && currentStreak === 11) {
+			let douBonus = submode == "zhizun" ? 2000 : 1000;
+			let boxBonus = submode == "zhizun" ? 100 : 50;
+			propToast.addToast("huanledou", douBonus, `斗地主11连胜额外奖励`);
+			propToast.addToast("czg_box", boxBonus, `斗地主11连胜额外奖励`);
+		}
+	}
 	//非欢乐/至尊斗地主
 	if (mode != "doudizhu" || (mode == "doudizhu" && submode != "huanle" && submode != "zhizun")) {
 		let myhld = Props.getCount("huanledou");
