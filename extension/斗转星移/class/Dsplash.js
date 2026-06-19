@@ -87,17 +87,23 @@ export class Dsplash extends DefaultSplash {
 			day: 0,
 			remainCount: 10,
 		}
+		if (timeInfo['shop_shishibaozhu_huanledou'] == undefined) timeInfo['shop_shishibaozhu_huanledou'] = {
+			year: 0,
+			month: 0,
+			day: 0,
+			remainCount: 1,
+		}
 		dzxy.saveCF('time');
 
 		//重置
 		let nowDate = dzxy.getDate('nyr');
-		let shopKeys = ['shop_huanjiangka', 'shop_shouqika', 'shop_huanledou'];
+		let shopKeys = ['shop_huanjiangka', 'shop_shouqika', 'shop_huanledou', 'shop_shishibaozhu_huanledou'];
 		for (let key of shopKeys) {
 			let info = dzxy.getCF('time')[key];
 			if (info.year != nowDate.year ||
 				info.month != nowDate.month ||
 				info.day != nowDate.day) {
-				info['remainCount'] = 10;
+				info['remainCount'] = key === 'shop_shishibaozhu_huanledou' ? 1 : 10;
 			}
 		}
 		dzxy.saveCF('time');

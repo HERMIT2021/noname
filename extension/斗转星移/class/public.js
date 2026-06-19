@@ -458,10 +458,11 @@ var Props = {
 	},
 	shop_shishibaozhu_huanledou: {
 		name: "史诗宝珠→欢乐豆",
-		intro: "消耗1个史诗宝珠兑换10000欢乐豆",
+		intro: "消耗1个史诗宝珠兑换6000欢乐豆",
 		dyintro() {
+			let remainCount = dzxy.getCF("time")["shop_shishibaozhu_huanledou"]["remainCount"];
 			let count_sbz = Props.getCount("shishibaozhu");
-			return `消耗1个史诗宝珠兑换10000欢乐豆<br>(当前史诗宝珠：${count_sbz})`;
+			return `消耗1个史诗宝珠兑换6000欢乐豆<br>(今日剩余兑换次数：${remainCount}/1;当前史诗宝珠：${count_sbz})`;
 		},
 		type: "shangdian",
 		display: true,
@@ -473,8 +474,18 @@ var Props = {
 				dzxy.create.bottomBarTip("史诗宝珠不足", document.body);
 				return false;
 			}
+
+			let timeInfo = dzxy.getCF("time")["shop_shishibaozhu_huanledou"];
+			if (timeInfo.remainCount <= 0) {
+				dzxy.create.bottomBarTip("今日剩余兑换次数不足", document.body);
+				return false;
+			}
+			Object.assign(timeInfo, dzxy.getDate("nyr"));
+			timeInfo.remainCount--;
+
 			Props.changeCount("shishibaozhu", -1);
-			propToast.addToast("huanledou", 10000);
+			propToast.addToast("huanledou", 6000);
+			dzxy.saveCF("time");
 		},
 		useAll() {
 			while (true) {
