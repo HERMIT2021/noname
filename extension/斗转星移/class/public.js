@@ -967,3 +967,33 @@ lib.onover.push(result => {
 		if (myPropCount < i.max || i.max == undefined) propToast.addToast(i.id, i.count);
 	}
 });
+
+// 斗地主退出/逃跑视为输
+window.addEventListener("beforeunload", () => {
+	let mode = get.mode();
+	if (mode != "doudizhu") return;
+	if (_status.over) return;
+	let streakData = {};
+	try {
+		streakData = JSON.parse(localStorage.getItem("doudizhuStats") || "{}");
+	} catch (e) {}
+	if (typeof streakData.currentStreak !== "number") streakData.currentStreak = 0;
+	if (streakData.currentStreak > 0) {
+		streakData.currentStreak = 0;
+		if (typeof streakData.totalGames !== "number") streakData.totalGames = 0;
+		streakData.totalGames++;
+		localStorage.setItem("doudizhuStats", JSON.stringify(streakData));
+	}
+});
+
+// 农民死亡后不显示重新开始按钮
+lib.onover.push(() => {
+	let mode = get.mode();
+	if (mode != "doudizhu") return;
+	if (game.me && game.me.isDead() && game.me.identity == "fan") {
+		if (ui.restart) {
+			ui.restart.close();
+			delete ui.restart;
+		}
+	}
+});
