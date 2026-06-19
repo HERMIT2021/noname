@@ -495,34 +495,6 @@ var Props = {
 			return false;
 		},
 	},
-	shop_shishibaozhu_yuanbao: {
-		name: "史诗宝珠→元宝",
-		intro: "消耗10个史诗宝珠兑换1000000元宝",
-		dyintro() {
-			let count_sbz = Props.getCount("shishibaozhu");
-			return `消耗10个史诗宝珠兑换1000000元宝<br>(当前史诗宝珠：${count_sbz})`;
-		},
-		type: "shangdian",
-		display: true,
-		nocount: true,
-		imgPath: `${dzxy.path}image/icon/shishibaozhu.png`,
-		use() {
-			let sbz = Props.getCount("shishibaozhu");
-			if (sbz < 10) {
-				dzxy.create.bottomBarTip("史诗宝珠不足，需要10个", document.body);
-				return false;
-			}
-			Props.changeCount("shishibaozhu", -10);
-			propToast.addToast("yuanbao", 1000000);
-		},
-		useAll() {
-			while (true) {
-				let bool = this.use();
-				if (bool == false) break;
-			}
-			return false;
-		},
-	},
 	/*--------------------------------------------------------------------------------------------------------*/
 	/**
 	 * 获取所有道具数组

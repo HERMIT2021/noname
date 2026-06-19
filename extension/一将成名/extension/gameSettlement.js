@@ -51,6 +51,33 @@ export function gameSettlement() {
 				}
 				doudizhuStats.recordGame(false);
 			}
+		}
+		if (isTargetMode("doudizhu", "zhizun")) {
+			if (bool === true) {
+				doudizhuStats.recordGame(true);
+			} else if (bool === false) {
+				doudizhuStats.recordGame(false);
+			}
+		}
+		if (bool === true && (isTargetMode("doudizhu", "huanle") || isTargetMode("doudizhu", "zhizun"))) {
+			let streak = doudizhuStats.getStats().currentStreak;
+			let isZhizun = isTargetMode("doudizhu", "zhizun");
+			if (streak >= 3 && streak % 3 === 0) {
+				let base = 300 + Math.floor((streak - 3) / 3) * 150;
+				let bonus = isZhizun ? 250 : 0;
+				let total = base + bonus;
+				if (game.changeGlobalItemCount) {
+					game.changeGlobalItemCount("huanledou", total);
+				}
+			}
+			if (streak === 11) {
+				let douBonus = isZhizun ? 2000 : 1000;
+				let boxBonus = isZhizun ? 100 : 50;
+				if (game.changeGlobalItemCount) {
+					game.changeGlobalItemCount("huanledou", douBonus);
+					game.changeGlobalItemCount("czg_box", boxBonus);
+				}
+			}
 		} else if (isTargetMode("versus", "two") && currentModeType === GameModeType.RANKED && currentModeId == "versus") {
 			// if (ui.dialog && lib.config[`extension_${EXTENSION_NAME}_closeDialog`]) {
 			// 	ui.dialog.classList.add("dialog-hide");
