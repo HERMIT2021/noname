@@ -957,11 +957,14 @@ lib.onover.push(result => {
 	}
 });
 
-// 斗地主退出/逃跑视为输
+// 斗地主退出/逃跑视为输（仅退出按钮/刷新触发，关浏览器不触发）
 window.addEventListener("beforeunload", () => {
-	let mode = get.mode();
-	if (mode != "doudizhu") return;
 	if (_status.over) return;
+	if (get.mode() != "doudizhu") return;
+	sessionStorage.setItem("_doudizhu_exit", "1");
+});
+if (sessionStorage.getItem("_doudizhu_exit") === "1") {
+	sessionStorage.removeItem("_doudizhu_exit");
 	let streakData = {};
 	try {
 		streakData = JSON.parse(localStorage.getItem("doudizhuStats") || "{}");
@@ -973,6 +976,10 @@ window.addEventListener("beforeunload", () => {
 		streakData.totalGames++;
 		localStorage.setItem("doudizhuStats", JSON.stringify(streakData));
 	}
+}
+// 正常结算后清除退出标记
+lib.onover.push(result => {
+	sessionStorage.removeItem("_doudizhu_exit");
 });
 
 // 农民死亡后不显示重新开始按钮
