@@ -1,7 +1,7 @@
 import { popupContainer, menuxpages, createConfig, clickMenuItem, openMenu } from "../index.js";
 import "../../../../../noname.js";
 import { nonameInitialized } from "../../../../util/index.js";
-import JSZip from "../../../../../_virtual/index2.js";
+import JSZip from "../../../../../_virtual/index.js";
 import { lib } from "../../../../library/index.js";
 import { game } from "../../../../game/index.js";
 import { get } from "../../../../get/index.js";

@@ -913,13 +913,13 @@ lib.onover.push(result => {
 			let base = 300 + Math.floor((currentStreak - 3) / 3) * 150;
 			let bonus = submode == "zhizun" ? 250 : 0;
 			let total = base + bonus;
-			propToast.addToast("huanledou", total, `斗地主${currentStreak}连胜奖励`);
+			propToast.addToast("huanledou", total);
 		}
 		if (result && currentStreak === 11) {
 			let douBonus = submode == "zhizun" ? 2000 : 1000;
 			let boxBonus = submode == "zhizun" ? 100 : 50;
-			propToast.addToast("huanledou", douBonus, `斗地主11连胜额外奖励`);
-			propToast.addToast("czg_box", boxBonus, `斗地主11连胜额外奖励`);
+			propToast.addToast("huanledou", douBonus);
+			propToast.addToast("czg_box", boxBonus);
 		}
 	}
 	//非欢乐/至尊斗地主
