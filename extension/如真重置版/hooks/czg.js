@@ -636,6 +636,36 @@ export function cangZhenGe() {
 				return total_weight;
 			});
 
+			// 找出最低权重物品（保底目标）
+			let rarestItems = currenBox.items.filter(item => {
+				return item.weight === 1 || (item.count === 66 && item.name === "史诗宝珠");
+			});
+			let rarestIds = new Set(rarestItems.map(item => item.id));
+
+			// 读取保底计数
+			let pityKey = "czg_pity_" + currenBox.name;
+			let pityData = {};
+			try {
+				pityData = JSON.parse(localStorage.getItem("czg_pity_data") || "{}");
+			} catch (e) {}
+			if (typeof pityData[pityKey] !== "number") pityData[pityKey] = 0;
+
+			// 检查是否触发保底
+			let pityTriggered = false;
+			if (pityData[pityKey] >= 20000 && rarestItems.length > 0) {
+				pityTriggered = true;
+				let forcedItem = rarestItems[Math.floor(Math.random() * rarestItems.length)];
+				result.push({
+					id: forcedItem.id,
+					name: forcedItem.name,
+					count: forcedItem.count || 1,
+					weight: forcedItem.weight,
+					gaoji: forcedItem.gaoji,
+					_pity: true,
+				});
+				pityData[pityKey] = 0;
+			}
+
 			// 放入必中的保底
 			rzczb.czgSettings.fixed.forEach(i => {
 				result.push({
@@ -646,6 +676,7 @@ export function cangZhenGe() {
 			});
 
 			let randomR;
+			let naturalRare = false;
 			// 模拟抽取
 			for (let i = 0; i < count; i++) {
 				randomR = Math.random() * total_weight;
@@ -670,10 +701,22 @@ export function cangZhenGe() {
 						if (!isExist) {
 							result.push({ ...currenBox.items[j] });
 						}
+						// 检测是否自然抽到保底物品
+						if (rarestIds.has(currenBox.items[j].id)) {
+							naturalRare = true;
+						}
 						break;
 					}
 				}
 			}
+			// 更新保底计数
+			if (naturalRare && !pityTriggered) {
+				pityData[pityKey] = 0;
+			} else if (!pityTriggered) {
+				pityData[pityKey] += count;
+			}
+			localStorage.setItem("czg_pity_data", JSON.stringify(pityData));
+
 			const rewardMap = {
 				将魂: "jianghun",
 				换将卡: "huanjiangka",
