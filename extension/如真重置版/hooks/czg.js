@@ -101,6 +101,10 @@ export function cangZhenGe() {
 			openRewardSafely(count);
 			return;
 		}
+		if (lib.config.extension_如真重置版_czgFastOpen) {
+			let speed = lib.config.extension_如真重置版_czgFastSpeed || 5;
+			boxbeijing.state.timeScale = Number(speed);
+		}
 		boxbeijing.state.setAnimation(0, "play2", false);
 		boxbeijing.state.addAnimation(0, "play1", true, 4);
 		let lis = {
@@ -338,6 +342,23 @@ export function cangZhenGe() {
 
 	const openAllTip = ui.create.div(".open-all-tip", bg);
 	openAllTip.innerHTML = "<span style='color:#DEB887; text-shadow:0 0 1px black;font-weight:600;font-family:shousha'>每次最多开50个</span>";
+	// 快速开启复选框
+	const fastOpenBox = ui.create.div(".czg-fast-open", bg);
+	fastOpenBox.style.cssText = "position:absolute;left:2%;top:3%;display:flex;align-items:center;gap:6px;z-index:5;font-family:shousha;color:#DEB887;font-size:14px;text-shadow:0 0 1px black;";
+	const fastOpenCheck = document.createElement("input");
+	fastOpenCheck.type = "checkbox";
+	fastOpenCheck.id = "czg_fast_open";
+	fastOpenCheck.style.cssText = "width:16px;height:16px;cursor:pointer;accent-color:#D4A574;";
+	fastOpenCheck.checked = !!lib.config.extension_如真重置版_czgFastOpen;
+	fastOpenCheck.addEventListener("change", () => {
+		game.saveConfig("extension_如真重置版_czgFastOpen", fastOpenCheck.checked ? true : false);
+	});
+	fastOpenBox.appendChild(fastOpenCheck);
+	const fastOpenLabel = document.createElement("label");
+	fastOpenLabel.htmlFor = "czg_fast_open";
+	fastOpenLabel.textContent = "快速开启";
+	fastOpenLabel.style.cursor = "pointer";
+	fastOpenBox.appendChild(fastOpenLabel);
 	const getPropCount = id => game.getGlobalItemCount?.(id) ?? window.dzxy?.Props?.getCount?.(id) ?? 0;
 	const changePropCount = (id, count) => game.changeGlobalItemCount?.(id, count) ?? window.dzxy?.Props?.changeCount?.(id, count);
 	const addPropToast = (id, count) => {
@@ -456,8 +477,6 @@ export function cangZhenGe() {
 		});
 		refreshCzgShopUi();
 	}
-	createCzgShop();
-
 	setCurrentBoxUi(currenBox);
 
 	// 打开一个遮罩层
@@ -888,8 +907,10 @@ export function cangZhenGe() {
 	}
 
 	openAll.listen(function () {
+		if (window._czg_opening) return;
 		let count = consumeBoxes(rzczb.czgSettings.drawCount || 50);
 		if (!count) return;
+		window._czg_opening = true;
 		// game.playAudio("../../extension/如真重置版/resource/cangZhenGe/mp3/knock.mp3");
 		PIXI.sound.play("czgknock");
 		PIXI.sound.play("czgguo");
@@ -897,11 +918,18 @@ export function cangZhenGe() {
 	});
 	//
 	openOne.listen(function () {
+		if (window._czg_opening) return;
 		let count = consumeBoxes(1);
 		if (!count) return;
+		window._czg_opening = true;
 		PIXI.sound.play("czgknock");
 		playBoxAnimation(count);
 	});
+	let _origOpenRewardSafely = openRewardSafely;
+	openRewardSafely = function(count) {
+		_origOpenRewardSafely(count);
+		window._czg_opening = false;
+	};
 
 	// 画预览的道具
 	function drawPreviewItem(itemInfo) {
