@@ -78,7 +78,7 @@ export const config = async () => {
 		czgFastOpen: {
 			name: "珍宝阁快速开启",
 			init: false,
-			intro: "勾选后，开盒界面显示"快速开启"选项，可加速盒子动画。",
+			intro: "勾选后，开盒界面显示「快速开启」选项，可加速盒子动画。",
 		},
 		czgFastSpeed: {
 			name: "快速开启倍速",
