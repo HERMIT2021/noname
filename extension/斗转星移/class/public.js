@@ -417,12 +417,12 @@ var Props = {
 		},
 	},
 	shop_huanledou: {
-		name: "欢乐豆*1000",
-		intro: "使用1000金票兑换1000欢乐豆",
+		name: "欢乐豆*600",
+		intro: "使用1000金票兑换600欢乐豆",
 		dyintro() {
-			let remainCount = dzxy.getCF("time")["shop_huanledou"]["remainCount"];
 			let count_jp = Props.getCount("jinpiao");
-			return `使用1000金票兑换1000欢乐豆<br>(今日剩余兑换次数：${remainCount}/10;当前金票：${count_jp})`;
+			let max = Math.floor(count_jp / 1000);
+			return `使用1000金票兑换600欢乐豆<br>(当前金票：${count_jp}，最多可兑换${max}次)`;
 		},
 		type: "shangdian",
 		display: true,
@@ -430,30 +430,21 @@ var Props = {
 		imgPath: `${dzxy.path}image/icon/huanledou.png`,
 		use() {
 			let jp = Props.getCount("jinpiao");
-			let needCount = 1000;
-			if (jp < needCount) {
-				dzxy.create.bottomBarTip("金票不足", document.body);
+			let max = Math.floor(jp / 1000);
+			if (max <= 0) {
+				dzxy.create.bottomBarTip("金票不足（需要1000金票）", document.body);
 				return false;
 			}
-
-			let timeInfo = dzxy.getCF("time")["shop_huanledou"];
-			if (timeInfo.remainCount <= 0) {
-				dzxy.create.bottomBarTip("今日剩余兑换次数不足", document.body);
+			let input = prompt(`当前金票：${jp}，每次消耗1000金票兑换600欢乐豆\n最多可兑换${max}次，请输入兑换次数：`, max);
+			if (input === null) return false;
+			let times = parseInt(input);
+			if (isNaN(times) || times <= 0) {
+				dzxy.create.bottomBarTip("输入无效", document.body);
 				return false;
 			}
-			Object.assign(timeInfo, dzxy.getDate("nyr"));
-			timeInfo.remainCount--;
-
-			Props.changeCount("jinpiao", -needCount);
-			propToast.addToast("huanledou", 1000);
-			dzxy.saveCF("time");
-		},
-		useAll() {
-			while (true) {
-				let bool = this.use();
-				if (bool == false) break;
-			}
-			return false;
+			times = Math.min(times, max);
+			Props.changeCount("jinpiao", -times * 1000);
+			propToast.addToast("huanledou", times * 600);
 		},
 	},
 	shop_shishibaozhu_czgbox: {
@@ -482,6 +473,37 @@ var Props = {
 				if (bool == false) break;
 			}
 			return false;
+		},
+	},
+	shop_jinpiao_shishibaozhu: {
+		name: "金票→史诗宝珠",
+		intro: "使用15000金票兑换1个史诗宝珠",
+		dyintro() {
+			let count_jp = Props.getCount("jinpiao");
+			let max = Math.floor(count_jp / 15000);
+			return `使用15000金票兑换1个史诗宝珠<br>(当前金票：${count_jp}，最多可兑换${max}个)`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shishibaozhu.png`,
+		use() {
+			let jp = Props.getCount("jinpiao");
+			let max = Math.floor(jp / 15000);
+			if (max <= 0) {
+				dzxy.create.bottomBarTip("金票不足（需要15000金票）", document.body);
+				return false;
+			}
+			let input = prompt(`当前金票：${jp}，每次消耗15000金票兑换1个史诗宝珠\n最多可兑换${max}个，请输入兑换个数：`, max);
+			if (input === null) return false;
+			let times = parseInt(input);
+			if (isNaN(times) || times <= 0) {
+				dzxy.create.bottomBarTip("输入无效", document.body);
+				return false;
+			}
+			times = Math.min(times, max);
+			Props.changeCount("jinpiao", -times * 15000);
+			propToast.addToast("shishibaozhu", times);
 		},
 	},
 	/*--------------------------------------------------------------------------------------------------------*/
@@ -756,7 +778,7 @@ function getIdentityPerformanceBonusRate(player) {
 	else if (["zhong", "mingzhong"].includes(player?.identity) && game.zhu?.isAlive?.()) score += 10;
 	else if (player?.identity == "fan" && !game.zhu?.isAlive?.()) score += 10;
 	else if (player?.identity == "nei" && player.isAlive?.() && getAlivePlayerCount(current => current.identity != "commoner") <= 1) score += 12;
-	const rate = Math.min(0.25, Math.max(0, score / 400));
+	const rate = Math.min(0.65, Math.max(0, score / 400));
 	return rate >= 0.1 ? rate : 0;
 }
 
@@ -786,7 +808,33 @@ function getYuanbaoPerformanceBonus(mode, baseAmount) {
 lib.onover.push(result => {
 	let mode = get.mode();
 	let submode = get.config(mode + "_mode", mode);
-	if (result && ["identity", "doudizhu"].includes(mode) && Math.random() < 0.75) {
+	let isIdentity8MVP = false;
+	if (mode == "identity") {
+		const playerCount = Math.max(game.players?.length || 0, (game.players?.length || 0) + (game.dead?.length || 0), get.playerNumber?.() || 0);
+		if (playerCount >= 8) {
+			// 检查是否MVP
+			let list = [];
+			for (let p of game.players) {
+				let score = { player: p, damage: 0, damaged: 0, cure: 0, help: 0, state: 100, all: 0 };
+				score.cure += p.dzxy_mvp?.cure || 0;
+				score.help += p.dzxy_mvp?.help || 0;
+				for (let s of p.stat) {
+					if (s.damage != undefined) score.damage += s.damage * 3;
+					if (s.damaged != undefined) score.damaged += s.damaged * 1;
+					if (s.kill != undefined) score.damage += (s.kill || 0) * 3;
+				}
+				score.all = score.damage + score.damaged + score.cure + score.help + score.state;
+				list.push(score);
+			}
+			let mvp = list.reduce((a, b) => a.all > b.all ? a : b);
+			isIdentity8MVP = mvp.player == game.me;
+		}
+	}
+	let shouldGiveYuanbao = result && ["identity", "doudizhu"].includes(mode);
+	if (shouldGiveYuanbao && !isIdentity8MVP) {
+		shouldGiveYuanbao = Math.random() < 0.75;
+	}
+	if (shouldGiveYuanbao) {
 		const randomRange = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
 		const getYuanbaoRange = () => {
 			if (mode == "identity") {

@@ -81,17 +81,11 @@ export class Dsplash extends DefaultSplash {
 			day: 0,
 			remainCount: 10,
 		}
-		if (timeInfo['shop_huanledou'] == undefined) timeInfo['shop_huanledou'] = {
-			year: 0,
-			month: 0,
-			day: 0,
-			remainCount: 10,
-		}
 		dzxy.saveCF('time');
 
 		//重置
 		let nowDate = dzxy.getDate('nyr');
-		let shopKeys = ['shop_huanjiangka', 'shop_shouqika', 'shop_huanledou'];
+		let shopKeys = ['shop_huanjiangka', 'shop_shouqika'];
 		for (let key of shopKeys) {
 			let info = dzxy.getCF('time')[key];
 			if (info.year != nowDate.year ||
