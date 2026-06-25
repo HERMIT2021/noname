@@ -3,7 +3,7 @@ import { __vitePreload } from "../_virtual/preload-helper.js";
 import "../noname.js";
 import { boot } from "./init/index.js";
 import { device, userAgentLowerCase } from "./util/index.js";
-import "../_virtual/index2.js";
+import "../_virtual/index3.js";
 import "../node_modules/.pnpm/vue@3.5.28/node_modules/vue/dist/vue.esm-browser.js";
 import { lib } from "./library/index.js";
 import { ai } from "./ai/index.js";

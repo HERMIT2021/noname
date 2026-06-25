@@ -94,6 +94,7 @@ export function cangZhenGe() {
 	function openRewardSafely(count) {
 		openRewardResult(count);
 		totalRewards.totalCount += count;
+		localStorage.setItem("czg_total_draws", String(totalRewards.totalCount));
 		refreshStatData();
 	}
 	function playBoxAnimation(count) {
@@ -285,8 +286,12 @@ export function cangZhenGe() {
 
 	const statBtn = ui.create.div(".stat-btn", bg);
 
+	let _totalDraws = 0;
+	try {
+		_totalDraws = parseInt(localStorage.getItem("czg_total_draws") || "0") || 0;
+	} catch (e) {}
 	const totalRewards = {
-		totalCount: 0,
+		totalCount: _totalDraws,
 		items: {},
 	};
 	const statBg = ui.create.div(".stat-bg", bg);
@@ -300,7 +305,15 @@ export function cangZhenGe() {
 
 	const refreshStatData = () => {
 		// 打开统计面板
-		let title = "  累计抽取" + totalRewards.totalCount + "次\n\n";
+		let pityInfo = "";
+		if (currenBox) {
+			let pityKey = "czg_pity_" + currenBox.name;
+			let pityData = {};
+			try { pityData = JSON.parse(localStorage.getItem("czg_pity_data") || "{}"); } catch (e) {}
+			let pityCount = pityData[pityKey] || 0;
+			pityInfo = `「${currenBox.name}」保底进度：${pityCount}/20000\n\n`;
+		}
+		let title = pityInfo + "  累计抽取" + totalRewards.totalCount + "次\n\n";
 		let res = [];
 		for (let k in totalRewards.items) {
 			res.push(totalRewards.items[k]);
