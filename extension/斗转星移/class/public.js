@@ -768,18 +768,18 @@ function getIdentityPerformanceBonusRate(player) {
 	const stat = getPlayerTotalStat(player);
 	const playerCount = Math.max(game.players?.length || 0, (game.players?.length || 0) + (game.dead?.length || 0), get.playerNumber?.() || 0);
 	let score = 0;
-	score += Math.min(32, stat.damage * 8);
-	score += Math.min(24, stat.kills * 18);
-	score += Math.min(18, stat.cards * 0.45);
-	score += Math.min(12, stat.gain * 0.2);
-	if (player?.isAlive?.()) score += 8;
-	if (stat.damaged <= Math.max(1, Math.floor(playerCount / 3))) score += 6;
-	if (player?.identity == "zhu" && player.isAlive?.()) score += 12;
-	else if (["zhong", "mingzhong"].includes(player?.identity) && game.zhu?.isAlive?.()) score += 10;
-	else if (player?.identity == "fan" && !game.zhu?.isAlive?.()) score += 10;
-	else if (player?.identity == "nei" && player.isAlive?.() && getAlivePlayerCount(current => current.identity != "commoner") <= 1) score += 12;
-	const rate = Math.min(0.65, Math.max(0, score / 400));
-	return rate >= 0.1 ? rate : 0;
+	score += Math.min(60, stat.damage * 12);
+	score += Math.min(70, stat.kills * 35);
+	score += Math.min(20, stat.cards * 0.5);
+	score += Math.min(15, stat.gain * 0.3);
+	if (player?.isAlive?.()) score += 15;
+	if (stat.damaged <= Math.max(1, Math.floor(playerCount / 3))) score += 10;
+	if (player?.identity == "zhu" && player.isAlive?.()) score += 15;
+	else if (["zhong", "mingzhong"].includes(player?.identity) && game.zhu?.isAlive?.()) score += 12;
+	else if (player?.identity == "fan" && !game.zhu?.isAlive?.()) score += 12;
+	else if (player?.identity == "nei" && player.isAlive?.() && getAlivePlayerCount(current => current.identity != "commoner") <= 1) score += 15;
+	const rate = Math.min(0.65, Math.max(0, score / 220));
+	return rate >= 0.15 ? rate : 0.15;
 }
 
 function getDoudizhuPerformanceBonusRate(player) {
@@ -839,7 +839,18 @@ lib.onover.push(result => {
 		const getYuanbaoRange = () => {
 			if (mode == "identity") {
 				const playerCount = Math.max(game.players?.length || 0, (game.players?.length || 0) + (game.dead?.length || 0), get.playerNumber?.() || 0);
-				if (playerCount >= 8) return [500, 3800];
+				if (playerCount >= 8) {
+					if (isIdentity8MVP) {
+						let stat = getPlayerTotalStat(game.me);
+						let dmg = stat.damage, kills = stat.kills, cards = stat.cards;
+						if (dmg >= 35 && kills >= 6) return [5888, 12888];
+						if (dmg >= 30 && kills >= 3) return [3888, 6666];
+						if (dmg >= 20 && kills >= 2) return [2888, 5000];
+						if (dmg >= 10 || kills >= 2 || cards >= 20) return [1888, 3888];
+						if (dmg >= 5 || kills >= 1 || cards >= 10) return [888, 2888];
+					}
+					return [500, 3800];
+				}
 				if (playerCount >= 5) return [200, 1600];
 				return [200, 1600];
 			}
