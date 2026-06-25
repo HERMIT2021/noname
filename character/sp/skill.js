@@ -35879,7 +35879,7 @@ const skills = {
 					if (idx == 1 || event._isBackwater) {
 						// 弃置黑色牌令伤害+N
 						var dmg = event._level == 1 ? 1 : 2;
-						player.chooseToDiscard("h", 1, "弃置一张黑色手牌令伤害+" + dmg).set("filterCard", function (card) {
+						player.chooseToDiscard("he", 1, "弃置一张黑色牌令伤害+" + dmg).set("filterCard", function (card) {
 							return get.color(card) == "black";
 						}).set("logSkill", ["jieyuan_more", trigger.player]).set("ai", function (card) {
 							if (_status.event.goon) return 8 - get.value(card);
@@ -35941,7 +35941,7 @@ const skills = {
 					if (idx == 1 || event._isBackwater) {
 						// 弃置红色牌令伤害-N
 						var dmg = event._level == 1 ? 1 : 2;
-						player.chooseToDiscard("h", 1, "弃置一张红色手牌令伤害-" + dmg).set("filterCard", function (card) {
+						player.chooseToDiscard("he", 1, "弃置一张红色牌令伤害-" + dmg).set("filterCard", function (card) {
 							return get.color(card) == "red";
 						}).set("logSkill", "jieyuan_less").set("ai", function (card) {
 							var player = _status.event.player;
