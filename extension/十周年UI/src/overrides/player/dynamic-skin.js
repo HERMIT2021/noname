@@ -47,6 +47,16 @@ function playerPlayDynamic(n, e) {
 		console.error("playDynamic: 参数1不能为空");
 		return;
 	}
+	// [切肤诊断] 十周年UI playDynamic 入口
+	try {
+		console.log('[切肤诊断][十周年playDynamic] 入口 deputy=', e,
+			'| 传入对象name=', (n && n.name) ? n.name : n,
+			'| 传入对象id(播放前)=', (n && n.id) ? n.id : '无',
+			'| this.dynamic存在=', !!this.dynamic,
+			'| primary存在=', (this.dynamic ? !!this.dynamic.primary : 'no dynamic'),
+			'| deputy存在=', (this.dynamic ? !!this.dynamic.deputy : 'no dynamic'),
+			'| this.name1=', this.name1);
+	} catch (err) {}
 
 	let t = this.dynamic;
 
@@ -109,6 +119,10 @@ function playerPlayDynamic(n, e) {
 		console.error("playDynamic: DynamicPlayer.play 失败", err);
 		return;
 	}
+	// [切肤诊断] play 成功
+	try {
+		console.log('[切肤诊断][十周年playDynamic] play完成 deputy=', e, '| 新id=', (a && a.id) ? a.id : '无', '| classList=', this.className);
+	} catch (err) {}
 
 	if (e) {
 		t.deputy = a;
@@ -120,6 +134,14 @@ function playerPlayDynamic(n, e) {
 
 function playerStopDynamic(i, n) {
 	const e = this.dynamic;
+	// [切肤诊断] 十周年UI stopDynamic 入口
+	try {
+		console.log('[切肤诊断][十周年stopDynamic] 入口 primary=', !!i, 'deputy=', !!n,
+			'| this.dynamic存在=', !!e,
+			'| primary存在=', (e ? !!e.primary : 'no dynamic'),
+			'| deputy存在=', (e ? !!e.deputy : 'no dynamic'),
+			'| this.name1=', this.name1);
+	} catch (err) {}
 	if (!e) return;
 
 	n = n === true;

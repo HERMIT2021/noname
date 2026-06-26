@@ -111,23 +111,44 @@ function hasPlayableSkeleton(scan, skin) {
 }
 
 function filterInstalledDynamicSkins(dynamicSkin, scan, lib, game, skinSwitch) {
+	// 兼容性兜底：本地没有骨骼文件的皮肤改为“软隐藏”（打 _notInstalled 标记），
+	// 不再 delete decadeUI.dynamicSkin 里的 key，更不删除整个角色。
+	// 否则会出现：切肤/对局中同步扫描把骨骼不存在的皮肤全删掉，导致
+	//   1) 换肤窗再次打开只剩原皮（dynamicSkin[角色]被整角色删除）；
+	//   2) 当前正在用的皮肤被删，角色卡在旧皮肤切不动。
+	// 软隐藏后，UI 仍能枚举到这些皮肤，点击时由加载逻辑自行处理失败。
 	let removed = 0;
 	const selected = lib.config?.[skinSwitch.configKey.dynamicSkin];
+	// qhly 当前选中的皮肤（千幻聆音接管时存这里），这类皮肤绝不能被隐藏。
+	let qhlySkinset;
+	try { qhlySkinset = lib.config?.qhly_skinset?.skin; } catch (e) { qhlySkinset = null; }
 	let changedSelected = false;
 	for (const character in dynamicSkin) {
 		const skins = dynamicSkin[character];
 		if (!skins || typeof skins !== 'object') continue;
 		for (const skinName of Object.keys(skins)) {
-			if (!hasPlayableSkeleton(scan, skins[skinName])) {
-				delete skins[skinName];
-				if (selected?.[character] === skinName) {
-					delete selected[character];
-					changedSelected = true;
+			const skin = skins[skinName];
+			const installed = hasPlayableSkeleton(scan, skin);
+			// 当前正在使用的皮肤（skinSwitch 或 qhly 选中的）一律视为已安装，不隐藏。
+			const isCurrentSkinSwitch = selected?.[character] === skinName;
+			let isCurrentQhly = false;
+			if (qhlySkinset) {
+				const cur = qhlySkinset[character];
+				if (cur && (cur === skinName || cur === skinName + '.jpg' || cur === skinName + '.png')) {
+					isCurrentQhly = true;
 				}
+			}
+			if (!installed && !isCurrentSkinSwitch && !isCurrentQhly) {
+				// 软隐藏：只标记，不删除 key，不删除角色。
+				try { skin._notInstalled = true; } catch (e) {}
 				removed++;
+			} else {
+				// 之前被标记过、现在装上了，清除标记。
+				try { if (skin._notInstalled) delete skin._notInstalled; } catch (e) {}
 			}
 		}
-		if (!Object.keys(skins).length) delete dynamicSkin[character];
+		// 不再执行 `if (!Object.keys(skins).length) delete dynamicSkin[character]`，
+		// 保证换肤窗至少能枚举到原皮以外的皮肤，避免“只剩原皮”。
 	}
 	if (changedSelected) game.saveConfig?.(skinSwitch.configKey.dynamicSkin, selected);
 	return removed;

@@ -2820,6 +2820,11 @@ export let CONTENT = function (config, pack) {
     }
     // @ts-ignore
     game.qhly_changeDynamicSkin = function (str, name, character, character2, play) {          //str主体，如果为字符串是名称中带有str的所有玩家，name指定更换为某种动皮，character玩家姓名id，character2是否为副将
+      // [切肤诊断] qhly_changeDynamicSkin 入口
+      try {
+        console.log('[切肤诊断][changeDynamic] 入口 str类型=', (typeof str), '| str=', (typeof str == 'string' ? str : (str && str.name1 ? 'player(' + str.name1 + '/' + (str.name2 || '') + ')' : 'obj')),
+          '| name(目标动皮)=', name, '| character=', character, '| character2=', character2, '| play=', play);
+      } catch (e) {}
       // @ts-ignore
       if (!window.decadeUI) return;
       if (lib.config['extension_千幻聆音_qhly_decadeCloseDynamic']) return;
@@ -2919,7 +2924,17 @@ export let CONTENT = function (config, pack) {
               node.campBack.classList.add('dong');
             }
           }
+          // [切肤诊断] 皮肤匹配结果
+          try {
+            console.log('[切肤诊断][changeDynamic] 皮肤匹配 character=', character,
+              '| qhly_getSkin=', game.qhly_getSkin(character),
+              '| dynamicSkin[character]keys=', (decadeUI.dynamicSkin[character] ? Object.keys(decadeUI.dynamicSkin[character]) : '不存在'),
+              '| 匹配到skin=', (skin ? (skin.name || '有skin但无name') : 'null(未匹配到)'),
+              '| nodeType=', nodeType, '| bool1=', bool1, '| bool2=', bool2,
+              '| node.dynamic存在=', !!node.dynamic, '| node.dynamic.primary=', (node.dynamic ? !!node.dynamic.primary : 'no dynamic'));
+          } catch (e) {}
           if (!skin) {
+            console.log('[切肤诊断][changeDynamic] !skin -> 移除d-skin并return(不播新动皮)');
             if (bool2) {
               node.classList.remove('d-skin2');
             } else {
@@ -10386,6 +10401,16 @@ export let CONTENT = function (config, pack) {
           }
           // @ts-ignore
           viewState1.skins = skinList;
+          // [切肤诊断] 换肤窗主将皮肤列表构建结果
+          try {
+            console.log('[切肤诊断][换肤窗] 构建皮肤列表 namex=', namex,
+              '| diskFileList长度=', (list ? list.length : 'list为空/null'),
+              '| dynamicSkin[namex]原始key=', (decadeUI.dynamicSkin[namex] ? Object.keys(decadeUI.dynamicSkin[namex]) : 'dynamicSkin[namex]不存在'),
+              '| 最终skinList=', JSON.stringify(skinList),
+              '| qhly_getSkin=', game.qhly_getSkin(namex),
+              '| qhly_skinListCache=', (_status.qhly_skinListCache ? (_status.qhly_skinListCache[namex] === undefined ? '未缓存' : (_status.qhly_skinListCache[namex] ? '已缓存数组' : '缓存为false')) : 'cache不存在'),
+              '| _status.qhly_open=', _status.qhly_open);
+          } catch (e) { console.log('[切肤诊断] 列表诊断输出异常', e); }
           viewState1.skinTotalWidth = (viewState1.skinPerWidth + viewState1.skinGap) * skinList.length - viewState1.skinGap + 20;
           for (let i = 0; i < skinList.length; i++) {
             var skin = skinList[i];
@@ -10597,14 +10622,23 @@ export let CONTENT = function (config, pack) {
                 game.qhly_setCurrentSkin(namex, skin, function () {
                   viewState1.refreshSkins();
                   //if (view.dynamicToggle && view.dynamicToggle.classList && !view.dynamicToggle.classList.contains('jing')) {
+                  // [切肤诊断] 点击皮肤后进入切肤回调
+                  console.log('[切肤诊断][点击切肤] 进入回调 namex=', namex, '| 欲切换skin=', skin, '| _status.qhly_open=', _status.qhly_open);
                   // @ts-ignore
-                  game.qhly_changeDynamicSkin(namex);
+                  try {
+                    game.qhly_changeDynamicSkin(namex);
+                    console.log('[切肤诊断][点击切肤] qhly_changeDynamicSkin 正常返回');
+                  } catch (e) {
+                    console.error('[切肤诊断][点击切肤] qhly_changeDynamicSkin 抛错:', e);
+                  }
                   //}
                   if (lib.config['extension_千幻聆音_qhly_decadeChangeEffect'] && cPlayer) cPlayer.playChangeSkinEffect(false);
                   // @ts-ignore
                   game.qhlySyncConfig();
                   if (lib.config.qhly_smallwinclosewhenchange) {
+                    console.log('[切肤诊断][点击切肤] 准备 exitListener() 关窗, 关窗前 _status.qhly_open=', _status.qhly_open);
                     exitListener();
+                    console.log('[切肤诊断][点击切肤] exitListener() 执行后 _status.qhly_open=', _status.qhly_open);
                   }
                 }, true);
 
@@ -11555,6 +11589,16 @@ export let CONTENT = function (config, pack) {
           }
           // @ts-ignore
           viewState1.skins = skinList;
+          // [切肤诊断] 换肤窗主将皮肤列表构建结果
+          try {
+            console.log('[切肤诊断][换肤窗] 构建皮肤列表 namex=', namex,
+              '| diskFileList长度=', (list ? list.length : 'list为空/null'),
+              '| dynamicSkin[namex]原始key=', (decadeUI.dynamicSkin[namex] ? Object.keys(decadeUI.dynamicSkin[namex]) : 'dynamicSkin[namex]不存在'),
+              '| 最终skinList=', JSON.stringify(skinList),
+              '| qhly_getSkin=', game.qhly_getSkin(namex),
+              '| qhly_skinListCache=', (_status.qhly_skinListCache ? (_status.qhly_skinListCache[namex] === undefined ? '未缓存' : (_status.qhly_skinListCache[namex] ? '已缓存数组' : '缓存为false')) : 'cache不存在'),
+              '| _status.qhly_open=', _status.qhly_open);
+          } catch (e) { console.log('[切肤诊断] 列表诊断输出异常', e); }
           viewState1.skinTotalWidth = (viewState1.skinPerWidth + viewState1.skinGap) * skinList.length - viewState1.skinGap + 20;
           for (let i = 0; i < skinList.length; i++) {
             var skin = skinList[i];
