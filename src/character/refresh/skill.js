@@ -11723,34 +11723,28 @@ const skills = {
 	repojun: {
 		audio: 2,
 		trigger: { player: "useCardToPlayered" },
-		direct: true,
 		filter(event, player) {
 			return event.card.name == "sha" && event.target.hp > 0 && event.target.countCards("he") > 0;
 		},
-		preHidden: true,
-		content() {
-			"step 0";
-			var next = player.choosePlayerCard(trigger.target, "he", [1, Math.min(trigger.target.hp, trigger.target.countCards("he"))], get.prompt("repojun", trigger.target), "allowChooseAll");
-			next.set("ai", function (button) {
-				if (!_status.event.goon) {
-					return 0;
-				}
-				var val = get.value(button.link);
-				if (button.link == _status.event.target.getEquip(2)) {
-					return 2 * (val + 3);
-				}
-				return val;
-			});
-			next.set("goon", get.attitude(player, trigger.target) <= 0);
-			next.set("forceAuto", true);
-			next.setHiddenSkill(event.name);
-			"step 1";
-			if (result.bool) {
-				var target = trigger.target;
-				player.logSkill("repojun", target);
-				target.addSkill("repojun2");
-				target.addToExpansion("giveAuto", result.cards, target).gaintag.add("repojun2");
-			}
+		async cost(event, trigger, player) {
+			const num = Math.min(trigger.target.hp, trigger.target.countCards("he"));
+			event.result = await player
+				.choosePlayerCard(trigger.target, "he", [1, num], get.prompt(event.skill, trigger.target), "allowChooseAll")
+				.set("ai", function (button) {
+					if (!_status.event.goon) return 0;
+					var val = get.value(button.link);
+					if (button.link == _status.event.target.getEquip(2)) return 2 * (val + 3);
+					return val;
+				})
+				.set("goon", get.attitude(player, trigger.target) <= 0)
+				.set("forceAuto", true)
+				.forResult();
+		},
+		async content(event, trigger, player) {
+			const target = trigger.target;
+			player.logSkill("repojun", target);
+			target.addSkill("repojun2");
+			target.addToExpansion(event.cards, target, "giveAuto").gaintag.add("repojun2");
 		},
 		ai: {
 			unequip_ai: true,

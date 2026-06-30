@@ -25763,13 +25763,13 @@ const skills = {
 							}
 						}
 						if (target.hp >= 4) {
-							return [1, num * 2];
+							return [1, -1];
 						}
 						if (target.hp == 3) {
-							return [1, num * 1.5];
+							return [1, 0.5];
 						}
-						if (target.hp == 2) {
-							return [1, num * 0.5];
+						if (target.hp <= 2) {
+							return [1, 1.5];
 						}
 					}
 				},

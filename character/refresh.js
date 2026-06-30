@@ -11723,33 +11723,23 @@ const skills = {
   repojun: {
     audio: 2,
     trigger: { player: "useCardToPlayered" },
-    direct: true,
     filter(event2, player2) {
       return event2.card.name == "sha" && event2.target.hp > 0 && event2.target.countCards("he") > 0;
     },
-    preHidden: true,
-    content() {
-      "step 0";
-      var next = player.choosePlayerCard(trigger.target, "he", [1, Math.min(trigger.target.hp, trigger.target.countCards("he"))], get.prompt("repojun", trigger.target), "allowChooseAll");
-      next.set("ai", function(button) {
-        if (!_status.event.goon) {
-          return 0;
-        }
+    async cost(event2, trigger2, player2) {
+      const num2 = Math.min(trigger2.target.hp, trigger2.target.countCards("he"));
+      event2.result = await player2.choosePlayerCard(trigger2.target, "he", [1, num2], get.prompt(event2.skill, trigger2.target), "allowChooseAll").set("ai", function(button) {
+        if (!_status.event.goon) return 0;
         var val = get.value(button.link);
-        if (button.link == _status.event.target.getEquip(2)) {
-          return 2 * (val + 3);
-        }
+        if (button.link == _status.event.target.getEquip(2)) return 2 * (val + 3);
         return val;
-      });
-      next.set("goon", get.attitude(player, trigger.target) <= 0);
-      next.set("forceAuto", true);
-      next.setHiddenSkill(event.name);
-      if (result.bool) {
-        var target2 = trigger.target;
-        player.logSkill("repojun", target2);
-        target2.addSkill("repojun2");
-        target2.addToExpansion("giveAuto", result.cards, target2).gaintag.add("repojun2");
-      }
+      }).set("goon", get.attitude(player2, trigger2.target) <= 0).set("forceAuto", true).forResult();
+    },
+    async content(event2, trigger2, player2) {
+      const target2 = trigger2.target;
+      player2.logSkill("repojun", target2);
+      target2.addSkill("repojun2");
+      target2.addToExpansion(event2.cards, target2, "giveAuto").gaintag.add("repojun2");
     },
     ai: {
       unequip_ai: true,

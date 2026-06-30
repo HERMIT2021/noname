@@ -22529,13 +22529,32 @@ import { lib, game, ui, get, ai, _status } from "noname";
 				scale: 0.4,
 				angle: 0,
                 //speed: 1,
-				//action: 'DaiJi',
+				shizhounian: true,
+				// 出场动作: 用同一套立绘骨骼播 play 标签
+				chuchang: {
+					name: '灵雎/血影婆娑/XingXiang',
+					scale: 0.7,
+					action: 'play',
+				},
+				// 攻击动作: 同骨骼; 攻击语音 XingXiang3.mp3 放在骨骼同目录, 皮肤切换会自动扫到并播放
+				gongji: {
+					name: '灵雎/血影婆娑/XingXiang',
+					scale: 0.8,
+					action: 'play',
+				},
+				// 技能/卡牌/胜利语音目录: audio 子目录下放 fenxin1/2.mp3、jieyuan1/2.mp3、victory.mp3
+				audio: {
+					skill: '灵雎/血影婆娑/audio',
+					card: '灵雎/血影婆娑/audio',
+				},
 				beijing: {
 					name: '灵雎/血影婆娑/BeiJing',
 					scale: 0.3,
 					x: [0, 0.4],
 					y: [0, 0.5],
 				},
+				// 露头静态背景图(换肤窗/未开动皮时显示)
+				background: '灵雎/血影婆娑/血影婆娑.png',
 			},
 			巾帼花武: {
 				name: '灵雎/巾帼花武/daiji2',
