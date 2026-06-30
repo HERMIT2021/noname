@@ -280,6 +280,7 @@ var Props = {
 		name: "心愿积分",
 		intro: "珍宝阁开盒获得，可用于心愿商城兑换。",
 		type: "cailiao",
+		imgPath: "extension/如真重置版/resource/cangZhenGe/items/620281.png",
 	},
 	dianjiangka: {
 		name: "点将卡",

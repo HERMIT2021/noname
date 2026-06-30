@@ -297,7 +297,7 @@ export function cangZhenGe() {
 	const statBg = ui.create.div(".stat-bg", bg);
 	const closeBtn = ui.create.div(".stat-close-btn", statBg);
 	closeBtn.innerHTML = "X";
-	closeBtn.addEventListener("click", () => {
+	closeBtn.listen(() => {
 		statBg.style.display = "none";
 	});
 	const desc = ui.create.div(".stat-text", statBg);
