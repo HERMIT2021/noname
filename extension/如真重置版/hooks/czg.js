@@ -784,8 +784,6 @@ export function cangZhenGe() {
 					} else if (i.weight === 3) {
 						addPropToast("shishibaozhu", 15);
 					}
-				} else {
-					addPropToast("shishibaozhu", 1);
 				}
 			});
 			refreshCzgShopUi();
