@@ -297,11 +297,11 @@ export function cangZhenGe() {
 	const statBg = ui.create.div(".stat-bg", bg);
 	const closeBtn = ui.create.div(".stat-close-btn", statBg);
 	closeBtn.innerHTML = "X";
-	closeBtn.listen(() => {
-		statBg.hide();
+	closeBtn.addEventListener("click", () => {
+		statBg.style.display = "none";
 	});
 	const desc = ui.create.div(".stat-text", statBg);
-	statBg.hide();
+	statBg.style.display = "none";
 
 	const refreshStatData = () => {
 		// 打开统计面板
@@ -331,7 +331,7 @@ export function cangZhenGe() {
 	};
 
 	statBtn.listen(() => {
-		statBg.show();
+		statBg.style.display = "";
 		refreshStatData();
 	});
 
@@ -769,11 +769,24 @@ export function cangZhenGe() {
 				620044: "yuanbao",
 				620149: "shishibaozhusuipian",
 				620150: "shishibaozhu",
+				620281: "xinyuanjifen",
 			};
 			result.forEach(i => {
 				let propId = rewardMap[i.name] || rewardIdMap[i.id];
-				if (propId) addPropToast(propId, i.count || 1);
-				else if (i.type == "wujiang" && game.unlockCharacter?.(i.id)) showTip(`已解锁武将：${i.name || get.translation(i.id) || i.id}`);
+				if (propId) {
+					addPropToast(propId, i.count || 1);
+				} else if (i.type == "wujiang") {
+					if (game.unlockCharacter?.(i.id)) {
+						showTip(`已解锁武将：${i.name || get.translation(i.id) || i.id}`);
+					}
+					if (i.weight === 1) {
+						addPropToast("shishibaozhu", 30);
+					} else if (i.weight === 3) {
+						addPropToast("shishibaozhu", 15);
+					}
+				} else {
+					addPropToast("shishibaozhu", 1);
+				}
 			});
 			refreshCzgShopUi();
 			return result;

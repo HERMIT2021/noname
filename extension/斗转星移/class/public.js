@@ -276,6 +276,11 @@ var Props = {
 		type: "daoju",
 		imgPath: `${dzxy.path}image/icon/shenmibaoxiang.png`,
 	},
+	xinyuanjifen: {
+		name: "心愿积分",
+		intro: "珍宝阁开盒获得，可用于心愿商城兑换。",
+		type: "cailiao",
+	},
 	dianjiangka: {
 		name: "点将卡",
 		intro: "用于军争和斗地主休闲模式的自由选将。",
@@ -504,6 +509,48 @@ var Props = {
 			times = Math.min(times, max);
 			Props.changeCount("jinpiao", -times * 15000);
 			propToast.addToast("shishibaozhu", times);
+		},
+	},
+	shop_xinyuanjifen_10000: {
+		name: "心愿积分→50宝珠",
+		intro: "使用10000心愿积分兑换50个史诗宝珠",
+		dyintro() {
+			let count = Props.getCount("xinyuanjifen");
+			return `使用10000心愿积分兑换50个史诗宝珠<br>(当前心愿积分：${count})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shishibaozhu.png`,
+		use() {
+			let xy = Props.getCount("xinyuanjifen");
+			if (xy < 10000) {
+				dzxy.create.bottomBarTip("心愿积分不足（需要10000）", document.body);
+				return false;
+			}
+			Props.changeCount("xinyuanjifen", -10000);
+			propToast.addToast("shishibaozhu", 50);
+		},
+	},
+	shop_xinyuanjifen_20000: {
+		name: "心愿积分→100宝珠",
+		intro: "使用20000心愿积分兑换100个史诗宝珠",
+		dyintro() {
+			let count = Props.getCount("xinyuanjifen");
+			return `使用20000心愿积分兑换100个史诗宝珠<br>(当前心愿积分：${count})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shishibaozhu.png`,
+		use() {
+			let xy = Props.getCount("xinyuanjifen");
+			if (xy < 20000) {
+				dzxy.create.bottomBarTip("心愿积分不足（需要20000）", document.body);
+				return false;
+			}
+			Props.changeCount("xinyuanjifen", -20000);
+			propToast.addToast("shishibaozhu", 100);
 		},
 	},
 	/*--------------------------------------------------------------------------------------------------------*/
