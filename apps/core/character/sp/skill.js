@@ -35847,21 +35847,30 @@ const skills = {
 					"step 0";
 					var level = player.storage.jieyuan || 1;
 					event._level = level;
+					var hasBlack = player.countCards("he", function(card) { return get.color(card) == "black"; }) > 0;
 					if (level == 1) {
-						event._choiceList = ["获得牌堆中的一张黑色牌", "弃置一张黑色牌，此伤害+1", "背水（获得一张黑色牌并弃牌加伤，删除受伤效果并升为2级）"];
+						event._choiceList = ["获得牌堆中的一张黑色牌"];
+						if (hasBlack) event._choiceList.push("弃置一张黑色牌，此伤害+1");
+						event._choiceList.push("背水（获得一张黑色牌并弃牌加伤，删除受伤效果并升为2级）");
+						event._choiceMap = ["gain", hasBlack ? "discard" : null, "backwater"];
 					} else {
-						event._choiceList = ["获得牌堆中的两张黑色牌", "弃置一张黑色牌，此伤害+2"];
+						event._choiceList = ["获得牌堆中的两张黑色牌"];
+						if (hasBlack) event._choiceList.push("弃置一张黑色牌，此伤害+2");
+						event._choiceMap = ["gain", hasBlack ? "discard" : null];
 					}
+					event._choiceList = event._choiceList.filter(Boolean);
+					event._choiceMap = event._choiceMap.filter(function(x) { return x !== null; });
 					player.chooseControl().set("choiceList", event._choiceList).set("prompt", level == 1 ? "竭缘：请选择一项（造成伤害时）" : "竭缘(2级)：请选择一项（造成伤害时）").set("ai", function () {
 						var player = _status.event.player;
 						var trigger = _status.event.getTrigger();
-						if (get.attitude(player, trigger.player) < 0) return 2; // 弃牌加伤
-						return 1; // 获得牌
+						var map = _status.event.getParent()._choiceMap;
+						if (map.includes("discard") && get.attitude(player, trigger.player) < 0) return map.indexOf("discard");
+						return map.indexOf("gain");
 					});
 					"step 1";
-					var idx = result.index;
-					event._isBackwater = (event._level == 1 && idx == 2);
-					if (idx == 0 || event._isBackwater) {
+					var choice = event._choiceMap[result.index];
+					event._isBackwater = (choice == "backwater");
+					if (choice == "gain" || event._isBackwater) {
 						// 获得牌堆中的牌（选项一，或背水时额外得牌）
 						var num = event._level == 1 ? 1 : 2;
 						var cards = [];
@@ -35876,10 +35885,10 @@ const skills = {
 							player.gain(cards, "gain2", "log");
 						}
 					}
-					if (idx == 1 || event._isBackwater) {
+					if (choice == "discard" || event._isBackwater) {
 						// 弃置黑色牌令伤害+N
 						var dmg = event._level == 1 ? 1 : 2;
-						player.chooseToDiscard("h", 1, "弃置一张黑色手牌令伤害+" + dmg).set("filterCard", function (card) {
+						player.chooseToDiscard("he", 1, "弃置一张黑色牌令伤害+" + dmg).set("filterCard", function (card) {
 							return get.color(card) == "black";
 						}).set("logSkill", ["jieyuan_more", trigger.player]).set("ai", function (card) {
 							if (_status.event.goon) return 8 - get.value(card);
@@ -35891,7 +35900,7 @@ const skills = {
 							game.log(player, "发动了", "#y【背水】", "，删除受伤效果并将〖竭缘〗升为2级");
 						}
 					}
-					if (idx == 0) event.finish();
+					if (choice == "gain") event.finish();
 					"step 2";
 					if (result.bool) {
 						trigger.num += event._level == 1 ? 1 : 2;
@@ -35910,20 +35919,29 @@ const skills = {
 					"step 0";
 					var level = player.storage.jieyuan || 1;
 					event._level = level;
+					var hasRed = player.countCards("he", function(card) { return get.color(card) == "red"; }) > 0;
 					if (level == 1) {
-						event._choiceList = ["获得牌堆中的一张红色牌", "弃置一张红色牌，此伤害-1", "背水（获得一张红色牌并弃牌减伤，删除造成伤害效果并升为3级）"];
+						event._choiceList = ["获得牌堆中的一张红色牌"];
+						if (hasRed) event._choiceList.push("弃置一张红色牌，此伤害-1");
+						event._choiceList.push("背水（获得一张红色牌并弃牌减伤，删除造成伤害效果并升为3级）");
+						event._choiceMap = ["gain", hasRed ? "discard" : null, "backwater"];
 					} else {
-						event._choiceList = ["获得牌堆中的两张红色牌", "弃置一张红色牌，此伤害-2"];
+						event._choiceList = ["获得牌堆中的两张红色牌"];
+						if (hasRed) event._choiceList.push("弃置一张红色牌，此伤害-2");
+						event._choiceMap = ["gain", hasRed ? "discard" : null];
 					}
+					event._choiceList = event._choiceList.filter(Boolean);
+					event._choiceMap = event._choiceMap.filter(function(x) { return x !== null; });
 					player.chooseControl().set("choiceList", event._choiceList).set("prompt", level == 1 ? "竭缘：请选择一项（受到伤害时）" : "竭缘(3级)：请选择一项（受到伤害时）").set("ai", function () {
 						var player = _status.event.player;
-						if (player.hp <= 1) return 2; // 弃牌减伤
-						return 1; // 获得牌
+						var map = _status.event.getParent()._choiceMap;
+						if (map.includes("discard") && player.hp <= 1) return map.indexOf("discard");
+						return map.indexOf("gain");
 					});
 					"step 1";
-					var idx = result.index;
-					event._isBackwater = (event._level == 1 && idx == 2);
-					if (idx == 0 || event._isBackwater) {
+					var choice = event._choiceMap[result.index];
+					event._isBackwater = (choice == "backwater");
+					if (choice == "gain" || event._isBackwater) {
 						// 获得牌堆中的牌（选项一，或背水时额外得牌）
 						var num = event._level == 1 ? 1 : 2;
 						var cards = [];
@@ -35938,10 +35956,10 @@ const skills = {
 							player.gain(cards, "gain2", "log");
 						}
 					}
-					if (idx == 1 || event._isBackwater) {
+					if (choice == "discard" || event._isBackwater) {
 						// 弃置红色牌令伤害-N
 						var dmg = event._level == 1 ? 1 : 2;
-						player.chooseToDiscard("h", 1, "弃置一张红色手牌令伤害-" + dmg).set("filterCard", function (card) {
+						player.chooseToDiscard("he", 1, "弃置一张红色牌令伤害-" + dmg).set("filterCard", function (card) {
 							return get.color(card) == "red";
 						}).set("logSkill", "jieyuan_less").set("ai", function (card) {
 							var player = _status.event.player;
@@ -35955,7 +35973,7 @@ const skills = {
 							game.log(player, "发动了", "#y【背水】", "，删除造成伤害效果并将〖竭缘〗升为3级");
 						}
 					}
-					if (idx == 0) event.finish();
+					if (choice == "gain") event.finish();
 					"step 2";
 					if (result.bool) {
 						trigger.num -= event._level == 1 ? 1 : 2;
@@ -35999,10 +36017,8 @@ const skills = {
 				choices.push("与其交换身份牌");
 				choiceMap.push("swap");
 			}
-			if (choices.length == 0) {
-				event.finish();
-				return;
-			}
+				choices.push("取消");
+			choiceMap.push("cancel");
 			player.chooseControl().set("choiceList", choices).set("prompt", "焚心：请选择一项").set("ai", function () {
 				var player = _status.event.player;
 				var target = _status.event.getTrigger().player;
@@ -36016,6 +36032,10 @@ const skills = {
 			"step 1";
 			var target = event.target;
 			if (!result || result.control == undefined) {
+				event.finish();
+				return;
+			}
+			if (event._choiceMap[result.index] == "cancel") {
 				event.finish();
 				return;
 			}
@@ -36066,6 +36086,16 @@ const skills = {
 				target.setIdentity();
 				player.logSkill("fenxin");
 				game.log(player, "发动", "#y【焚心】", "，与", get.translation(target), "交换了身份牌");
+				if (lib.config.mode == "identity") {
+					var alivePlayers = game.players.filter(p => p.isAlive());
+					var fanNeiAlive = alivePlayers.filter(p => p.identity == "fan" || p.identity == "nei");
+					var zhuAlive = alivePlayers.find(p => p.identity == "zhu");
+					if (!zhuAlive) {
+						game.over("fan");
+					} else if (fanNeiAlive.length == 0) {
+						game.over(game.me.identity == "nei" ? "nei" : "zhong");
+					}
+				}
 			}
 		},
 		ai: { combo: "jieyuan" },

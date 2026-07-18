@@ -276,6 +276,12 @@ var Props = {
 		type: "daoju",
 		imgPath: `${dzxy.path}image/icon/shenmibaoxiang.png`,
 	},
+	xinyuanjifen: {
+		name: "心愿积分",
+		intro: "珍宝阁开盒获得，可用于心愿商城兑换。",
+		type: "cailiao",
+		imgPath: "extension/如真重置版/resource/cangZhenGe/items/620281.png",
+	},
 	dianjiangka: {
 		name: "点将卡",
 		intro: "用于军争和斗地主休闲模式的自由选将。",
@@ -417,12 +423,12 @@ var Props = {
 		},
 	},
 	shop_huanledou: {
-		name: "欢乐豆*1000",
-		intro: "使用1000金票兑换1000欢乐豆",
+		name: "欢乐豆*600",
+		intro: "使用1000金票兑换600欢乐豆",
 		dyintro() {
-			let remainCount = dzxy.getCF("time")["shop_huanledou"]["remainCount"];
 			let count_jp = Props.getCount("jinpiao");
-			return `使用1000金票兑换1000欢乐豆<br>(今日剩余兑换次数：${remainCount}/10;当前金票：${count_jp})`;
+			let max = Math.floor(count_jp / 1000);
+			return `使用1000金票兑换600欢乐豆<br>(当前金票：${count_jp}，最多可兑换${max}次)`;
 		},
 		type: "shangdian",
 		display: true,
@@ -430,23 +436,42 @@ var Props = {
 		imgPath: `${dzxy.path}image/icon/huanledou.png`,
 		use() {
 			let jp = Props.getCount("jinpiao");
-			let needCount = 1000;
-			if (jp < needCount) {
-				dzxy.create.bottomBarTip("金票不足", document.body);
+			let max = Math.floor(jp / 1000);
+			if (max <= 0) {
+				dzxy.create.bottomBarTip("金票不足（需要1000金票）", document.body);
 				return false;
 			}
-
-			let timeInfo = dzxy.getCF("time")["shop_huanledou"];
-			if (timeInfo.remainCount <= 0) {
-				dzxy.create.bottomBarTip("今日剩余兑换次数不足", document.body);
+			let input = prompt(`当前金票：${jp}，每次消耗1000金票兑换600欢乐豆\n最多可兑换${max}次，请输入兑换次数：`, max);
+			if (input === null) return false;
+			let times = parseInt(input);
+			if (isNaN(times) || times <= 0) {
+				dzxy.create.bottomBarTip("输入无效", document.body);
 				return false;
 			}
-			Object.assign(timeInfo, dzxy.getDate("nyr"));
-			timeInfo.remainCount--;
-
-			Props.changeCount("jinpiao", -needCount);
-			propToast.addToast("huanledou", 1000);
-			dzxy.saveCF("time");
+			times = Math.min(times, max);
+			Props.changeCount("jinpiao", -times * 1000);
+			propToast.addToast("huanledou", times * 600);
+		},
+	},
+	shop_shishibaozhu_czgbox: {
+		name: "史诗宝珠→盒子",
+		intro: "消耗1个史诗宝珠兑换50个珍宝阁盒子",
+		dyintro() {
+			let count_sbz = Props.getCount("shishibaozhu");
+			return `消耗1个史诗宝珠兑换50个珍宝阁盒子<br>(当前史诗宝珠：${count_sbz})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shishibaozhu.png`,
+		use() {
+			let sbz = Props.getCount("shishibaozhu");
+			if (sbz < 1) {
+				dzxy.create.bottomBarTip("史诗宝珠不足", document.body);
+				return false;
+			}
+			Props.changeCount("shishibaozhu", -1);
+			propToast.addToast("czg_box", 50);
 		},
 		useAll() {
 			while (true) {
@@ -454,6 +479,79 @@ var Props = {
 				if (bool == false) break;
 			}
 			return false;
+		},
+	},
+	shop_jinpiao_shishibaozhu: {
+		name: "金票→史诗宝珠",
+		intro: "使用15000金票兑换1个史诗宝珠",
+		dyintro() {
+			let count_jp = Props.getCount("jinpiao");
+			let max = Math.floor(count_jp / 15000);
+			return `使用15000金票兑换1个史诗宝珠<br>(当前金票：${count_jp}，最多可兑换${max}个)`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shishibaozhu.png`,
+		use() {
+			let jp = Props.getCount("jinpiao");
+			let max = Math.floor(jp / 15000);
+			if (max <= 0) {
+				dzxy.create.bottomBarTip("金票不足（需要15000金票）", document.body);
+				return false;
+			}
+			let input = prompt(`当前金票：${jp}，每次消耗15000金票兑换1个史诗宝珠\n最多可兑换${max}个，请输入兑换个数：`, max);
+			if (input === null) return false;
+			let times = parseInt(input);
+			if (isNaN(times) || times <= 0) {
+				dzxy.create.bottomBarTip("输入无效", document.body);
+				return false;
+			}
+			times = Math.min(times, max);
+			Props.changeCount("jinpiao", -times * 15000);
+			propToast.addToast("shishibaozhu", times);
+		},
+	},
+	shop_xinyuanjifen_10000: {
+		name: "心愿积分→50宝珠",
+		intro: "使用10000心愿积分兑换50个史诗宝珠",
+		dyintro() {
+			let count = Props.getCount("xinyuanjifen");
+			return `使用10000心愿积分兑换50个史诗宝珠<br>(当前心愿积分：${count})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shishibaozhu.png`,
+		use() {
+			let xy = Props.getCount("xinyuanjifen");
+			if (xy < 10000) {
+				dzxy.create.bottomBarTip("心愿积分不足（需要10000）", document.body);
+				return false;
+			}
+			Props.changeCount("xinyuanjifen", -10000);
+			propToast.addToast("shishibaozhu", 50);
+		},
+	},
+	shop_xinyuanjifen_20000: {
+		name: "心愿积分→100宝珠",
+		intro: "使用20000心愿积分兑换100个史诗宝珠",
+		dyintro() {
+			let count = Props.getCount("xinyuanjifen");
+			return `使用20000心愿积分兑换100个史诗宝珠<br>(当前心愿积分：${count})`;
+		},
+		type: "shangdian",
+		display: true,
+		nocount: true,
+		imgPath: `${dzxy.path}image/icon/shishibaozhu.png`,
+		use() {
+			let xy = Props.getCount("xinyuanjifen");
+			if (xy < 20000) {
+				dzxy.create.bottomBarTip("心愿积分不足（需要20000）", document.body);
+				return false;
+			}
+			Props.changeCount("xinyuanjifen", -20000);
+			propToast.addToast("shishibaozhu", 100);
 		},
 	},
 	/*--------------------------------------------------------------------------------------------------------*/
@@ -718,18 +816,18 @@ function getIdentityPerformanceBonusRate(player) {
 	const stat = getPlayerTotalStat(player);
 	const playerCount = Math.max(game.players?.length || 0, (game.players?.length || 0) + (game.dead?.length || 0), get.playerNumber?.() || 0);
 	let score = 0;
-	score += Math.min(32, stat.damage * 8);
-	score += Math.min(24, stat.kills * 18);
-	score += Math.min(18, stat.cards * 0.45);
-	score += Math.min(12, stat.gain * 0.2);
-	if (player?.isAlive?.()) score += 8;
-	if (stat.damaged <= Math.max(1, Math.floor(playerCount / 3))) score += 6;
-	if (player?.identity == "zhu" && player.isAlive?.()) score += 12;
-	else if (["zhong", "mingzhong"].includes(player?.identity) && game.zhu?.isAlive?.()) score += 10;
-	else if (player?.identity == "fan" && !game.zhu?.isAlive?.()) score += 10;
-	else if (player?.identity == "nei" && player.isAlive?.() && getAlivePlayerCount(current => current.identity != "commoner") <= 1) score += 12;
-	const rate = Math.min(0.25, Math.max(0, score / 400));
-	return rate >= 0.1 ? rate : 0;
+	score += Math.min(60, stat.damage * 12);
+	score += Math.min(70, stat.kills * 35);
+	score += Math.min(20, stat.cards * 0.5);
+	score += Math.min(15, stat.gain * 0.3);
+	if (player?.isAlive?.()) score += 15;
+	if (stat.damaged <= Math.max(1, Math.floor(playerCount / 3))) score += 10;
+	if (player?.identity == "zhu" && player.isAlive?.()) score += 15;
+	else if (["zhong", "mingzhong"].includes(player?.identity) && game.zhu?.isAlive?.()) score += 12;
+	else if (player?.identity == "fan" && !game.zhu?.isAlive?.()) score += 12;
+	else if (player?.identity == "nei" && player.isAlive?.() && getAlivePlayerCount(current => current.identity != "commoner") <= 1) score += 15;
+	const rate = Math.min(0.65, Math.max(0, score / 220));
+	return rate >= 0.15 ? rate : 0.15;
 }
 
 function getDoudizhuPerformanceBonusRate(player) {
@@ -758,12 +856,49 @@ function getYuanbaoPerformanceBonus(mode, baseAmount) {
 lib.onover.push(result => {
 	let mode = get.mode();
 	let submode = get.config(mode + "_mode", mode);
-	if (result && ["identity", "doudizhu"].includes(mode) && Math.random() < 0.75) {
+	let isIdentity8MVP = false;
+	if (mode == "identity") {
+		const playerCount = Math.max(game.players?.length || 0, (game.players?.length || 0) + (game.dead?.length || 0), get.playerNumber?.() || 0);
+		if (playerCount >= 8) {
+			// 检查是否MVP
+			let list = [];
+			for (let p of game.players) {
+				let score = { player: p, damage: 0, damaged: 0, cure: 0, help: 0, state: 100, all: 0 };
+				score.cure += p.dzxy_mvp?.cure || 0;
+				score.help += p.dzxy_mvp?.help || 0;
+				for (let s of p.stat) {
+					if (s.damage != undefined) score.damage += s.damage * 3;
+					if (s.damaged != undefined) score.damaged += s.damaged * 1;
+					if (s.kill != undefined) score.damage += (s.kill || 0) * 3;
+				}
+				score.all = score.damage + score.damaged + score.cure + score.help + score.state;
+				list.push(score);
+			}
+			let mvp = list.reduce((a, b) => a.all > b.all ? a : b);
+			isIdentity8MVP = mvp.player == game.me;
+		}
+	}
+	let shouldGiveYuanbao = result && ["identity", "doudizhu"].includes(mode);
+	if (shouldGiveYuanbao && !isIdentity8MVP) {
+		shouldGiveYuanbao = Math.random() < 0.75;
+	}
+	if (shouldGiveYuanbao) {
 		const randomRange = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
 		const getYuanbaoRange = () => {
 			if (mode == "identity") {
 				const playerCount = Math.max(game.players?.length || 0, (game.players?.length || 0) + (game.dead?.length || 0), get.playerNumber?.() || 0);
-				if (playerCount >= 8) return [500, 3800];
+				if (playerCount >= 8) {
+					if (isIdentity8MVP) {
+						let stat = getPlayerTotalStat(game.me);
+						let dmg = stat.damage, kills = stat.kills, cards = stat.cards;
+						if (dmg >= 35 && kills >= 6) return [5888, 12888];
+						if (dmg >= 30 && kills >= 3) return [3888, 6666];
+						if (dmg >= 20 && kills >= 2) return [2888, 5000];
+						if (dmg >= 10 || kills >= 2 || cards >= 20) return [1888, 3888];
+						if (dmg >= 5 || kills >= 1 || cards >= 10) return [888, 2888];
+					}
+					return [500, 3800];
+				}
 				if (playerCount >= 5) return [200, 1600];
 				return [200, 1600];
 			}
@@ -848,6 +983,41 @@ lib.onover.push(result => {
 			}
 		}
 	}
+	//斗地主连胜奖励
+	if (mode == "doudizhu" && (submode == "huanle" || submode == "zhizun")) {
+		let streakData = {};
+		try {
+			streakData = JSON.parse(localStorage.getItem("doudizhuStats") || "{}");
+		} catch (e) {}
+		if (typeof streakData.currentStreak !== "number") streakData.currentStreak = 0;
+		if (typeof streakData.maxStreak !== "number") streakData.maxStreak = 0;
+		let currentStreak = streakData.currentStreak;
+		if (result) {
+			currentStreak++;
+		} else {
+			currentStreak = 0;
+		}
+		streakData.currentStreak = currentStreak;
+		if (result && currentStreak > streakData.maxStreak) {
+			streakData.maxStreak = currentStreak;
+		}
+		if (typeof streakData.totalGames !== "number") streakData.totalGames = 0;
+		streakData.totalGames++;
+		localStorage.setItem("doudizhuStats", JSON.stringify(streakData));
+
+		if (result && currentStreak >= 3 && currentStreak % 3 === 0) {
+			let base = 300 + Math.floor((currentStreak - 3) / 3) * 150;
+			let bonus = submode == "zhizun" ? 250 : 0;
+			let total = base + bonus;
+			propToast.addToast("huanledou", total);
+		}
+		if (result && currentStreak === 11) {
+			let douBonus = submode == "zhizun" ? 2000 : 1000;
+			let boxBonus = submode == "zhizun" ? 100 : 50;
+			propToast.addToast("huanledou", douBonus);
+			propToast.addToast("czg_box", boxBonus);
+		}
+	}
 	//非欢乐/至尊斗地主
 	if (mode != "doudizhu" || (mode == "doudizhu" && submode != "huanle" && submode != "zhizun")) {
 		let myhld = Props.getCount("huanledou");
@@ -891,5 +1061,42 @@ lib.onover.push(result => {
 		if (random > i.prob) continue;
 		let myPropCount = Props.getCount(i.id);
 		if (myPropCount < i.max || i.max == undefined) propToast.addToast(i.id, i.count);
+	}
+});
+
+// 斗地主退出/逃跑视为输（仅退出按钮/刷新触发，关浏览器不触发）
+window.addEventListener("beforeunload", () => {
+	if (_status.over) return;
+	if (get.mode() != "doudizhu") return;
+	sessionStorage.setItem("_doudizhu_exit", "1");
+});
+if (sessionStorage.getItem("_doudizhu_exit") === "1") {
+	sessionStorage.removeItem("_doudizhu_exit");
+	let streakData = {};
+	try {
+		streakData = JSON.parse(localStorage.getItem("doudizhuStats") || "{}");
+	} catch (e) {}
+	if (typeof streakData.currentStreak !== "number") streakData.currentStreak = 0;
+	if (streakData.currentStreak > 0) {
+		streakData.currentStreak = 0;
+		if (typeof streakData.totalGames !== "number") streakData.totalGames = 0;
+		streakData.totalGames++;
+		localStorage.setItem("doudizhuStats", JSON.stringify(streakData));
+	}
+}
+// 正常结算后清除退出标记
+lib.onover.push(result => {
+	sessionStorage.removeItem("_doudizhu_exit");
+});
+
+// 农民死亡后不显示重新开始按钮
+lib.onover.push(() => {
+	let mode = get.mode();
+	if (mode != "doudizhu") return;
+	if (game.me && game.me.isDead() && game.me.identity == "fan") {
+		if (ui.restart) {
+			ui.restart.close();
+			delete ui.restart;
+		}
 	}
 });

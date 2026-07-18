@@ -8167,7 +8167,6 @@ export class Library {
 					}
 					if (config.connect_doudizhu_mode !== "normal") {
 						map.connect_double_character.hide();
-						map.connect_allow_same_character[config.connect_doudizhu_mode === "kaihei" ? "show" : "hide"]();
 						if (config.connect_doudizhu_mode !== "kaihei") {
 							map.connect_choice_zhu.hide();
 							map.connect_choice_fan.hide();
@@ -8180,12 +8179,16 @@ export class Library {
 						map.connect_feiyang_version.hide();
 					} else {
 						map.connect_double_character.show();
-						map.connect_allow_same_character.show();
 						map.connect_choice_zhu.show();
 						map.connect_choice_fan.show();
 						map.connect_enhance_dizhu.show();
 						map.connect_enhance_nongmin.show();
 						map.connect_feiyang_version.show();
+					}
+					if (config.connect_doudizhu_mode !== "online") {
+						map.connect_allow_same_character.show();
+					} else {
+						map.connect_allow_same_character.hide();
 					}
 				},
 				connect_doudizhu_mode: {
@@ -8309,11 +8312,9 @@ export class Library {
 						if (config.doudizhu_mode === "kaihei") {
 							map.choice_zhu.show();
 							map.choice_fan.show();
-							map.allow_same_character.show();
 						} else {
 							map.choice_zhu.hide();
 							map.choice_fan.hide();
-							map.allow_same_character.hide();
 						}
 						map.double_character.hide();
 						map.free_choose.hide();
@@ -8327,7 +8328,6 @@ export class Library {
 						map.feiyang_version.hide();
 					} else {
 						map.double_character.show();
-						map.allow_same_character.show();
 						map.choice_zhu.show();
 						map.choice_fan.show();
 						map.free_choose.show();
@@ -8339,6 +8339,11 @@ export class Library {
 						map.enhance_dizhu.show();
 						map.enhance_nongmin.show();
 						map.feiyang_version.show();
+					}
+					if (config.doudizhu_mode !== "online") {
+						map.allow_same_character.show();
+					} else {
+						map.allow_same_character.hide();
 					}
 					if (config.double_character && config.doudizhu_mode == "normal") {
 						map.double_hp.show();

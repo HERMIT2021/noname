@@ -2311,6 +2311,15 @@ div.select-all:not(.card):not(.player) {
 	position: absolute;
 	left: 50%;
 }
+#control > .skill-controls {
+	font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif !important;
+	font-weight: 600;
+	text-rendering: optimizeLegibility;
+}
+#control > .skill-controls > div {
+	font-family: inherit !important;
+	font-weight: inherit;
+}
 #arena.choose-to-move > #control,
 #arena.discard-player-card > #control,
 #arena.gain-player-card > #control,

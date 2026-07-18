@@ -94,12 +94,17 @@ export function cangZhenGe() {
 	function openRewardSafely(count) {
 		openRewardResult(count);
 		totalRewards.totalCount += count;
+		localStorage.setItem("czg_total_draws", String(totalRewards.totalCount));
 		refreshStatData();
 	}
 	function playBoxAnimation(count) {
 		if (!canPlayBoxAnimation()) {
 			openRewardSafely(count);
 			return;
+		}
+		if (lib.config.extension_如真重置版_czgFastOpen) {
+			let speed = lib.config.extension_如真重置版_czgFastSpeed || 5;
+			boxbeijing.state.timeScale = Number(speed);
 		}
 		boxbeijing.state.setAnimation(0, "play2", false);
 		boxbeijing.state.addAnimation(0, "play1", true, 4);
@@ -281,22 +286,34 @@ export function cangZhenGe() {
 
 	const statBtn = ui.create.div(".stat-btn", bg);
 
+	let _totalDraws = 0;
+	try {
+		_totalDraws = parseInt(localStorage.getItem("czg_total_draws") || "0") || 0;
+	} catch (e) {}
 	const totalRewards = {
-		totalCount: 0,
+		totalCount: _totalDraws,
 		items: {},
 	};
 	const statBg = ui.create.div(".stat-bg", bg);
 	const closeBtn = ui.create.div(".stat-close-btn", statBg);
 	closeBtn.innerHTML = "X";
 	closeBtn.listen(() => {
-		statBg.hide();
+		statBg.style.display = "none";
 	});
 	const desc = ui.create.div(".stat-text", statBg);
-	statBg.hide();
+	statBg.style.display = "none";
 
 	const refreshStatData = () => {
 		// 打开统计面板
-		let title = "  累计抽取" + totalRewards.totalCount + "次\n\n";
+		let pityInfo = "";
+		if (currenBox) {
+			let pityKey = "czg_pity_" + currenBox.name;
+			let pityData = {};
+			try { pityData = JSON.parse(localStorage.getItem("czg_pity_data") || "{}"); } catch (e) {}
+			let pityCount = pityData[pityKey] || 0;
+			pityInfo = `「${currenBox.name}」保底进度：${pityCount}/20000\n\n`;
+		}
+		let title = pityInfo + "  累计抽取" + totalRewards.totalCount + "次\n\n";
 		let res = [];
 		for (let k in totalRewards.items) {
 			res.push(totalRewards.items[k]);
@@ -314,7 +331,7 @@ export function cangZhenGe() {
 	};
 
 	statBtn.listen(() => {
-		statBg.show();
+		statBg.style.display = "";
 		refreshStatData();
 	});
 
@@ -338,6 +355,23 @@ export function cangZhenGe() {
 
 	const openAllTip = ui.create.div(".open-all-tip", bg);
 	openAllTip.innerHTML = "<span style='color:#DEB887; text-shadow:0 0 1px black;font-weight:600;font-family:shousha'>每次最多开50个</span>";
+	// 快速开启复选框
+	const fastOpenBox = ui.create.div(".czg-fast-open", bg);
+	fastOpenBox.style.cssText = "position:absolute;left:2%;top:3%;display:flex;align-items:center;gap:6px;z-index:5;font-family:shousha;color:#DEB887;font-size:14px;text-shadow:0 0 1px black;";
+	const fastOpenCheck = document.createElement("input");
+	fastOpenCheck.type = "checkbox";
+	fastOpenCheck.id = "czg_fast_open";
+	fastOpenCheck.style.cssText = "width:16px;height:16px;cursor:pointer;accent-color:#D4A574;";
+	fastOpenCheck.checked = !!lib.config.extension_如真重置版_czgFastOpen;
+	fastOpenCheck.addEventListener("change", () => {
+		game.saveConfig("extension_如真重置版_czgFastOpen", fastOpenCheck.checked ? true : false);
+	});
+	fastOpenBox.appendChild(fastOpenCheck);
+	const fastOpenLabel = document.createElement("label");
+	fastOpenLabel.htmlFor = "czg_fast_open";
+	fastOpenLabel.textContent = "快速开启";
+	fastOpenLabel.style.cursor = "pointer";
+	fastOpenBox.appendChild(fastOpenLabel);
 	const getPropCount = id => game.getGlobalItemCount?.(id) ?? window.dzxy?.Props?.getCount?.(id) ?? 0;
 	const changePropCount = (id, count) => game.changeGlobalItemCount?.(id, count) ?? window.dzxy?.Props?.changeCount?.(id, count);
 	const addPropToast = (id, count) => {
@@ -456,8 +490,6 @@ export function cangZhenGe() {
 		});
 		refreshCzgShopUi();
 	}
-	createCzgShop();
-
 	setCurrentBoxUi(currenBox);
 
 	// 打开一个遮罩层
@@ -636,6 +668,36 @@ export function cangZhenGe() {
 				return total_weight;
 			});
 
+			// 找出最低权重物品（保底目标）
+			let rarestItems = currenBox.items.filter(item => {
+				return item.weight === 1 || (item.count === 66 && item.name === "史诗宝珠");
+			});
+			let rarestIds = new Set(rarestItems.map(item => item.id));
+
+			// 读取保底计数
+			let pityKey = "czg_pity_" + currenBox.name;
+			let pityData = {};
+			try {
+				pityData = JSON.parse(localStorage.getItem("czg_pity_data") || "{}");
+			} catch (e) {}
+			if (typeof pityData[pityKey] !== "number") pityData[pityKey] = 0;
+
+			// 检查是否触发保底
+			let pityTriggered = false;
+			if (pityData[pityKey] >= 20000 && rarestItems.length > 0) {
+				pityTriggered = true;
+				let forcedItem = rarestItems[Math.floor(Math.random() * rarestItems.length)];
+				result.push({
+					id: forcedItem.id,
+					name: forcedItem.name,
+					count: forcedItem.count || 1,
+					weight: forcedItem.weight,
+					gaoji: forcedItem.gaoji,
+					_pity: true,
+				});
+				pityData[pityKey] = 0;
+			}
+
 			// 放入必中的保底
 			rzczb.czgSettings.fixed.forEach(i => {
 				result.push({
@@ -646,6 +708,7 @@ export function cangZhenGe() {
 			});
 
 			let randomR;
+			let naturalRare = false;
 			// 模拟抽取
 			for (let i = 0; i < count; i++) {
 				randomR = Math.random() * total_weight;
@@ -670,10 +733,22 @@ export function cangZhenGe() {
 						if (!isExist) {
 							result.push({ ...currenBox.items[j] });
 						}
+						// 检测是否自然抽到保底物品
+						if (rarestIds.has(currenBox.items[j].id)) {
+							naturalRare = true;
+						}
 						break;
 					}
 				}
 			}
+			// 更新保底计数
+			if (naturalRare && !pityTriggered) {
+				pityData[pityKey] = 0;
+			} else if (!pityTriggered) {
+				pityData[pityKey] += count;
+			}
+			localStorage.setItem("czg_pity_data", JSON.stringify(pityData));
+
 			const rewardMap = {
 				将魂: "jianghun",
 				换将卡: "huanjiangka",
@@ -694,11 +769,22 @@ export function cangZhenGe() {
 				620044: "yuanbao",
 				620149: "shishibaozhusuipian",
 				620150: "shishibaozhu",
+				620281: "xinyuanjifen",
 			};
 			result.forEach(i => {
 				let propId = rewardMap[i.name] || rewardIdMap[i.id];
-				if (propId) addPropToast(propId, i.count || 1);
-				else if (i.type == "wujiang" && game.unlockCharacter?.(i.id)) showTip(`已解锁武将：${i.name || get.translation(i.id) || i.id}`);
+				if (propId) {
+					addPropToast(propId, i.count || 1);
+				} else if (i.type == "wujiang") {
+					if (game.unlockCharacter?.(i.id)) {
+						showTip(`已解锁武将：${i.name || get.translation(i.id) || i.id}`);
+					}
+					if (i.weight === 1) {
+						addPropToast("shishibaozhu", 30);
+					} else if (i.weight === 3) {
+						addPropToast("shishibaozhu", 15);
+					}
+				}
 			});
 			refreshCzgShopUi();
 			return result;
@@ -845,8 +931,10 @@ export function cangZhenGe() {
 	}
 
 	openAll.listen(function () {
+		if (window._czg_opening) return;
 		let count = consumeBoxes(rzczb.czgSettings.drawCount || 50);
 		if (!count) return;
+		window._czg_opening = true;
 		// game.playAudio("../../extension/如真重置版/resource/cangZhenGe/mp3/knock.mp3");
 		PIXI.sound.play("czgknock");
 		PIXI.sound.play("czgguo");
@@ -854,11 +942,18 @@ export function cangZhenGe() {
 	});
 	//
 	openOne.listen(function () {
+		if (window._czg_opening) return;
 		let count = consumeBoxes(1);
 		if (!count) return;
+		window._czg_opening = true;
 		PIXI.sound.play("czgknock");
 		playBoxAnimation(count);
 	});
+	let _origOpenRewardSafely = openRewardSafely;
+	openRewardSafely = function(count) {
+		_origOpenRewardSafely(count);
+		window._czg_opening = false;
+	};
 
 	// 画预览的道具
 	function drawPreviewItem(itemInfo) {

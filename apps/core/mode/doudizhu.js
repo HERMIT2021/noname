@@ -726,17 +726,23 @@ export default () => {
 						});
 					"step 6";
 					game.me.init(result.links[0]);
-					for (var player of game.players) {
-						if (player != game.me) {
-							player.init(game.chooseDoudizhuCharacters(event.map[player.playerid], player, 1)[0]);
+				for (var player of game.players) {
+					if (player != game.me) {
+						var pool = event.map[player.playerid];
+						if (!game.allowSameCharacter()) {
+							game.removeSameCharacterChoice(pool, game.me.name1, game.me.name2);
 						}
-						if (player == game.zhu) {
-							player.addSkill(game.zhuSkill);
-						} else {
-							player.addSkill("binglin_neihong");
+						var chosen = game.chooseDoudizhuCharacters(pool, player, 1)[0];
+						if (!chosen) {
+							var fallback = event.list.filter(function (name) {
+								return !game.allowSameCharacter() ? get.sourceCharacter(name) != get.sourceCharacter(game.me.name1) : true;
+							});
+							chosen = fallback.length ? fallback.randomGet() : event.list.randomGet();
 						}
+						player.init(chosen);
 					}
-					if (!game.zhu.isInitFilter("noZhuHp")) {
+				}
+				if (!game.zhu.isInitFilter("noZhuHp")) {
 						game.zhu.maxHp++;
 						game.zhu.hp++;
 						game.zhu.update();
@@ -838,7 +844,18 @@ export default () => {
 					game.me.init(result.links[0]);
 					for (var player of game.players) {
 						if (player != game.me) {
-							player.init(game.chooseDoudizhuCharacters(event.map[player.playerid], player, 1)[0]);
+							var pool = event.map[player.playerid];
+							if (!game.allowSameCharacter()) {
+								game.removeSameCharacterChoice(pool, game.me.name1, game.me.name2);
+							}
+							var chosen = game.chooseDoudizhuCharacters(pool, player, 1)[0];
+							if (!chosen) {
+								var fallback = event.list.filter(function (name) {
+									return !game.allowSameCharacter() ? get.sourceCharacter(name) != get.sourceCharacter(game.me.name1) : true;
+								});
+								chosen = fallback.length ? fallback.randomGet() : event.list.randomGet();
+							}
+							player.init(chosen);
 						}
 					}
 					if (!game.zhu.isInitFilter("noZhuHp")) {

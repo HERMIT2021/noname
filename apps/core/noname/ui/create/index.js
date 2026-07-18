@@ -2107,6 +2107,7 @@ export class Create {
 			_status.noupdatec = true;
 		}
 		ui.skills = ui.create.control(skills.concat([ui.click.skill]));
+		ui.skills.classList.add("skill-controls");
 		for (var i = 0; i < ui.skills.childNodes.length; i++) {
 			ui.skills.childNodes[i].innerHTML = get.skillTranslation(ui.skills.childNodes[i].link, _status.event.player, true);
 		}
@@ -2144,6 +2145,7 @@ export class Create {
 			_status.noupdatec = true;
 		}
 		ui.skills2 = ui.create.control(skills.concat([ui.click.skill]));
+		ui.skills2.classList.add("skill-controls");
 		for (var i = 0; i < ui.skills2.childNodes.length; i++) {
 			ui.skills2.childNodes[i].innerHTML = get.skillTranslation(ui.skills2.childNodes[i].link, _status.event.player, true);
 		}
@@ -2181,6 +2183,7 @@ export class Create {
 			_status.noupdatec = true;
 		}
 		ui.skills3 = ui.create.control(skills.concat([ui.click.skill]));
+		ui.skills3.classList.add("skill-controls");
 		for (var i = 0; i < ui.skills3.childNodes.length; i++) {
 			ui.skills3.childNodes[i].innerHTML = get.skillTranslation(ui.skills3.childNodes[i].link, _status.event.player, true);
 		}

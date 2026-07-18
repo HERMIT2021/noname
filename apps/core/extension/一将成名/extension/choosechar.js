@@ -1860,11 +1860,22 @@ export function choosechar() {
 							}
 
 							game.me.init(event.link);
-							if (_status.replacetwo) {
-								game.me.replacetwo = result.links[1];
+						for (var player of game.players) {
+							if (player != game.me) {
+								if (!game.allowSameCharacter()) {
+									game.removeSameCharacterChoice(event.map[player.playerid], game.me.name1, game.me.name2);
+								}
+								var chosen = event.map[player.playerid].randomGet();
+								if (!chosen) {
+									var fallback = event.list.filter(function (name) {
+										return !game.allowSameCharacter() ? get.sourceCharacter(name) != get.sourceCharacter(game.me.name1) : true;
+									});
+									chosen = fallback.length ? fallback.randomGet() : event.list.randomGet();
+								}
+								player.init(chosen);
 							}
-							event.list.remove(game.me.name1);
-							for (var i = 0; i < game.players.length; i++) {
+						}
+						for (var i = 0; i < game.players.length; i++) {
 								if (game.players[i] != game.me) {
 									if (_status.brawl && _status.brawl.chooseCharacter) {
 										var list = _status.brawl.chooseCharacter(event.list, game.players[i]);
@@ -3295,7 +3306,19 @@ export function choosechar() {
 
 							game.me.init(event.link);
 							for (var player of game.players) {
-								if (player != game.me) player.init(event.map[player.playerid].randomGet());
+								if (player != game.me) {
+									if (!game.allowSameCharacter()) {
+										game.removeSameCharacterChoice(event.map[player.playerid], game.me.name1, game.me.name2);
+									}
+									var chosen = event.map[player.playerid].randomGet();
+									if (!chosen) {
+										var fallback = event.list.filter(function (name) {
+											return !game.allowSameCharacter() ? get.sourceCharacter(name) != get.sourceCharacter(game.me.name1) : true;
+										});
+										chosen = fallback.length ? fallback.randomGet() : event.list.randomGet();
+									}
+									player.init(chosen);
+								}
 							}
 							if (!game.zhu.isInitFilter("noZhuHp")) {
 								game.zhu.maxHp++;
