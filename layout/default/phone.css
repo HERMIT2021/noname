@@ -15,6 +15,21 @@
 	font-size: 30px;
 	line-height: 34px;
 }
+#control > .skill-controls {
+	font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif !important;
+	font-size: 21px;
+	font-weight: 600;
+	line-height: 30px;
+	letter-spacing: 0;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+#control > .skill-controls > div {
+	font-family: inherit !important;
+	font-size: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+}
 #historybar {
 	top: 14px;
 	height: calc(100% - 150px);

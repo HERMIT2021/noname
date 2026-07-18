@@ -1,4 +1,0 @@
-import {lib,game,ui,get,ai,_status} from '../../../noname.js'
-export async function arenaReady(config,pack){
-	import('../extension/Mvp/mvp.js');
-};

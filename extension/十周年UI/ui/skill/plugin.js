@@ -1,1 +1,0 @@
-import"noname";import{createSkillPluginForSkin as n,getCurrentSkin as o}from"./skins/index.js";async function r(lib,game,ui,get,ai,_status,r){return n(o(),lib,game,ui,get,ai,_status,r)}export{r as createSkillPlugin};
